@@ -39,4 +39,4 @@ After you run the created JAR file, you should be able to see the implemented re
 ## Documentation
 
 - General references: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle
-- Application properties: https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html
+- Default.Application properties: https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html
