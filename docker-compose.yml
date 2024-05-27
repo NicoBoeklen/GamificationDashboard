@@ -1,8 +1,0 @@
-services:
-  database:
-    image: mariadb
-    restart: unless-stopped
-    ports:
-      - 3306:3306
-    environment:
-      MARIADB_ROOT_PASSWORD: root
