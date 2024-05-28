@@ -1,5 +1,6 @@
 package Default.GithubAPI;
 
+import Default.Commit.Commit;
 import Default.GithubRepo.GithubRepo;
 import Default.User.User;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,13 @@ public class GithubService {
             .uri("/repos/{owner}/{repo}", owner, repo)
             .retrieve()
             .bodyToMono(GithubRepo.class);
+    }
+
+    public Flux<Commit> getCommits(String owner, String repo) {
+        return this.webClient.get()
+            .uri("/repos/{owner}/{repo}/commits", owner, repo)
+            .retrieve()
+            .bodyToFlux(Commit.class);
     }
 }
 
