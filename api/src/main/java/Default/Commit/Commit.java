@@ -17,6 +17,7 @@ public class Commit {
 
     @JsonProperty("commit")
     @JsonDeserialize(using = CommitMessageDeserializer.class)
+    @Lob
     private String message;
 
     //@JsonProperty("commit")
