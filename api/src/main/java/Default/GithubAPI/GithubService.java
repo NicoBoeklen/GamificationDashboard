@@ -18,7 +18,13 @@ public class GithubService {
     private final WebClient webClient;
 
     public GithubService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://api.github.com").build();
+        // GitHub API key
+        String githubApiKey = "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";
+
+        this.webClient = webClientBuilder
+            .baseUrl("https://api.github.com")
+            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + githubApiKey)
+            .build();
     }
 
     public Flux<User> getContributors(String owner, String repo) {

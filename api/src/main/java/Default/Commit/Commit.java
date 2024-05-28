@@ -15,19 +15,13 @@ public class Commit {
     @JsonProperty("sha")
     private String id;
 
-    @JsonProperty("commit")
-    @JsonDeserialize(using = CommitMessageDeserializer.class)
     @Lob
     private String message;
 
-    //@JsonProperty("commit")
-    //@JsonDeserialize(using = CommitDateDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date date;
 
     private boolean isMerge;
     
-
     private Integer additions;
 
     private Integer deletions;
