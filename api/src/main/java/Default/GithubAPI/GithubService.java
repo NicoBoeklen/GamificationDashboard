@@ -1,5 +1,6 @@
 package Default.GithubAPI;
 
+import Default.GithubRepo.GithubRepo;
 import Default.User.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,6 +20,13 @@ public class GithubService {
             .uri("/repos/{owner}/{repo}/contributors", owner, repo)
             .retrieve()
             .bodyToFlux(User.class);
+    }
+
+    public Mono<GithubRepo> getRepository(String owner, String repo) {
+        return this.webClient.get()
+            .uri("/repos/{owner}/{repo}", owner, repo)
+            .retrieve()
+            .bodyToMono(GithubRepo.class);
     }
 }
 

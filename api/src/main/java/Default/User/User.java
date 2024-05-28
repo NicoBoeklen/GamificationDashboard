@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class User {
     @Id
     private Long id;
-
-    @Column(name = "name")
-    private String login;
+    
+    @JsonProperty("login")
+    private String name;
     
     private Integer level;
 
@@ -29,12 +29,12 @@ public class User {
         return id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getName() {
+        return name;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getLevel() {
