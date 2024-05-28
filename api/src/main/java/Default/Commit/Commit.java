@@ -1,6 +1,7 @@
 package Default.Commit;
 
 import Default.User.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
@@ -18,11 +19,13 @@ public class Commit {
     @JsonDeserialize(using = CommitMessageDeserializer.class)
     private String message;
 
-    @JsonProperty("commit.author.date")
-    @JsonDeserialize(using = CustomDateDeserializer.class)
+    //@JsonProperty("commit")
+    //@JsonDeserialize(using = CommitDateDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date date;
 
     private boolean isMerge;
+    
 
     private Integer additions;
 
