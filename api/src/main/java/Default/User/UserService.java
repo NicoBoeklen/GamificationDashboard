@@ -1,7 +1,7 @@
-package Default.service;
+package Default.User;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class ExampleService {
+public class UserService {
 }
