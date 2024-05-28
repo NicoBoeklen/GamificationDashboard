@@ -34,46 +34,5 @@ public class GithubService {
             .retrieve()
             .bodyToMono(GithubRepo.class);
     }
-
-    public Flux<Commit> getCommits(String owner, String repo) {
-        String url = String.format("/repos/%s/%s/commits", owner, repo);
-        return getCommitsRecursively(url);
-    }
-
-    private Flux<Commit> getCommitsRecursively(String url) {
-        return webClient.get()
-            .uri(url)
-            .retrieve()
-            //.onStatus(HttpStatus::isError, clientResponse -> Mono.error(new RuntimeException("Failed to fetch commits")))
-            .bodyToFlux(Commit.class)
-            .collectList()
-            .flatMapMany(commits -> {
-                return getNextPageUrl(url)
-                    .flatMapMany(nextUrl -> Flux.fromIterable(commits).concatWith(getCommitsRecursively(nextUrl)))
-                    .switchIfEmpty(Flux.fromIterable(commits));
-            });
-    }
-
-    private Mono<String> getNextPageUrl(String url) {
-        return webClient.get()
-            .uri(url)
-            .exchangeToMono(response -> {
-                HttpHeaders headers = response.headers().asHttpHeaders();
-                List<String> linkHeaders = headers.get(HttpHeaders.LINK);
-                if (linkHeaders == null || linkHeaders.isEmpty()) {
-                    return Mono.empty();
-                }
-
-                Pattern pattern = Pattern.compile("<(.*?)>;\\s*rel=\"next\"");
-                for (String header : linkHeaders) {
-                    Matcher matcher = pattern.matcher(header);
-                    if (matcher.find()) {
-                        return Mono.just(matcher.group(1));
-                    }
-                }
-
-                return Mono.empty();
-            });
-    }
 }
 

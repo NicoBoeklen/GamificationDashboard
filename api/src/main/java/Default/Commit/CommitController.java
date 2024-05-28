@@ -1,5 +1,6 @@
 package Default.Commit;
 
+import Default.GithubAPI.GithubCommitService;
 import Default.GithubAPI.GithubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import reactor.core.publisher.Flux;
 @Controller
 public class CommitController {
     @Autowired
-    private GithubService githubService;
+    private GithubCommitService githubService;
 
     @Autowired
     private CommitService commitService;
