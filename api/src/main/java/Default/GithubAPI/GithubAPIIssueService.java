@@ -116,13 +116,10 @@ public class GithubAPIIssueService {
             .retrieve()
             .bodyToMono(IssueDetails.class)
             .map(details -> {
-                issue.setDateOpened(details.getIssueInfo().getCreatedAt());
-                issue.setDeletions(details.getStats().getDeletions());
-                issue.setDate(details.getIssueInfo().getAuthor().getDate());
-                issue.setMessage(details.getIssueInfo().getMessage());
+                issue.setDateOpened(details.getCreatedAt());
+                issue.setDateClosed(details.getClosedAt());
                 return issue;
-            })
-            .map(issues -> setIssueMerge(issue));
+            });
     }
     
 
@@ -131,25 +128,22 @@ public class GithubAPIIssueService {
      * Represents the structure of the response of the GitHub API
      */
     private static class IssueDetails {
-
-        
-
+        @JsonProperty("created_at")
         Date createdAt;
-        Date updatedAt;
+        @JsonProperty("closed_at")
+        Date closedAt;
+        public Date setClosedAt(Date closedAt) {
+            return this.closedAt=closedAt;
+        }
+        public Date getClosedAt() {
+            return closedAt;
+        }
         public Date getCreatedAt() {
             return createdAt;
         }
 
         public void setCreatedAt(Date createdAt) {
             this.createdAt = createdAt;
-        }
-
-        public Date getUpdatedAt() {
-            return updatedAt;
-        }
-
-        public void setUpdatedAt(Date updatedAt) {
-            this.updatedAt = updatedAt;
         }
     }
 }

@@ -10,6 +10,27 @@ import java.sql.Date;
 @Entity
 @Table(name = "\"issue\"")
 public class Issue {
+    @Id
+    @JsonProperty("sha")
+    private String id;
+    private Date dateOpened;
+
+    private Date dateClosed;
+    private String State;
+    @OneToOne
+    @JoinColumn(name = "closedBy_id")
+    @JsonProperty("author")
+    private User closedBy;
+    @OneToOne
+    @JoinColumn(name = "openedBy_id")
+    @JsonProperty("author")
+    private User openedBy;
+    @OneToOne
+    @JoinColumn(name = "repository_id")
+    @JsonProperty("repository")
+    private GithubRepo repository;
+    
+    
     public String getId() {
         return id;
     }
@@ -26,12 +47,12 @@ public class Issue {
         this.dateOpened = dateOpened;
     }
 
-    public Date getClosed() {
-        return Closed;
+    public Date getDateClosed() {
+        return dateClosed;
     }
 
-    public void setClosed(Date closed) {
-        Closed = closed;
+    public void setDateClosed(Date dateClosed) {
+        this.dateClosed = dateClosed;
     }
 
     public String getState() {
@@ -65,24 +86,4 @@ public class Issue {
     public void setRepository(GithubRepo repository) {
         this.repository = repository;
     }
-
-    @Id
-    @JsonProperty("sha")
-    private String id;
-    private Date dateOpened;
-
-    private Date Closed;
-    private String State;
-    @OneToOne
-    @JoinColumn(name = "closedBy_id")
-    @JsonProperty("author")
-    private User closedBy;
-    @OneToOne
-    @JoinColumn(name = "openedBy_id")
-    @JsonProperty("author")
-    private User openedBy;
-    @OneToOne
-    @JoinColumn(name = "author_id")
-    @JsonProperty("author")
-    private GithubRepo repository;
 }
