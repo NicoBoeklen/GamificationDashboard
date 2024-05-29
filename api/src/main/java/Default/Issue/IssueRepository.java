@@ -1,5 +1,6 @@
 package Default.Issue;
 
+import Default.Commit.Commit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

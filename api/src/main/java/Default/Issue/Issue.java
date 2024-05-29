@@ -11,22 +11,35 @@ import java.sql.Date;
 @Table(name = "\"issue\"")
 public class Issue {
     @Id
+<<<<<<< HEAD
 
+=======
+    @JsonProperty("sha")
+    private String id;
+    private Date dateOpened;
+
+    private Date dateClosed;
+    private String State;
+>>>>>>> parent of 716bafa (Query gefixt)
     @OneToOne
     @JoinColumn(name = "closedBy_id")
     @JsonProperty("closed_by")
     private User closedBy;
-    
     @OneToOne
     @JoinColumn(name = "openedBy_id")
     @JsonProperty("id")
     private User openedBy;
+    @OneToOne
+    @JoinColumn(name = "repository_id")
+    @JsonProperty("repository")
+    private GithubRepo repository;
     
-    public Integer getId() {
+    
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -47,11 +60,11 @@ public class Issue {
     }
 
     public String getState() {
-        return state;
+        return State;
     }
 
     public void setState(String state) {
-        this.state = state;
+        State = state;
     }
 
     public User getClosedBy() {
@@ -70,4 +83,11 @@ public class Issue {
         this.openedBy = openedBy;
     }
 
+    public GithubRepo getRepository() {
+        return repository;
+    }
+
+    public void setRepository(GithubRepo repository) {
+        this.repository = repository;
+    }
 }
