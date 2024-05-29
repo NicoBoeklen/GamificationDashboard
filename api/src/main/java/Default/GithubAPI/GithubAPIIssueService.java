@@ -28,7 +28,7 @@ public class GithubAPIIssueService {
      */
     public GithubAPIIssueService(WebClient.Builder webClientBuilder) {
         // GitHub API key NicoBoeklen
-        String githubApiKey = "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";
+        String githubApiKey = "";
 
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
