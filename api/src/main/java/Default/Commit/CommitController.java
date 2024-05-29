@@ -54,7 +54,7 @@ public class CommitController {
      * @param userId
      * @return
      */
-    @GetMapping("/commitCount/{user}")
+    @GetMapping("/commitCount/{userId}")
     public String getCommitCount(@PathVariable Long userId) {
         return commitService.getCommitCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
     }

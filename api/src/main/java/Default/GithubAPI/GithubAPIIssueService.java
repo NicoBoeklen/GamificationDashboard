@@ -30,8 +30,6 @@ public class GithubAPIIssueService {
      * Defines Header and webClient with API-Key
      */
     public GithubAPIIssueService(WebClient.Builder webClientBuilder) {
-        // GitHub API key NicoBoeklen
-
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
@@ -49,6 +47,7 @@ public class GithubAPIIssueService {
     public Flux<Issue> getIssues(String owner, String repo) {
         String url = String.format("/repos/%s/%s/issues", owner, repo);
         return getIssuesRecursively(url)
+            //dann noch selber nur mit url /issues?state=closed
             .flatMap(issue -> fetchIssueDetails(issue, owner, repo));
     }
 
