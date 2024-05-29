@@ -2,6 +2,7 @@ package Default.GithubAPI;
 
 import Default.Apikey;
 import Default.Issue.Issue;
+import Default.User.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -119,6 +120,7 @@ public class GithubAPIIssueService {
             .map(details -> {
                 issue.setDateOpened(details.getCreatedAt());
                 issue.setDateClosed(details.getClosedAt());
+                issue.setOpenedBy(details.getUser());
                 return issue;
             });
     }
@@ -133,6 +135,15 @@ public class GithubAPIIssueService {
         Date createdAt;
         @JsonProperty("closed_at")
         Date closedAt;
+        @JsonProperty("user")
+        User user;
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
         public Date setClosedAt(Date closedAt) {
             return this.closedAt=closedAt;
         }
@@ -146,8 +157,9 @@ public class GithubAPIIssueService {
         public void setCreatedAt(Date createdAt) {
             this.createdAt = createdAt;
         }
+        
+        }
     }
-}
 
 
 

@@ -20,11 +20,11 @@ public class Issue {
     private String state;
     @OneToOne
     @JoinColumn(name = "closedBy_id")
-    @JsonProperty("author")
+    @JsonProperty("closed_by")
     private User closedBy;
     @OneToOne
     @JoinColumn(name = "openedBy_id")
-    @JsonProperty("author")
+    @JsonProperty("id")
     private User openedBy;
     @OneToOne
     @JoinColumn(name = "repository_id")
