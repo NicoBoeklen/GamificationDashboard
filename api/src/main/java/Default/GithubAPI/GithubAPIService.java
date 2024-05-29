@@ -1,5 +1,6 @@
 package Default.GithubAPI;
 
+import Default.Apikey;
 import Default.GithubRepo.GithubRepo;
 import Default.User.User;
 import org.springframework.http.HttpHeaders;
@@ -22,12 +23,9 @@ public class GithubAPIService {
      * Defines Header and webClient with API-Key
      */
     public GithubAPIService(WebClient.Builder webClientBuilder) {
-        // GitHub API key
-        String githubApiKey = "";
-
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + githubApiKey)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
 
