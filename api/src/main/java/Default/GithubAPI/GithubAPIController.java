@@ -34,6 +34,7 @@ public class GithubAPIController {
         return getDataFromContributors(owner, repo)
             .then(getDataFromRepository(owner, repo))
             .then(getDataFromCommits(owner, repo))
+            .then(getDataFromIssues(owner, repo))
             .then(Mono.just(ResponseEntity.ok("Data saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("Error occurred: " + e.getMessage())));
     }
@@ -78,5 +79,19 @@ public class GithubAPIController {
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Commits Response: " + response))
             .doOnError(error -> System.err.println("Error in getDataFromCommits: " + error.getMessage()));
+    }
+
+    /**
+     * Calls API Request on Issue Controller
+     *
+     * @return String if Successfully or not
+     */
+    private Mono<String> getDataFromIssues(String owner, String repo) {
+        return webClient.get()
+            .uri("/issues/{owner}/{repo}", owner, repo)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnNext(response -> System.out.println("Issues Response: " + response))
+            .doOnError(error -> System.err.println("Error in getDataFromIssues: " + error.getMessage()));
     }
 }

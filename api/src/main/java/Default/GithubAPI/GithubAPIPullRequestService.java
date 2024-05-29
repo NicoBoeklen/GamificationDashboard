@@ -103,49 +103,59 @@ public class GithubAPIPullRequestService {
     }
 
     /**
-     * Gets the details of the pullRequest: 
+     * Gets the details of the pullRequest: closedBy
      * Requests every single pullRequest with own URL
      *
      * @param pullRequest pullRequest to be requested
-     * @param owner Name of the owner of the GitHub Repository
-     * @param repo  Name of the GitHub Repository
+     * @param owner       Name of the owner of the GitHub Repository
+     * @param repo        Name of the GitHub Repository
      * @return Single pullRequest with als attributes
      */
     private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo) {
 
         String url = String.format("/repos/%s/%s/pulls/%s", owner, repo, pullRequest.getId());
-        if (pullRequest.getDateClosed() != null) {
-            return webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(IssueDetails.class)
-                .map(details -> {
-                    pullRequest.setClosedBy(userService.findById(details.getUser().getId()).orElseThrow());
-                    return pullRequest;
-                });
-        }
+        //Only if Pull Request search for details
         return webClient.get()
             .uri(url)
             .retrieve()
-            .bodyToMono(IssueDetails.class)
+            .bodyToMono(PullRequestDetails.class)
             .map(details -> {
+                //pullRequest.setClosedBy(userService.findById(details.getUser().getId()).orElseThrow());
+                pullRequest.setAdditions(details.additions);
+                pullRequest.setDeletions(details.deletions);
+                pullRequest.setCommentNumber(details.commentNumber);
+                pullRequest.setCommitNumber(details.commitNumber);
                 return pullRequest;
             });
     }
+        
 
     /**
      * Anonym Class for Requesting Issue Details
      * Represents the structure of the response of the GitHub API
      */
-    private static class IssueDetails {
-        @JsonProperty("closed_by")
-        private CloseDetails closedDetails;
+    private static class PullRequestDetails {
+        
+        @JsonProperty("additions")
+        private Integer additions;
 
-        public CloseDetails getUser() {
-            return this.closedDetails;
+        @JsonProperty("deletions")
+        private Integer deletions;
+
+        @JsonProperty("commits")
+        private Integer commitNumber;
+
+        @JsonProperty("review_comments")
+        private Integer commentNumber;
+
+        @JsonProperty("merged_by")
+        private MergeDetails mergeDetails;
+
+        public MergeDetails getUser() {
+            return this.mergeDetails;
         }
 
-        private static class CloseDetails {
+        private static class MergeDetails {
             @JsonProperty("id")
             private Long id;
 

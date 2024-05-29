@@ -18,4 +18,14 @@ public class IssueService {
     public Issue saveIssue(Issue issue) {
         return issueRepository.save(issue);
     }
+
+    /**
+     * Delete an issue from the repository
+     *
+     * @param issueId Issue to be saved
+     * @return The deleted issue
+     */
+    public void deleteIssueById(Integer issueId) {
+        issueRepository.deleteById(issueId);
+    }
 }

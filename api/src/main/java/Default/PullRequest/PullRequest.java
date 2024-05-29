@@ -3,15 +3,12 @@ package Default.PullRequest;
 import Default.Issue.Issue;
 import Default.User.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "\"PullRequest\"")
 public class PullRequest extends Issue {
-    
+
     private Integer additions;
     
     private Integer deletions;
@@ -22,10 +19,10 @@ public class PullRequest extends Issue {
     @JsonProperty("review_comments")
     private Integer commentNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewedBy_id")
-    @JsonProperty("merged_by")
-    private User reviewer;
+    //@ManyToOne
+    //@JoinColumn(name = "reviewedBy_id")
+    //@JsonProperty("merged_by")
+    //private User reviewer;
 
     ///////////////////////////////////////////////
     // Getter & Setter
@@ -61,12 +58,12 @@ public class PullRequest extends Issue {
     public void setCommentNumber(Integer commentNumber) {
         this.commentNumber = commentNumber;
     }
-
+/*
     public User getReviewer() {
         return reviewer;
     }
 
     public void setReviewer(User reviewer) {
         this.reviewer = reviewer;
-    }
+    }*/
 }
