@@ -1,10 +1,9 @@
 package Default.Issue;
 
-import Default.Commit.Commit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
-Repository for Commits identified by ID/Sha (long)
+Repository for Issues identified by ID (long)
  */
 public interface IssueRepository extends JpaRepository<Issue, Long>{
 }

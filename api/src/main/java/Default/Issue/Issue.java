@@ -1,6 +1,5 @@
 package Default.Issue;
 
-import Default.GithubRepo.GithubRepo;
 import Default.User.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -32,6 +31,9 @@ public class Issue {
     private User openedBy;
 
 
+    ///////////////////////////////////////////////
+    // Getter & Setter
+    ///////////////////////////////////////////////
     public Integer getId() {
         return id;
     }
