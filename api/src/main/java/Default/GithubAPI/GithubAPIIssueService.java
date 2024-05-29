@@ -3,12 +3,15 @@ package Default.GithubAPI;
 import Default.Apikey;
 import Default.Issue.Issue;
 import Default.User.User;
+import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -26,6 +29,9 @@ public class GithubAPIIssueService {
 
     private final WebClient webClient;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * Defines Header and webClient with API-Key
      */
@@ -38,7 +44,7 @@ public class GithubAPIIssueService {
 
     /**
      * This Method is called to get all Issues from a GitHub Repo
-     * And then get the Details by requesting every specific issue again with its URL
+     * And then get the Details (closedBy) by requesting every specific issue again with its URL
      *
      * @param owner Name of the Owner of the GitHub Repository
      * @param repo  Name of the GitHub Repository
@@ -54,7 +60,7 @@ public class GithubAPIIssueService {
 
 
     /**
-     * Gets the issues sha and author
+     * Gets the issues number (id), state, closed date, opened date, openedBy
      * Gets all issues of the actual page and adds them to the other flux of issues
      * Recursively continues with next page
      *
@@ -101,65 +107,62 @@ public class GithubAPIIssueService {
     }
 
     /**
-     * Gets the details of the issue: message, date, additions, deletions
-     * And sets the boolean isMerge depending on the Message
+     * Gets the details of the issue: closedBy
      * Requests every single issue with own URL
      *
      * @param issue issue to be requested
-     * @param owner  Name of the owner of the GitHub Repository
-     * @param repo   Name of the GitHub Repository
+     * @param owner Name of the owner of the GitHub Repository
+     * @param repo  Name of the GitHub Repository
      * @return Single Issue with als attributes
      */
     private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo) {
-        
+
         String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getId());
+        if (issue.getDateClosed() != null) {
+            return webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(IssueDetails.class)
+                .map(details -> {
+                    issue.setClosedBy(userService.findById(details.getUser().getId()).orElseThrow());
+                    return issue;
+                });
+        }
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(IssueDetails.class)
             .map(details -> {
-                issue.setDateOpened(details.getCreatedAt());
-                issue.setDateClosed(details.getClosedAt());
-                //issue.setOpenedBy(details.getUser());
                 return issue;
             });
     }
-    
 
     /**
      * Anonym Class for Requesting Issue Details
      * Represents the structure of the response of the GitHub API
      */
     private static class IssueDetails {
-        @JsonProperty("created_at")
-        Date createdAt;
-        @JsonProperty("closed_at")
-        Date closedAt;
-        @JsonProperty("user")
-        User user;
-        public User getUser() {
-            return user;
+        @JsonProperty("closed_by")
+        private CloseDetails closedDetails;
+
+        public CloseDetails getUser() {
+            return this.closedDetails;
         }
 
-        public void setUser(User user) {
-            this.user = user;
-        }
-        public Date setClosedAt(Date closedAt) {
-            return this.closedAt=closedAt;
-        }
-        public Date getClosedAt() {
-            return closedAt;
-        }
-        public Date getCreatedAt() {
-            return createdAt;
-        }
+        private static class CloseDetails {
+            @JsonProperty("id")
+            private Long id;
 
-        public void setCreatedAt(Date createdAt) {
-            this.createdAt = createdAt;
-        }
-        
+            public Long getId() {
+                return id;
+            }
+
+            public void setId(Long id) {
+                this.id = id;
+            }
         }
     }
+}
 
 
 

@@ -13,26 +13,25 @@ public class Issue {
     @Id
     @JsonProperty("number")
     private Integer id;
-    
+
     @JsonProperty("created_at")
     private Date dateOpened;
-    
+
     @JsonProperty("closed_at")
     private Date dateClosed;
-    
+
     private String state;
-/*
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "closedBy_id")
-    @JsonProperty("closed_by")
     private User closedBy;
-    
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "openedBy_id")
-    @JsonProperty("id")
+    @JsonProperty("user")
     private User openedBy;
-     */
-    
+
+
     public Integer getId() {
         return id;
     }
@@ -64,7 +63,7 @@ public class Issue {
     public void setState(String state) {
         this.state = state;
     }
-    /*
+
     public User getClosedBy() {
         return closedBy;
     }
@@ -81,5 +80,4 @@ public class Issue {
         this.openedBy = openedBy;
     }
     
-    */
 }
