@@ -120,7 +120,7 @@ public class GithubAPIIssueService {
             .map(details -> {
                 issue.setDateOpened(details.getCreatedAt());
                 issue.setDateClosed(details.getClosedAt());
-                issue.setOpenedBy(details.getUser());
+                //issue.setOpenedBy(details.getUser());
                 return issue;
             });
     }
