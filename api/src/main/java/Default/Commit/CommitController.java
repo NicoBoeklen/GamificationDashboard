@@ -1,14 +1,18 @@
 package Default.Commit;
 
 import Default.GithubAPI.GithubAPICommitService;
+import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 /**
  * Controller to provide get URL for Commits (localhost)
@@ -50,12 +54,15 @@ public class CommitController {
     }
 
     /**
-     * 
-     * @param userId
-     * @return
+     * @return String of commitCount
      */
-    @GetMapping("/commitCount/{user}")
-    public String getCommitCount(@PathVariable Long userId) {
-        return commitService.getCommitCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    @GetMapping("/commitCount/{userId}")
+    public ResponseEntity<?> getCommitCount(@PathVariable Long userId) {
+        try {
+            User user = userService.findById(userId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+            return ResponseEntity.ok(user.getName() +" " + commitService.getCommitCount(user));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
     }
 }

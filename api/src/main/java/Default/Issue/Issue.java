@@ -11,31 +11,30 @@ import java.sql.Date;
 @Table(name = "\"issue\"")
 public class Issue {
     @Id
-    @JsonProperty("sha")
-    private String id;
+    @JsonProperty("number")
+    private Integer id;
+
     private Date dateOpened;
 
     private Date dateClosed;
-    private String State;
+    
+    private String state;
+    
     @OneToOne
     @JoinColumn(name = "closedBy_id")
     @JsonProperty("author")
     private User closedBy;
+    
     @OneToOne
     @JoinColumn(name = "openedBy_id")
     @JsonProperty("author")
     private User openedBy;
-    @OneToOne
-    @JoinColumn(name = "repository_id")
-    @JsonProperty("repository")
-    private GithubRepo repository;
     
-    
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -56,11 +55,11 @@ public class Issue {
     }
 
     public String getState() {
-        return State;
+        return state;
     }
 
     public void setState(String state) {
-        State = state;
+        this.state = state;
     }
 
     public User getClosedBy() {
@@ -79,11 +78,4 @@ public class Issue {
         this.openedBy = openedBy;
     }
 
-    public GithubRepo getRepository() {
-        return repository;
-    }
-
-    public void setRepository(GithubRepo repository) {
-        this.repository = repository;
-    }
 }

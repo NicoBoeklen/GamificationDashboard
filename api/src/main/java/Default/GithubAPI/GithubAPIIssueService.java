@@ -47,8 +47,8 @@ public class GithubAPIIssueService {
      */
     public Flux<Issue> getIssues(String owner, String repo) {
         String url = String.format("/repos/%s/%s/issues", owner, repo);
-        return getIssuesRecursively(url)
-            .flatMap(issue -> fetchIssueDetails(issue, owner, repo));
+        return getIssuesRecursively(url);
+            //.flatMap(issue -> fetchIssueDetails(issue, owner, repo));
     }
 
 
