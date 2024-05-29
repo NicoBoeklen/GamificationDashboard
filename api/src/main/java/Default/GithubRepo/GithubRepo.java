@@ -24,8 +24,9 @@ public class GithubRepo {
     @JsonProperty("created_at")
     private Date createdAt;
 
-    @OneToOne (fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "owner_id")
+    @JsonProperty("owner")
     private User owner;
 
 

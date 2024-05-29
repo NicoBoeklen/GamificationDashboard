@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Controller to provide get URL for User (localhost)
@@ -30,16 +31,10 @@ public class UserController {
      * @return "Contributors saved successfully" with 200 or 500 Error if exception is thrown
      */
     @GetMapping("/contributors/{owner}/{repo}")
-    public ResponseEntity<?> getContributors(@PathVariable String owner, @PathVariable String repo) {
-        try {
-            Flux<User> contributorsFlux = githubService.getContributors(owner, repo);
-
-            //Save die Users in JpaRepository
-            contributorsFlux.subscribe(userService::saveUser);
-
-            return ResponseEntity.ok("Contributors saved successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
-        }
+    public Mono<ResponseEntity<String>> getContributors(@PathVariable String owner, @PathVariable String repo) {
+        return githubService.getContributors(owner, repo)
+            .flatMap(userService::saveUser)  // Save each user
+            .then(Mono.just(ResponseEntity.ok("Contributors saved successfully")))
+            .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
 }

@@ -28,7 +28,7 @@ public class GithubCommitService {
      */
     public GithubCommitService(WebClient.Builder webClientBuilder) {
         // GitHub API key NicoBoeklen
-        String githubApiKey = "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";
+        String githubApiKey = "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";
 
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
