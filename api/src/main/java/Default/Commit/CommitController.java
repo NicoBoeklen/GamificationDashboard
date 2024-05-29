@@ -1,7 +1,6 @@
 package Default.Commit;
 
 import Default.GithubAPI.GithubCommitService;
-import Default.GithubAPI.GithubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,28 +9,34 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
 
+/**
+ * Controller to provide get URL for Commits (localhost)
+ * Uses the GithubCommitService
+ */
 @Controller
 public class CommitController {
+
     @Autowired
-    private GithubCommitService githubService;
+    private GithubCommitService githubCommitService;
 
     @Autowired
     private CommitService commitService;
 
     /**
      * Important: First Users and Then Repository must be in the database or method will fail
-     * 
-     * @param owner
-     * @param repo
-     * @return
+     * Saves the commits in the repository. Calls the Methods in GithubCommitService
+     *
+     * @param owner Owner of the GitHub repository
+     * @param repo  GitHub Repository name
+     * @return "Commits saved successfully" with 200 or 500 Error if exception is thrown
      */
     @GetMapping("/commits/{owner}/{repo}")
     public ResponseEntity<?> getCommits(@PathVariable String owner, @PathVariable String repo) {
         try {
-            // Rufe die Contributors des angegebenen Repositorys ab
-            Flux<Commit> commitsFlux = githubService.getCommits(owner, repo);
+            //Call Request-Method in githubCommitService
+            Flux<Commit> commitsFlux = githubCommitService.getCommits(owner, repo);
 
-            // Speichere die Contributors in deinem JpaRepository
+            //Save Commits in JpaRepository
             commitsFlux.subscribe(commitService::saveCommit);
 
             return ResponseEntity.ok("Commits saved successfully");

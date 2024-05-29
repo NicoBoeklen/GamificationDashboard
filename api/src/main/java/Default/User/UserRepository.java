@@ -2,6 +2,8 @@ package Default.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-public interface UserRepository extends JpaRepository<User, Long>{
+/**
+ * Repository for Users identified by ID (long)
+ */
+public interface UserRepository extends JpaRepository<User, Long> {
 }

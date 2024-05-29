@@ -13,12 +13,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Functionality to request commits via GitHub API
+ * Uses API Key to avoid rate-limit
+ * With API-Key 5000 Requests per Hour are possible
+ */
 @Service
 public class GithubCommitService {
+
     private final WebClient webClient;
 
+    /**
+     * Defines Header and webClient with API-Key
+     */
     public GithubCommitService(WebClient.Builder webClientBuilder) {
-        // GitHub API key
+        // GitHub API key NicoBoeklen
         String githubApiKey = "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";
 
         this.webClient = webClientBuilder
@@ -27,6 +36,14 @@ public class GithubCommitService {
             .build();
     }
 
+    /**
+     * This Method is called to get all Commits from a GitHub Repo
+     * And then get the Details by requesting every specific commit again with its URL
+     *
+     * @param owner Name of the Owner of the GitHub Repository
+     * @param repo  Name of the GitHub Repository
+     * @return Returns a Flux (Datastream) of Commits
+     */
     public Flux<Commit> getCommits(String owner, String repo) {
         String url = String.format("/repos/%s/%s/commits", owner, repo);
         return getCommitsRecursively(url)
@@ -35,14 +52,16 @@ public class GithubCommitService {
 
     /**
      * Gets the commits sha and author
+     * Gets all commits of the actual page and adds them to the other flux of commits
+     * Recursively continues with next page
+     *
      * @param url
-     * @return
+     * @return Returns a Flux of Commits
      */
     private Flux<Commit> getCommitsRecursively(String url) {
         return webClient.get()
             .uri(url)
             .retrieve()
-            //.onStatus(HttpStatus::isError, clientResponse -> Mono.error(new RuntimeException("Failed to fetch commits")))
             .bodyToFlux(Commit.class)
             .collectList()
             .flatMapMany(commits -> getNextPageUrl(url)
@@ -50,6 +69,12 @@ public class GithubCommitService {
                 .switchIfEmpty(Flux.fromIterable(commits)));
     }
 
+    /**
+     * Method to Avoid Pagination of GitHub
+     *
+     * @param url
+     * @return
+     */
     private Mono<String> getNextPageUrl(String url) {
         return webClient.get()
             .uri(url)
@@ -75,10 +100,12 @@ public class GithubCommitService {
     /**
      * Gets the details of the commit: message, date, additions, deletions
      * And sets the boolean isMerge depending on the Message
-     * @param commit
-     * @param owner
-     * @param repo
-     * @return
+     * Requests every single commit with own URL
+     *
+     * @param commit commit to be requested
+     * @param owner  Name of the owner of the GitHub Repository
+     * @param repo   Name of the GitHub Repository
+     * @return Single Commit with als attributes
      */
     private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo) {
         String url = String.format("/repos/%s/%s/commits/%s", owner, repo, commit.getId());
@@ -91,11 +118,18 @@ public class GithubCommitService {
                 commit.setDeletions(details.getStats().getDeletions());
                 commit.setDate(details.getCommitInfo().getAuthor().getDate());
                 commit.setMessage(details.getCommitInfo().getMessage());
-                return commit;})
+                return commit;
+            })
             .map(commits -> setCommitMerge(commit));
     }
 
-    //Sets the boolean isMerge of Commit
+    /**
+     * Sets the boolean whether the commit is a merge commit
+     * Depends on the message if it contains "Merge"
+     *
+     * @param commit
+     * @return Commit with set merge boolean
+     */
     private Commit setCommitMerge(Commit commit) {
         if (commit.getMessage() != null) {
             commit.setMerge(commit.getMessage().contains("Merge"));
@@ -103,13 +137,17 @@ public class GithubCommitService {
         return commit;
     }
 
+    /**
+     * Anonym Class for Requesting Commit Details
+     * Represents the structure of the response of the GitHub API
+     */
     private static class CommitDetails {
         @JsonProperty("commit")
         private CommitInfo commitInfo;
 
         @JsonProperty("stats")
         private Stats stats;
-        
+
         public CommitInfo getCommitInfo() {
             return commitInfo;
         }
@@ -125,7 +163,7 @@ public class GithubCommitService {
         public void setStats(Stats stats) {
             this.stats = stats;
         }
-        
+
         private static class CommitInfo {
             @JsonProperty("author")
             private Author author;
@@ -140,6 +178,7 @@ public class GithubCommitService {
             public void setAuthor(Author author) {
                 this.author = author;
             }
+
             public String getMessage() {
                 return message;
             }

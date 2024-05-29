@@ -8,19 +8,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class User {
     @Id
     private Long id;
-    
+
     @JsonProperty("login")
     private String name;
-    
+
     private Integer level;
 
-    @JsonProperty("avatar_url") // Dieses Attribut gibt an, dass das JSON-Feld avatar_url diesem Java-Feld entspricht
+    @JsonProperty("avatar_url")
     private String avatarUrl;
 
     public User() {
         this.level = 0;
-    }   
+    }
+
     
+    ///////////////////////////////////////////////
+    // Getter & Setter
+    ///////////////////////////////////////////////
+
     public void setId(Long id) {
         this.id = id;
     }

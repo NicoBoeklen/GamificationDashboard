@@ -1,9 +1,7 @@
 package Default.Commit;
 
 import Default.User.User;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -21,7 +19,7 @@ public class Commit {
     private Date date;
 
     private boolean isMerge;
-    
+
     private Integer additions;
 
     private Integer deletions;
@@ -30,6 +28,10 @@ public class Commit {
     @JoinColumn(name = "author_id")
     @JsonProperty("author")
     private User author;
+
+    ///////////////////////////////////////////////
+    // Getter & Setter
+    ///////////////////////////////////////////////    
 
     public String getId() {
         return id;

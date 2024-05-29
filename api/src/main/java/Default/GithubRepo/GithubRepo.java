@@ -28,6 +28,11 @@ public class GithubRepo {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+
+    ///////////////////////////////////////////////
+    // Getter & Setter
+    /////////////////////////////////////////////// 
+    
     public Long getId() {
         return id;
     }
