@@ -2,6 +2,7 @@ package Default.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class UserService {
@@ -10,12 +11,12 @@ public class UserService {
     private UserRepository userRepository;
 
     /**
-     * Saves a User in the repository
+     * Save a user to the repository
      *
      * @param user User to be saved
-     * @return The User commit
+     * @return Mono<User> indicating completion
      */
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public Mono<User> saveUser(User user) {
+        return Mono.fromCallable(() -> userRepository.save(user));
     }
 }

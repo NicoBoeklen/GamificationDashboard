@@ -26,6 +26,7 @@ public class GithubRepo {
 
     @OneToOne
     @JoinColumn(name = "owner_id")
+    @JsonProperty("owner")
     private User owner;
 
 

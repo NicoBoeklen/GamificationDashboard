@@ -23,7 +23,7 @@ public class GithubService {
      */
     public GithubService(WebClient.Builder webClientBuilder) {
         // GitHub API key
-        String githubApiKey = "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";
+        String githubApiKey = "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";
 
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
