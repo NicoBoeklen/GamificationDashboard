@@ -1,5 +1,6 @@
 package Default.GithubAPI;
 
+import Default.Apikey;
 import Default.Issue.Issue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpHeaders;
@@ -7,11 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.sql.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static Default.Apikey.Key.apiKey;
 
 /**
  * Functionality to request issues via GitHub API
@@ -28,11 +30,10 @@ public class GithubAPIIssueService {
      */
     public GithubAPIIssueService(WebClient.Builder webClientBuilder) {
         // GitHub API key NicoBoeklen
-        String githubApiKey = "";
 
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + githubApiKey)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
 

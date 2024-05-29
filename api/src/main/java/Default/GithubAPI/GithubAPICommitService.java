@@ -1,5 +1,6 @@
 package Default.GithubAPI;
 
+import Default.Apikey;
 import Default.Commit.Commit;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpHeaders;
@@ -27,12 +28,9 @@ public class GithubAPICommitService {
      * Defines Header and webClient with API-Key
      */
     public GithubAPICommitService(WebClient.Builder webClientBuilder) {
-        // GitHub API key NicoBoeklen
-        String githubApiKey = "";
-
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + githubApiKey)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
 
