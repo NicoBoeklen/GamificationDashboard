@@ -46,8 +46,9 @@ public class GithubAPIIssueService {
      */
     public Flux<Issue> getIssues(String owner, String repo) {
         String url = String.format("/repos/%s/%s/issues", owner, repo);
-        return getIssuesRecursively(url)
-            //dann noch selber nur mit url /issues?state=closed
+        String url2 = String.format("/repos/%s/%s/issues?state=closed", owner, repo);
+        return Flux.merge(getIssuesRecursively(url), getIssuesRecursively(url2))
+            .distinct(Issue::getId) // Remove duplicates by Issue ID
             .flatMap(issue -> fetchIssueDetails(issue, owner, repo));
     }
 

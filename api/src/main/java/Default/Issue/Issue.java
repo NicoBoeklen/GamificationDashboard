@@ -13,13 +13,14 @@ public class Issue {
     @Id
     @JsonProperty("number")
     private Integer id;
+    
     @JsonProperty("created_at")
     private Date dateOpened;
+    
     @JsonProperty("closed_at")
-
     private Date dateClosed;
     
-   // private String state;
+    private String state;
 /*
     @OneToOne
     @JoinColumn(name = "closedBy_id")
@@ -56,14 +57,14 @@ public class Issue {
         this.dateClosed = dateClosed;
     }
 
-    /*public String getState() {
+    public String getState() {
         return state;
-    }*/
-
-   /* public void setState(String state) {
-        this.state = state;
     }
 
+    public void setState(String state) {
+        this.state = state;
+    }
+    /*
     public User getClosedBy() {
         return closedBy;
     }
