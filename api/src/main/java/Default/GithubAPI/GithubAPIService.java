@@ -14,16 +14,16 @@ import reactor.core.publisher.Mono;
  * With API-Key 5000 Requests per Hour are possible
  */
 @Service
-public class GithubService {
+public class GithubAPIService {
 
     private final WebClient webClient;
 
     /**
      * Defines Header and webClient with API-Key
      */
-    public GithubService(WebClient.Builder webClientBuilder) {
+    public GithubAPIService(WebClient.Builder webClientBuilder) {
         // GitHub API key
-        String githubApiKey = "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";
+        String githubApiKey = "";
 
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")

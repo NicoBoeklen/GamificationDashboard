@@ -13,11 +13,11 @@ import reactor.core.publisher.Mono;
  * ToDo: Change that updateData is called with data from login
  */
 @RestController
-public class GithubController {
+public class GithubAPIController {
 
     private final WebClient webClient;
 
-    public GithubController(WebClient.Builder webClientBuilder) {
+    public GithubAPIController(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
     }
 
