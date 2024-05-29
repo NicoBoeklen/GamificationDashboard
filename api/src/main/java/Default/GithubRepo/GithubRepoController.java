@@ -1,6 +1,6 @@
 package Default.GithubRepo;
 
-import Default.GithubAPI.GithubService;
+import Default.GithubAPI.GithubAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,20 +11,20 @@ import reactor.core.publisher.Mono;
 
 /**
  * Controller to provide get URL for Repository (localhost)
- * Uses the GithubService
+ * Uses the GithubAPIService
  */
 @Controller
 public class GithubRepoController {
 
     @Autowired
-    private GithubService githubService;
+    private GithubAPIService githubAPIService;
 
     @Autowired
     private GithubRepoService repoService;
 
     /**
      * Important: First Users must be in the database or method will fail
-     * Saves the Repository in the JPA-Repository. Calls the Methods in GithubService
+     * Saves the Repository in the JPA-Repository. Calls the Methods in GithubAPIService
      *
      * @param owner Owner of the GitHub repository
      * @param repo  GitHub Repository name
@@ -33,7 +33,7 @@ public class GithubRepoController {
     @GetMapping("/repository/{owner}/{repo}")
     public ResponseEntity<?> getRepository(@PathVariable String owner, @PathVariable String repo) {
         try {
-            Mono<GithubRepo> repoMono = githubService.getRepository(owner, repo);
+            Mono<GithubRepo> repoMono = githubAPIService.getRepository(owner, repo);
 
             //Save the Contributors in JpaRepository
             repoMono.subscribe(repoService::saveRepo);

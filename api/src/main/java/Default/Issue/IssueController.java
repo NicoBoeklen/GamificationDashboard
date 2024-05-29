@@ -1,7 +1,6 @@
 package Default.Issue;
 
-import Default.Issue.Issue;
-import Default.GithubAPI.GithubIssueService;
+import Default.GithubAPI.GithubAPIIssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,20 +11,20 @@ import reactor.core.publisher.Flux;
 
 /**
  * Controller to provide get URL for Issues (localhost)
- * Uses the GithubIssueService
+ * Uses the GithubAPIIssueService
  */
 @Controller
 public class IssueController {
 
     @Autowired
-    private GithubIssueService githubIssueService;
+    private GithubAPIIssueService githubAPIIssueService;
 
     @Autowired
     private IssueService issueService;
 
     /**
      * Important: First Users and Then Repository must be in the database or method will fail
-     * Saves the issues in the repository. Calls the Methods in GithubIssueService
+     * Saves the issues in the repository. Calls the Methods in GithubAPIIssueService
      *
      * @param owner Owner of the GitHub repository
      * @param repo  GitHub Repository name
@@ -35,7 +34,7 @@ public class IssueController {
     public ResponseEntity<?> getIssues(@PathVariable String owner, @PathVariable String repo) {
         try {
             //Call Request-Method in githubIssueService
-            Flux<Issue> issuesFlux = githubIssueService.getIssues(owner, repo);
+            Flux<Issue> issuesFlux = githubAPIIssueService.getIssues(owner, repo);
 
             //Save Issues in JpaRepository
             issuesFlux.subscribe(issueService::saveIssue);

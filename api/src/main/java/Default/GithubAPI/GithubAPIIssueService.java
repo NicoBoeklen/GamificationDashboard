@@ -19,14 +19,14 @@ import java.util.regex.Pattern;
  * With API-Key 5000 Requests per Hour are possible
  */
 @Service
-public class GithubIssueService {
+public class GithubAPIIssueService {
 
     private final WebClient webClient;
 
     /**
      * Defines Header and webClient with API-Key
      */
-    public GithubIssueService(WebClient.Builder webClientBuilder) {
+    public GithubAPIIssueService(WebClient.Builder webClientBuilder) {
         // GitHub API key NicoBoeklen
         String githubApiKey = "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";
 
