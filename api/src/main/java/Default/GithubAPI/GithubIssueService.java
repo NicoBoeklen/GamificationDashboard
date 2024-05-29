@@ -1,6 +1,6 @@
 package Default.GithubAPI;
 
-import Default.Commit.Commit;
+import Default.Issue.Issue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -14,19 +14,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Functionality to request commits via GitHub API
+ * Functionality to request issues via GitHub API
  * Uses API Key to avoid rate-limit
  * With API-Key 5000 Requests per Hour are possible
  */
 @Service
-public class GithubCommitService {
+public class GithubIssueService {
 
     private final WebClient webClient;
 
     /**
      * Defines Header and webClient with API-Key
      */
-    public GithubCommitService(WebClient.Builder webClientBuilder) {
+    public GithubIssueService(WebClient.Builder webClientBuilder) {
         // GitHub API key NicoBoeklen
         String githubApiKey = "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";
 
@@ -37,37 +37,37 @@ public class GithubCommitService {
     }
 
     /**
-     * This Method is called to get all Commits from a GitHub Repo
-     * And then get the Details by requesting every specific commit again with its URL
+     * This Method is called to get all Issues from a GitHub Repo
+     * And then get the Details by requesting every specific issue again with its URL
      *
      * @param owner Name of the Owner of the GitHub Repository
      * @param repo  Name of the GitHub Repository
-     * @return Returns a Flux (Datastream) of Commits
+     * @return Returns a Flux (Datastream) of Issues
      */
-    public Flux<Commit> getCommits(String owner, String repo) {
-        String url = String.format("/repos/%s/%s/commits", owner, repo);
-        return getCommitsRecursively(url)
-            .flatMap(commit -> fetchCommitDetails(commit, owner, repo));
+    public Flux<Issue> getIssues(String owner, String repo) {
+        String url = String.format("/repos/%s/%s/issues", owner, repo);
+        return getIssuesRecursively(url)
+            .flatMap(issue -> fetchIssueDetails(issue, owner, repo));
     }
-    
+
 
     /**
-     * Gets the commits sha and author
-     * Gets all commits of the actual page and adds them to the other flux of commits
+     * Gets the issues sha and author
+     * Gets all issues of the actual page and adds them to the other flux of issues
      * Recursively continues with next page
      *
      * @param url
-     * @return Returns a Flux of Commits
+     * @return Returns a Flux of Issues
      */
-    private Flux<Commit> getCommitsRecursively(String url) {
+    private Flux<Issue> getIssuesRecursively(String url) {
         return webClient.get()
             .uri(url)
             .retrieve()
-            .bodyToFlux(Commit.class)
+            .bodyToFlux(Issue.class)
             .collectList()
-            .flatMapMany(commits -> getNextPageUrl(url)
-                .flatMapMany(nextUrl -> Flux.fromIterable(commits).concatWith(getCommitsRecursively(nextUrl)))
-                .switchIfEmpty(Flux.fromIterable(commits)));
+            .flatMapMany(issues -> getNextPageUrl(url)
+                .flatMapMany(nextUrl -> Flux.fromIterable(issues).concatWith(getIssuesRecursively(nextUrl)))
+                .switchIfEmpty(Flux.fromIterable(issues)));
     }
 
     /**
@@ -99,62 +99,62 @@ public class GithubCommitService {
     }
 
     /**
-     * Gets the details of the commit: message, date, additions, deletions
+     * Gets the details of the issue: message, date, additions, deletions
      * And sets the boolean isMerge depending on the Message
-     * Requests every single commit with own URL
+     * Requests every single issue with own URL
      *
-     * @param commit commit to be requested
+     * @param issue issue to be requested
      * @param owner  Name of the owner of the GitHub Repository
      * @param repo   Name of the GitHub Repository
-     * @return Single Commit with als attributes
+     * @return Single Issue with als attributes
      */
-    private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo) {
-        String url = String.format("/repos/%s/%s/commits/%s", owner, repo, commit.getId());
+    private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo) {
+        String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getId());
         return webClient.get()
             .uri(url)
             .retrieve()
-            .bodyToMono(CommitDetails.class)
+            .bodyToMono(IssueDetails.class)
             .map(details -> {
-                commit.setAdditions(details.getStats().getAdditions());
-                commit.setDeletions(details.getStats().getDeletions());
-                commit.setDate(details.getCommitInfo().getAuthor().getDate());
-                commit.setMessage(details.getCommitInfo().getMessage());
-                return commit;
+                issue.setAdditions(details.getStats().getAdditions());
+                issue.setDeletions(details.getStats().getDeletions());
+                issue.setDate(details.getIssueInfo().getAuthor().getDate());
+                issue.setMessage(details.getIssueInfo().getMessage());
+                return issue;
             })
-            .map(commits -> setCommitMerge(commit));
+            .map(issues -> setIssueMerge(issue));
     }
 
     /**
-     * Sets the boolean whether the commit is a merge commit
+     * Sets the boolean whether the issue is a merge issue
      * Depends on the message if it contains "Merge"
      *
-     * @param commit
-     * @return Commit with set merge boolean
+     * @param issue
+     * @return Issue with set merge boolean
      */
-    private Commit setCommitMerge(Commit commit) {
-        if (commit.getMessage() != null) {
-            commit.setMerge(commit.getMessage().contains("Merge"));
+    private Issue setIssueMerge(Issue issue) {
+        if (issue.getMessage() != null) {
+            issue.setMerge(issue.getMessage().contains("Merge"));
         }
-        return commit;
+        return issue;
     }
 
     /**
-     * Anonym Class for Requesting Commit Details
+     * Anonym Class for Requesting Issue Details
      * Represents the structure of the response of the GitHub API
      */
-    private static class CommitDetails {
-        @JsonProperty("commit")
-        private CommitInfo commitInfo;
+    private static class IssueDetails {
+        @JsonProperty("issue")
+        private IssueInfo issueInfo;
 
         @JsonProperty("stats")
         private Stats stats;
 
-        public CommitInfo getCommitInfo() {
-            return commitInfo;
+        public IssueInfo getIssueInfo() {
+            return issueInfo;
         }
 
-        public void setCommitInfo(CommitInfo commitInfo) {
-            this.commitInfo = commitInfo;
+        public void setIssueInfo(IssueInfo issueInfo) {
+            this.issueInfo = issueInfo;
         }
 
         public Stats getStats() {
@@ -165,7 +165,7 @@ public class GithubCommitService {
             this.stats = stats;
         }
 
-        private static class CommitInfo {
+        private static class IssueInfo {
             @JsonProperty("author")
             private Author author;
 
