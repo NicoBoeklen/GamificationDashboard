@@ -11,12 +11,13 @@ import java.sql.Date;
 @Table(name = "\"issue\"")
 public class Issue {
     @Id
-    @JsonProperty("sha")
+    @JsonProperty("id")
     private String id;
+    @JsonProperty("created_at")
     private Date dateOpened;
-
+    @JsonProperty("closed_at")
     private Date dateClosed;
-    private String State;
+    private String state;
     @OneToOne
     @JoinColumn(name = "closedBy_id")
     @JsonProperty("author")
@@ -56,11 +57,11 @@ public class Issue {
     }
 
     public String getState() {
-        return State;
+        return state;
     }
 
     public void setState(String state) {
-        State = state;
+        this.state = state;
     }
 
     public User getClosedBy() {
