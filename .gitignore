@@ -1,7 +1,7 @@
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
-api/src/main/java/Default/Apikey.java
+!**/src/main/java/Default/Apikey.java
 ### STS ###
 .apt_generated
 .classpath
