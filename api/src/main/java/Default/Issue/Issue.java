@@ -11,23 +11,15 @@ import java.sql.Date;
 @Table(name = "\"issue\"")
 public class Issue {
     @Id
-    @JsonProperty("number")
-    private Integer id;
 
-    private Date dateOpened;
-
-    private Date dateClosed;
-    
-    private String state;
-    
     @OneToOne
     @JoinColumn(name = "closedBy_id")
-    @JsonProperty("author")
+    @JsonProperty("closed_by")
     private User closedBy;
     
     @OneToOne
     @JoinColumn(name = "openedBy_id")
-    @JsonProperty("author")
+    @JsonProperty("id")
     private User openedBy;
     
     public Integer getId() {
