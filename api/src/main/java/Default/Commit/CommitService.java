@@ -1,5 +1,6 @@
 package Default.Commit;
 
+import Default.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +18,14 @@ public class CommitService {
      */
     public Commit saveCommit(Commit commit) {
         return commitRepository.save(commit);
+    }
+    
+    /**
+     * Gives back all Commits from the user excluding merge commits
+     * @param user
+     * @return count of Commits
+     */
+    public Integer getCommitCount(User user) {
+        return commitRepository.getAllCommitsBy(user.getId());
     }
 }

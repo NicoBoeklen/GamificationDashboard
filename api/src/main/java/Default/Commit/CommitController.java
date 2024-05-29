@@ -1,6 +1,7 @@
 package Default.Commit;
 
 import Default.GithubAPI.GithubAPICommitService;
+import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class CommitController {
 
     @Autowired
     private CommitService commitService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Important: First Users and Then Repository must be in the database or method will fail
@@ -43,5 +47,15 @@ public class CommitController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
+    }
+
+    /**
+     * 
+     * @param userId
+     * @return
+     */
+    @GetMapping("/commitCount/{user}")
+    public String getCommitCount(@PathVariable Long userId) {
+        return commitService.getCommitCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
     }
 }

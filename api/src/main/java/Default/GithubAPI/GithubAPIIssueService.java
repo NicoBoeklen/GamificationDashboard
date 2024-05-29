@@ -30,6 +30,7 @@ public class GithubAPIIssueService {
      */
     public GithubAPIIssueService(WebClient.Builder webClientBuilder) {
         // GitHub API key NicoBoeklen
+
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
