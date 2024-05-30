@@ -5,15 +5,16 @@ import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.netty.handler.codec.http.HttpRequestDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.codec.ClientCodecConfigurer;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -41,17 +42,16 @@ public class GithubAPIPullRequestService {
      * Defines Header and webClient with API-Key
      */
     public GithubAPIPullRequestService(WebClient.Builder webClientBuilder) {
+        HttpClient httpClient = HttpClient.create()
+            .wiretap("reactor.netty.http.client.HttpClient")
+            .doOnConnected(conn ->
+                conn .addHandlerLast(new HttpRequestDecoder(64 * 1024 * 1024, 64 * 1024 * 1024, 64 * 1024 * 1024)));
+
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
-            .exchangeStrategies(ExchangeStrategies.builder()
-                .codecs(this::customizeCodecs)
-                .build())
+            .clientConnector(new ReactorClientHttpConnector(httpClient))
             .build();
-    }
-
-    private void customizeCodecs(ClientCodecConfigurer configurer) {
-        configurer.defaultCodecs().maxInMemorySize(-1); // Set unlimited buffer size
     }
 
     /**

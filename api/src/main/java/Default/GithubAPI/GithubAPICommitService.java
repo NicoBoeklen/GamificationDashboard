@@ -3,13 +3,14 @@ package Default.GithubAPI;
 import Default.Apikey;
 import Default.Commit.Commit;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.netty.handler.codec.http.HttpRequestDecoder;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.codec.ClientCodecConfigurer;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
 import java.sql.Date;
 import java.util.List;
@@ -30,17 +31,16 @@ public class GithubAPICommitService {
      * Defines Header and webClient with API-Key
      */
     public GithubAPICommitService(WebClient.Builder webClientBuilder) {
+        HttpClient httpClient = HttpClient.create()
+            .wiretap("reactor.netty.http.client.HttpClient")
+            .doOnConnected(conn ->
+                conn .addHandlerLast(new HttpRequestDecoder(64 * 1024 * 1024, 64 * 1024 * 1024, 64 * 1024 * 1024)));
+
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
-            .exchangeStrategies(ExchangeStrategies.builder()
-                .codecs(this::customizeCodecs)
-                .build())
+            .clientConnector(new ReactorClientHttpConnector(httpClient))
             .build();
-    }
-
-    private void customizeCodecs(ClientCodecConfigurer configurer) {
-        configurer.defaultCodecs().maxInMemorySize(-1); // Set unlimited buffer size
     }
 
     /**
@@ -56,7 +56,7 @@ public class GithubAPICommitService {
         return getCommitsRecursively(url)
             .flatMap(commit -> fetchCommitDetails(commit, owner, repo));
     }
-    
+
 
     /**
      * Gets the commits sha and author
