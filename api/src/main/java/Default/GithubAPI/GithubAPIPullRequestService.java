@@ -16,6 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
+import java.net.URI;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,15 +43,15 @@ public class GithubAPIPullRequestService {
      * Defines Header and webClient with API-Key
      */
     public GithubAPIPullRequestService(WebClient.Builder webClientBuilder) {
-        HttpClient httpClient = HttpClient.create()
+        /*HttpClient httpClient = HttpClient.create()
             .wiretap("reactor.netty.http.client.HttpClient")
             .doOnConnected(conn ->
                 conn .addHandlerLast(new HttpRequestDecoder(64 * 1024 * 1024, 64 * 1024 * 1024, 64 * 1024 * 1024)));
-
+        */
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
-            .clientConnector(new ReactorClientHttpConnector(httpClient))
+            //.clientConnector(new ReactorClientHttpConnector(httpClient))
             .build();
     }
 
@@ -95,7 +96,7 @@ public class GithubAPIPullRequestService {
      * @param url
      * @return
      */
-    private Mono<String> getNextPageUrl(String url) {
+    /*private Mono<String> getNextPageUrl(String url) {
         return webClient.get()
             .uri(url)
             .exchangeToMono(response -> {
@@ -113,6 +114,46 @@ public class GithubAPIPullRequestService {
                     }
                 }
 
+                return Mono.empty();
+            });
+    }*/
+    /**
+     * Method to Avoid Pagination of GitHub
+     *
+     * @param url The current page URL
+     * @return A Mono containing the URL of the next page, or empty if no next page exists
+     */
+    private Mono<String> getNextPageUrl(String url) {
+        // Parse the current URL to get the base and the current page number
+        URI uri = URI.create(url);
+        String baseUrl = uri.getPath().split("\\?")[0];
+        String query = uri.getQuery();
+        int currentPage = 1;
+
+        // Extract the current page number from the query, if present
+        if (query != null && query.contains("page=")) {
+            Pattern pattern = Pattern.compile("page=(\\d+)");
+            Matcher matcher = pattern.matcher(query);
+            if (matcher.find()) {
+                currentPage = Integer.parseInt(matcher.group(1));
+            }
+        }
+
+        int nextPage = currentPage + 1;
+        String nextUrl = String.format("%s?page=%d", baseUrl, nextPage);
+
+        return webClient.get()
+            .uri(nextUrl)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return response.bodyToMono(String.class).flatMap(body -> {
+                        // Check if the body contains data, if not return empty
+                        if (body.isEmpty()) {
+                            return Mono.empty();
+                        }
+                        return Mono.just(nextUrl);
+                    });
+                }
                 return Mono.empty();
             });
     }
