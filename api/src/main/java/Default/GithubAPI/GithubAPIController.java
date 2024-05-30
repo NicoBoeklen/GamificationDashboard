@@ -36,10 +36,15 @@ public class GithubAPIController {
             .then(getDataFromCommits(owner, repo))
             .then(getDataFromIssues(owner, repo))
             .then(getDataFromPullRequest(owner, repo))
+            .then(getDataFromReleases(owner, repo))
             .then(Mono.just(ResponseEntity.ok("Data saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("Error occurred: " + e.getMessage())));
     }
 
+    ///////////////////////////////////////////////
+    // Requesting methods
+    ///////////////////////////////////////////////
+    
     /**
      * Calls API Request on User Controller
      *
@@ -109,5 +114,19 @@ public class GithubAPIController {
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("PullRequest Response: " + response))
             .doOnError(error -> System.err.println("Error in getDataFromPullRequests: " + error.getMessage()));
+    }
+
+    /**
+     * Calls API Request on Release Controller
+     *
+     * @return String if Successfully or not
+     */
+    private Mono<String> getDataFromReleases(String owner, String repo) {
+        return webClient.get()
+            .uri("/release/{owner}/{repo}", owner, repo)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnNext(response -> System.out.println("Release Response: " + response))
+            .doOnError(error -> System.err.println("Error in getDataFromReleases: " + error.getMessage()));
     }
 }

@@ -2,6 +2,7 @@ package Default.GithubAPI;
 
 import Default.Apikey;
 import Default.GithubRepo.GithubRepo;
+import Default.Release.Release;
 import Default.User.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Functionality to request contributors and Repository via GitHub API
+ * Functionality to request contributors, releases and Repository via GitHub API
  * Uses API Key to avoid rate-limit
  * With API-Key 5000 Requests per Hour are possible
  */
@@ -55,6 +56,20 @@ public class GithubAPIService {
             .uri("/repos/{owner}/{repo}", owner, repo)
             .retrieve()
             .bodyToMono(GithubRepo.class);
+    }
+
+    /**
+     * This Method is called to get all Releases from a GitHub Repo
+     *
+     * @param owner Name of the Owner of the GitHub Repository
+     * @param repo  Name of the GitHub Repository
+     * @return Returns a Flux (Datastream) of Releases
+     */
+    public Flux<Release> getReleases(String owner, String repo) {
+        return this.webClient.get()
+            .uri("/repos/{owner}/{repo}/releases", owner, repo)
+            .retrieve()
+            .bodyToFlux(Release.class);
     }
 }
 
