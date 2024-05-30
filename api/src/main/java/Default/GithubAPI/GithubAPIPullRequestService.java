@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.codec.ClientCodecConfigurer;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -42,7 +44,14 @@ public class GithubAPIPullRequestService {
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
+            .exchangeStrategies(ExchangeStrategies.builder()
+                .codecs(this::customizeCodecs)
+                .build())
             .build();
+    }
+
+    private void customizeCodecs(ClientCodecConfigurer configurer) {
+        configurer.defaultCodecs().maxInMemorySize(-1); // Set unlimited buffer size
     }
 
     /**
