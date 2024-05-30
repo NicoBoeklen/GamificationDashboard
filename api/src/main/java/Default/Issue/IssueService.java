@@ -19,7 +19,6 @@ public class IssueService {
      * @return The saved issue
      */
     public Mono<Issue> saveIssue(Issue issue) {
-        System.out.println("Speichere Issue: " + issue.getId());
         return Mono.fromCallable(() -> issueRepository.save(issue));
     }
 

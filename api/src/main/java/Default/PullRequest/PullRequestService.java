@@ -20,7 +20,6 @@ public class PullRequestService {
      * @return The saved pullRequest
      */
     public PullRequest savePullRequest(PullRequest pullRequest) {
-        System.out.println("Speichere PullRequest: " + pullRequest.getId());
         issueService.deleteIssueById(pullRequest.getId());
         return pullRequestRepository.save(pullRequest);
     }
