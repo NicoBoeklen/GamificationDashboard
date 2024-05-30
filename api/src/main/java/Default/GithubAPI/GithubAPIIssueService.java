@@ -2,22 +2,19 @@ package Default.GithubAPI;
 
 import Default.Apikey;
 import Default.Issue.Issue;
-import Default.User.User;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static Default.Apikey.Key.apiKey;
 
 /**
  * Functionality to request issues via GitHub API
@@ -48,7 +45,7 @@ public class GithubAPIIssueService {
      *
      * @param owner Name of the Owner of the GitHub Repository
      * @param repo  Name of the GitHub Repository
-     * @return Returns a Flux (Datastream) of Issues
+     * @return Returns a Flux (Data-stream) of Issues
      */
     public Flux<Issue> getIssues(String owner, String repo) {
         String url = String.format("/repos/%s/%s/issues", owner, repo);
@@ -64,7 +61,7 @@ public class GithubAPIIssueService {
      * Gets all issues of the actual page and adds them to the other flux of issues
      * Recursively continues with next page
      *
-     * @param url
+     * @param url URL
      * @return Returns a Flux of Issues
      */
     private Flux<Issue> getIssuesRecursively(String url) {
@@ -81,8 +78,8 @@ public class GithubAPIIssueService {
     /**
      * Method to Avoid Pagination of GitHub
      *
-     * @param url
-     * @return
+     * @param url URL
+     * @return mono
      */
     private Mono<String> getNextPageUrl(String url) {
         return webClient.get()
@@ -116,26 +113,31 @@ public class GithubAPIIssueService {
      * @return Single Issue with als attributes
      */
     private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo) {
-
         String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getId());
-        if (issue.getDateClosed() != null) {
             return webClient.get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(IssueDetails.class)
                 .map(details -> {
-                    issue.setClosedBy(userService.findById(details.getUser().getId()).orElseThrow());
+                    //Get closedBy User if getDateClosed is not null
+                    if (issue.getDateClosed() != null) {
+                        try {
+                            //It can happen that an issue is closed by a user that is not a contributor
+                            issue.setClosedBy(userService.findById(details.getUser().getId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                        } catch (ChangeSetPersister.NotFoundException e) {
+                            issue.setClosedBy(null);
+                        }
+                    }
+                    try {
+                        //It can happen that an issue is opened by a user that is not a contributor
+                        issue.setOpenedBy(userService.findById(issue.getOpenedBy().getId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                    } catch (ChangeSetPersister.NotFoundException e) {
+                        issue.setOpenedBy(null);
+                    }
                     return issue;
                 });
         }
-        return webClient.get()
-            .uri(url)
-            .retrieve()
-            .bodyToMono(IssueDetails.class)
-            .map(details -> {
-                return issue;
-            });
-    }
+    
 
     /**
      * Anonym Class for Requesting Issue Details

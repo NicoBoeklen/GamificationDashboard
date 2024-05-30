@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
  * Functionality to request issues via GitHub API
  * Uses API Key to avoid rate-limit
  * With API-Key 5000 Requests per Hour are possible
+ * 
+ * ToDo: Check if mergedBy is good for closedBy (=Who reviewed). Whats with auto merge?
  */
 @Service
 public class GithubAPIPullRequestService {
