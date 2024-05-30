@@ -36,7 +36,7 @@ public class IssueService {
     /**
      * 
      * @param id id of the issue
-     * @return Closed by User or throws exception
+     * @return Closed by User or throws exception, can be null
      */
     public User findClosedByWithId(Integer id) throws ChangeSetPersister.NotFoundException {
         return issueRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new).getClosedBy();

@@ -14,6 +14,7 @@ public class GithubRepo {
 
     private String name;
 
+    @Lob
     private String description;
 
     private String language;

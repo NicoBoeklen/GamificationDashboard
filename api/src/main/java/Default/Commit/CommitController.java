@@ -1,6 +1,7 @@
 package Default.Commit;
 
 import Default.GithubAPI.GithubAPICommitService;
+import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 /**
  * Controller to provide get URL for Commits (localhost)
@@ -38,8 +42,17 @@ public class CommitController {
     public ResponseEntity<?> getCommits(@PathVariable String owner, @PathVariable String repo) {
         try {
             //Call Request-Method in githubCommitService
-            Flux<Commit> commitsFlux = githubAPICommitService.getCommits(owner, repo);
-
+            Flux<Commit> commitsFlux = githubAPICommitService.getCommits(owner, repo)
+                //If author is not a contributor (no User exists in Database)
+                .flatMap(commits -> {
+                    if (commits.getAuthor() != null) {
+                        Optional<User> userOptional = userService.findById(commits.getAuthor().getId());
+                        if (userOptional.isEmpty()) {
+                            commits.setAuthor(null);
+                        }
+                    }
+                    return Mono.just(commits);
+                });
             //Save Commits in JpaRepository
             commitsFlux.subscribe(commitService::saveCommit);
 
@@ -50,7 +63,6 @@ public class CommitController {
     }
 
     /**
-     * 
      * @param userId
      * @return
      */

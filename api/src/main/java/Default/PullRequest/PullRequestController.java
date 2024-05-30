@@ -35,7 +35,7 @@ public class PullRequestController {
         try {
             //Call Request-Method in githubPullRequestService
             Flux<PullRequest> pullRequestFlux = githubAPIPullRequestService.getPullRequests(owner, repo);
-
+            
             //Save PullRequest in JpaRepository and deletes the issue
             pullRequestFlux.subscribe(pullRequestService::savePullRequest);
 
