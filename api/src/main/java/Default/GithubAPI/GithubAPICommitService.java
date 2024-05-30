@@ -133,6 +133,7 @@ public class GithubAPICommitService {
         if (commit.getMessage() != null) {
             commit.setMerge(commit.getMessage().contains("Merge"));
         }
+        commit.setMessage("");
         return commit;
     }
 

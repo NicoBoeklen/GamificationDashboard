@@ -3,6 +3,7 @@ package Default.GithubAPI;
 import Default.Apikey;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
+import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -30,6 +31,9 @@ public class GithubAPIPullRequestService {
 
     @Autowired
     private IssueService issueService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Defines Header and webClient with API-Key
@@ -131,6 +135,12 @@ public class GithubAPIPullRequestService {
                 pullRequest.setDeletions(details.deletions);
                 pullRequest.setCommentNumber(details.commentNumber);
                 pullRequest.setCommitNumber(details.commitNumber);
+                try {
+                    //It can happen that an issue is opened by a user that is not a contributor
+                    pullRequest.setOpenedBy(userService.findById(pullRequest.getOpenedBy().getId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                } catch (ChangeSetPersister.NotFoundException e) {
+                    pullRequest.setOpenedBy(null);
+                }
                 return pullRequest;
             });
     }

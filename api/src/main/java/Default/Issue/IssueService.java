@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import Default.User.User;
-
-import java.util.Optional;
+import reactor.core.publisher.Mono;
 
 @Service
 public class IssueService {
@@ -19,8 +18,9 @@ public class IssueService {
      * @param issue Issue to be saved
      * @return The saved issue
      */
-    public Issue saveIssue(Issue issue) {
-        return issueRepository.save(issue);
+    public Mono<Issue> saveIssue(Issue issue) {
+        System.out.println("Speichere Issue: " + issue.getId());
+        return Mono.fromCallable(() -> issueRepository.save(issue));
     }
 
     /**
