@@ -23,7 +23,7 @@ public class GithubAPIController {
 
     /**
      * Calls all relevant methods in the controller to get all Data from the Repository
-     * Such as Issues, Commits, User Data, ...
+     * Such as Issues, Commits, User Data, Repo Data and PullRequests
      * Its Important that User Data is requested first, then Repository Data
      *
      * @return 200 if successful
@@ -35,6 +35,7 @@ public class GithubAPIController {
             .then(getDataFromRepository(owner, repo))
             .then(getDataFromCommits(owner, repo))
             .then(getDataFromIssues(owner, repo))
+            .then(getDataFromPullRequest(owner, repo))
             .then(Mono.just(ResponseEntity.ok("Data saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("Error occurred: " + e.getMessage())));
     }
@@ -93,5 +94,20 @@ public class GithubAPIController {
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Issues Response: " + response))
             .doOnError(error -> System.err.println("Error in getDataFromIssues: " + error.getMessage()));
+    }
+
+    /**
+     * Calls API Request on PullRequest Controller
+     * Issues have to be in the database first (PullRequests are Issues with extra Data)
+     *
+     * @return String if Successfully or not
+     */
+    private Mono<String> getDataFromPullRequest(String owner, String repo) {
+        return webClient.get()
+            .uri("/pullRequests/{owner}/{repo}", owner, repo)
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnNext(response -> System.out.println("PullRequest Response: " + response))
+            .doOnError(error -> System.err.println("Error in getDataFromPullRequests: " + error.getMessage()));
     }
 }
