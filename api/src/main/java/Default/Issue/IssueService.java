@@ -1,7 +1,11 @@
 package Default.Issue;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import Default.User.User;
+
+import java.util.Optional;
 
 @Service
 public class IssueService {
@@ -27,5 +31,14 @@ public class IssueService {
      */
     public void deleteIssueById(Integer issueId) {
         issueRepository.deleteById(issueId);
+    }
+
+    /**
+     * 
+     * @param id id of the issue
+     * @return Closed by User or throws exception
+     */
+    public User findClosedByWithId(Integer id) throws ChangeSetPersister.NotFoundException {
+        return issueRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new).getClosedBy();
     }
 }

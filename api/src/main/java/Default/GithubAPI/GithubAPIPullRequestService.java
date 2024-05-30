@@ -1,11 +1,11 @@
 package Default.GithubAPI;
 
 import Default.Apikey;
-import Default.Issue.Issue;
+import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
-import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,7 +27,7 @@ public class GithubAPIPullRequestService {
     private final WebClient webClient;
 
     @Autowired
-    private UserService userService;
+    private IssueService issueService;
 
     /**
      * Defines Header and webClient with API-Key
@@ -120,7 +120,11 @@ public class GithubAPIPullRequestService {
             .retrieve()
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {
-                //pullRequest.setClosedBy(userService.findById(details.getUser().getId()).orElseThrow());
+                try {
+                    pullRequest.setClosedBy(issueService.findClosedByWithId(pullRequest.getId()));
+                } catch (ChangeSetPersister.NotFoundException e) {
+                    pullRequest.setClosedBy(null);
+                }
                 pullRequest.setAdditions(details.additions);
                 pullRequest.setDeletions(details.deletions);
                 pullRequest.setCommentNumber(details.commentNumber);
