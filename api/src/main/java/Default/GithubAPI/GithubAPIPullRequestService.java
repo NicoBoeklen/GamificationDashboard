@@ -5,16 +5,13 @@ import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.netty.handler.codec.http.HttpRequestDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient;
 
 import java.net.URI;
 import java.util.List;
@@ -43,15 +40,9 @@ public class GithubAPIPullRequestService {
      * Defines Header and webClient with API-Key
      */
     public GithubAPIPullRequestService(WebClient.Builder webClientBuilder) {
-        /*HttpClient httpClient = HttpClient.create()
-            .wiretap("reactor.netty.http.client.HttpClient")
-            .doOnConnected(conn ->
-                conn .addHandlerLast(new HttpRequestDecoder(64 * 1024 * 1024, 64 * 1024 * 1024, 64 * 1024 * 1024)));
-        */
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
-            //.clientConnector(new ReactorClientHttpConnector(httpClient))
             .build();
     }
 
@@ -89,34 +80,7 @@ public class GithubAPIPullRequestService {
                 .flatMapMany(nextUrl -> Flux.fromIterable(pullRequest).concatWith(getPullsRecursively(nextUrl)))
                 .switchIfEmpty(Flux.fromIterable(pullRequest)));
     }
-
-    /**
-     * Method to Avoid Pagination of GitHub
-     *
-     * @param url
-     * @return
-     */
-    /*private Mono<String> getNextPageUrl(String url) {
-        return webClient.get()
-            .uri(url)
-            .exchangeToMono(response -> {
-                HttpHeaders headers = response.headers().asHttpHeaders();
-                List<String> linkHeaders = headers.get(HttpHeaders.LINK);
-                if (linkHeaders == null || linkHeaders.isEmpty()) {
-                    return Mono.empty();
-                }
-
-                Pattern pattern = Pattern.compile("<(.*?)>;\\s*rel=\"next\"");
-                for (String header : linkHeaders) {
-                    Matcher matcher = pattern.matcher(header);
-                    if (matcher.find()) {
-                        return Mono.just(matcher.group(1));
-                    }
-                }
-
-                return Mono.empty();
-            });
-    }*/
+    
     /**
      * Method to Avoid Pagination of GitHub
      *
@@ -141,7 +105,7 @@ public class GithubAPIPullRequestService {
         int nextPage = currentPage + 1;
         String nextUrl;
         if (query != null && !query.isEmpty()) {
-            nextUrl = baseUrl + "?" + query.replaceAll("page=\\d+", "") + "page=" + nextPage;
+            nextUrl = baseUrl + "?" + query.replaceAll("page=\\d+", "") + "&page=" + nextPage;
         } else {
             nextUrl = baseUrl + "?page=" + nextPage;
         }
