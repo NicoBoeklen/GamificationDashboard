@@ -112,13 +112,11 @@ public class GithubAPICommitService {
      * @return A Mono containing the URL of the next page, or empty if no next page exists
      */
     private Mono<String> getNextPageUrl(String url) {
-        // Parse the current URL to get the base and the current page number
         URI uri = URI.create(url);
         String baseUrl = uri.getPath().split("\\?")[0];
         String query = uri.getQuery();
         int currentPage = 1;
 
-        // Extract the current page number from the query, if present
         if (query != null && query.contains("page=")) {
             Pattern pattern = Pattern.compile("page=(\\d+)");
             Matcher matcher = pattern.matcher(query);
@@ -129,14 +127,14 @@ public class GithubAPICommitService {
 
         int nextPage = currentPage + 1;
         String nextUrl = String.format("%s?page=%d", baseUrl, nextPage);
+        System.out.println(nextUrl);
 
         return webClient.get()
             .uri(nextUrl)
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
-                    return response.bodyToMono(String.class).flatMap(body -> {
-                        // Check if the body contains data, if not return empty
-                        if (body.isEmpty()) {
+                    return response.bodyToMono(List.class).flatMap(body -> {
+                        if (body == null || body.isEmpty()) {
                             return Mono.empty();
                         }
                         return Mono.just(nextUrl);
