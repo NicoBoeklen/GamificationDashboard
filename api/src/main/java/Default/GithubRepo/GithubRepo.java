@@ -14,6 +14,7 @@ public class GithubRepo {
 
     private String name;
 
+    @Lob
     private String description;
 
     private String language;
@@ -26,6 +27,7 @@ public class GithubRepo {
 
     @OneToOne
     @JoinColumn(name = "owner_id")
+    @JsonProperty("owner")
     private User owner;
 
 

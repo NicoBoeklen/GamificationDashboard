@@ -2,6 +2,10 @@ package Default.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -10,12 +14,20 @@ public class UserService {
     private UserRepository userRepository;
 
     /**
-     * Saves a User in the repository
+     * Save a user to the repository
      *
      * @param user User to be saved
-     * @return The User commit
+     * @return Mono<User> indicating completion
      */
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public Mono<User> saveUser(User user) {
+        return Mono.fromCallable(() -> userRepository.save(user));
+    }
+    
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+    
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

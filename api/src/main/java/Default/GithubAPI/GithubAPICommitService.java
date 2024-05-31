@@ -1,5 +1,6 @@
 package Default.GithubAPI;
 
+import Default.Apikey;
 import Default.Commit.Commit;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.sql.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,20 +21,17 @@ import java.util.regex.Pattern;
  * With API-Key 5000 Requests per Hour are possible
  */
 @Service
-public class GithubCommitService {
+public class GithubAPICommitService {
 
     private final WebClient webClient;
 
     /**
      * Defines Header and webClient with API-Key
      */
-    public GithubCommitService(WebClient.Builder webClientBuilder) {
-        // GitHub API key NicoBoeklen
-        String githubApiKey = "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";
-
+    public GithubAPICommitService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + githubApiKey)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
 
@@ -49,7 +48,7 @@ public class GithubCommitService {
         return getCommitsRecursively(url)
             .flatMap(commit -> fetchCommitDetails(commit, owner, repo));
     }
-    
+
 
     /**
      * Gets the commits sha and author
@@ -73,27 +72,38 @@ public class GithubCommitService {
     /**
      * Method to Avoid Pagination of GitHub
      *
-     * @param url
-     * @return
+     * @param url The current page URL
+     * @return A Mono containing the URL of the next page, or empty if no next page exists
      */
     private Mono<String> getNextPageUrl(String url) {
+        URI uri = URI.create(url);
+        String baseUrl = uri.getPath().split("\\?")[0];
+        String query = uri.getQuery();
+        int currentPage = 1;
+
+        if (query != null && query.contains("page=")) {
+            Pattern pattern = Pattern.compile("page=(\\d+)");
+            Matcher matcher = pattern.matcher(query);
+            if (matcher.find()) {
+                currentPage = Integer.parseInt(matcher.group(1));
+            }
+        }
+
+        int nextPage = currentPage + 1;
+        String nextUrl = String.format("%s?page=%d", baseUrl, nextPage);
+        System.out.println(nextUrl);
+
         return webClient.get()
-            .uri(url)
+            .uri(nextUrl)
             .exchangeToMono(response -> {
-                HttpHeaders headers = response.headers().asHttpHeaders();
-                List<String> linkHeaders = headers.get(HttpHeaders.LINK);
-                if (linkHeaders == null || linkHeaders.isEmpty()) {
-                    return Mono.empty();
+                if (response.statusCode().is2xxSuccessful()) {
+                    return response.bodyToMono(List.class).flatMap(body -> {
+                        if (body == null || body.isEmpty()) {
+                            return Mono.empty();
+                        }
+                        return Mono.just(nextUrl);
+                    });
                 }
-
-                Pattern pattern = Pattern.compile("<(.*?)>;\\s*rel=\"next\"");
-                for (String header : linkHeaders) {
-                    Matcher matcher = pattern.matcher(header);
-                    if (matcher.find()) {
-                        return Mono.just(matcher.group(1));
-                    }
-                }
-
                 return Mono.empty();
             });
     }
@@ -135,6 +145,7 @@ public class GithubCommitService {
         if (commit.getMessage() != null) {
             commit.setMerge(commit.getMessage().contains("Merge"));
         }
+        commit.setMessage("");
         return commit;
     }
 
