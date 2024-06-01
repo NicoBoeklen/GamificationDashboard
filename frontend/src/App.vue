@@ -16,16 +16,10 @@ import "agnostic-vue/dist/index.css";
             <RouterLink to="/">Home</RouterLink>
           </HeaderNavItem>
           <HeaderNavItem>
-            <RouterLink to="/about">About</RouterLink>
-          </HeaderNavItem>
-          <HeaderNavItem>
             <RouterLink to="/assignees">Assignees</RouterLink>
           </HeaderNavItem>
           <HeaderNavItem>
-            <RouterLink to="/todos">Todos</RouterLink>
-          </HeaderNavItem>
-          <HeaderNavItem>
-            <RouterLink to="/create-assignee" class="hidden-link"></RouterLink>
+            <RouterLink to="/todos">ToDos</RouterLink>
           </HeaderNavItem>
         </HeaderNav>
       </template>
@@ -60,10 +54,5 @@ import "agnostic-vue/dist/index.css";
 <style scoped>
 .main {
   padding: 10px 20px;
-}
-
-.hidden-link {
-  display: none;
-  pointer-events: none;
 }
 </style>
