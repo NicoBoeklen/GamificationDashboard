@@ -1,6 +1,9 @@
 package Default.Commit;
 
+import Default.Commit.Stats.CodeGrowth;
+import Default.Commit.Stats.CommitMetric;
 import Default.GithubAPI.GithubAPICommitService;
+import Default.Issue.Stats.IssueStats;
 import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +12,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
  * Controller to provide get URL for Commits (localhost)
  * Uses the GithubAPICommitService
  */
-@Controller
+@RestController
 public class CommitController {
 
     @Autowired
@@ -67,7 +72,48 @@ public class CommitController {
      * @return
      */
     @GetMapping("/commitCount/{userId}")
-    public String getCommitCount(@PathVariable Long userId) {
-        return commitService.getCommitCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    public Integer getCommitCount(@PathVariable Long userId) {
+        return commitService.getCommitCount(userId);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping("/deletionCount/{userId}")
+    public Integer getDeletionCount(@PathVariable Long userId) {
+        return commitService.getDeletionCount(userId);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping("/additionCount/{userId}")
+    public Integer getAdditionCount(@PathVariable Long userId) {
+        return commitService.getAdditionCount(userId);
+    }
+
+    /**
+     * @return
+     */
+    @GetMapping("/codeGrowth")
+    public List<CodeGrowth> getCodeGrowth() {
+        return commitService.getCodeGrowth();
+    }
+
+    @GetMapping("/averageAdditions/{userId}")
+    public Double getAverageAdditions(@PathVariable Long userId) {
+        return commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId);
+    }
+
+    @GetMapping("/averageDeletions/{userId}")
+    public Double getAverageDeletions(@PathVariable Long userId) {
+        return commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId);
+    }
+
+    @GetMapping("/commitMetrics/{userId}")
+    public CommitMetric getCommitMetrics(@PathVariable Long userId) {
+        return new CommitMetric(commitService.getCodeGrowth(), commitService.getCommitCount(userId), commitService.getDeletionCount(userId), commitService.getAdditionCount(userId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId), commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId), commitService.getCommitsUser(userId));
     }
 }

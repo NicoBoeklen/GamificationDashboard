@@ -40,4 +40,17 @@ public class IssueService {
     public User findClosedByWithId(Integer id) throws ChangeSetPersister.NotFoundException {
         return issueRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new).getClosedBy();
     }
+    public Integer getOpenIssuesTeam() {
+        return issueRepository.getOpenIssuesTeam();
+    }
+    public Integer getFixedIssuesTeam() {
+        return issueRepository.getFixedIssuesTeam();
+    }
+    public Integer getAllIssuesTeam() {
+        return issueRepository.getAllIssuesTeam();
+    }
+    public Integer getTotalClosedIssuesUser(Long userId) {
+        return issueRepository.getTotalClosedIssuesUser(userId);
+    }
+    
 }

@@ -1,21 +1,22 @@
 package Default.Issue;
 
 import Default.GithubAPI.GithubAPIIssueService;
+import Default.Issue.Stats.IssueStats;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import reactor.core.publisher.Flux;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
  * Controller to provide get URL for Issues (localhost)
  * Uses the GithubAPIIssueService
  */
-@Controller
+@RestController
 public class IssueController {
+    @Autowired
+    private IssueRepository issueRepository;
 
     @Autowired
     private GithubAPIIssueService githubAPIIssueService;
@@ -37,5 +38,9 @@ public class IssueController {
             .flatMap(issueService::saveIssue)  // Save each issue
             .then(Mono.just(ResponseEntity.ok("Issues saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
+    }
+    @GetMapping("/issuesStats/{userId}")
+    public IssueStats getIssueInfo(@PathVariable Long userId) {
+        return new IssueStats(issueService.getAllIssuesTeam(), issueService.getFixedIssuesTeam(), issueService.getOpenIssuesTeam(), issueService.getTotalClosedIssuesUser(userId));
     }
 }

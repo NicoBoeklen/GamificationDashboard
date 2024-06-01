@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "\"commit\"")
@@ -16,7 +17,7 @@ public class Commit {
     @Lob
     private String message;
 
-    private Date date;
+    private LocalDateTime date;
 
     private boolean isMerge;
 
@@ -49,11 +50,11 @@ public class Commit {
         this.message = message;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

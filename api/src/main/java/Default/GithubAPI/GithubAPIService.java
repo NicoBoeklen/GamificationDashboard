@@ -1,7 +1,6 @@
 package Default.GithubAPI;
 
 import Default.Apikey;
-import Default.Commit.Commit;
 import Default.GithubRepo.GithubRepo;
 import Default.Release.Release;
 import Default.User.User;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "\"repository\"")
@@ -20,10 +21,10 @@ public class GithubRepo {
     private String language;
 
     @JsonProperty("updated_at")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @JsonProperty("created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @OneToOne
     @JoinColumn(name = "owner_id")
@@ -67,19 +68,19 @@ public class GithubRepo {
         this.language = language;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
