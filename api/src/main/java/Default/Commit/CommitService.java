@@ -3,8 +3,10 @@ package Default.Commit;
 import Default.Commit.Stats.CodeGrowth;
 import Default.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
@@ -56,5 +58,23 @@ public class CommitService {
      */
     public List<CodeGrowth> getCodeGrowth() {
         return commitRepository.getCodeGrowth();
+    }
+
+    public Double getAverageAdditionsOfLastFiveCommitsByUser(Long userId) {
+        Pageable pageable = PageRequest.of(0, 5);
+        List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable);
+        return commits.stream()
+            .mapToInt(Commit::getAdditions)
+            .average()
+            .orElse(0.0);
+    }
+
+    public Double getAverageDeletionsOfLastFiveCommitsByUser(Long userId) {
+        Pageable pageable = PageRequest.of(0, 5);
+        List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable);
+        return commits.stream()
+            .mapToInt(Commit::getDeletions)
+            .average()
+            .orElse(0.0);
     }
 }
