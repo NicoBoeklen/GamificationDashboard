@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "\"release\"")
@@ -17,7 +18,7 @@ public class Release {
     private String name;
     
     @JsonProperty("published_at")
-    private Date publishedAt;
+    private LocalDateTime publishedAt;
 
     ///////////////////////////////////////////////
     // Getter & Setter
@@ -39,11 +40,11 @@ public class Release {
         this.name = name;
     }
 
-    public Date getPublishedAt() {
+    public LocalDateTime getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(Date publishedAt) {
+    public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
     }
 }

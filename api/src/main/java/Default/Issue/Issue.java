@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "\"issue\"")
@@ -14,10 +15,10 @@ public class Issue {
     private Integer id;
 
     @JsonProperty("created_at")
-    private Date dateOpened;
+    private LocalDateTime dateOpened;
 
     @JsonProperty("closed_at")
-    private Date dateClosed;
+    private LocalDateTime dateClosed;
 
     private String state;
 
@@ -42,19 +43,19 @@ public class Issue {
         this.id = id;
     }
 
-    public Date getDateOpened() {
+    public LocalDateTime getDateOpened() {
         return dateOpened;
     }
 
-    public void setDateOpened(Date dateOpened) {
+    public void setDateOpened(LocalDateTime dateOpened) {
         this.dateOpened = dateOpened;
     }
 
-    public Date getDateClosed() {
+    public LocalDateTime getDateClosed() {
         return dateClosed;
     }
 
-    public void setDateClosed(Date dateClosed) {
+    public void setDateClosed(LocalDateTime dateClosed) {
         this.dateClosed = dateClosed;
     }
 

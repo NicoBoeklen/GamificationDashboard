@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -201,13 +202,13 @@ public class GithubAPICommitService {
 
             private static class Author {
                 @JsonProperty("date")
-                private Date date;
+                private LocalDateTime date;
 
-                public Date getDate() {
+                public LocalDateTime getDate() {
                     return date;
                 }
 
-                public void setDate(Date date) {
+                public void setDate(LocalDateTime date) {
                     this.date = date;
                 }
             }
