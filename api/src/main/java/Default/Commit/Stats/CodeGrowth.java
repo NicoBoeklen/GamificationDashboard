@@ -1,22 +1,23 @@
 package Default.Commit.Stats;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class CodeGrowth {
-    private Date week;
+    private LocalDateTime week;
     private Long totalChanges;
 
-    public CodeGrowth(Date week, Long totalChanges) {
+    public CodeGrowth(LocalDateTime week, Long totalChanges) {
         this.week = week;
         this.totalChanges = totalChanges;
     }
 
     // Getter und Setter
-    public Date getWeek() {
+    public LocalDateTime getWeek() {
         return week;
     }
 
-    public void setWeek(Date week) {
+    public void setWeek(LocalDateTime week) {
         this.week = week;
     }
 
