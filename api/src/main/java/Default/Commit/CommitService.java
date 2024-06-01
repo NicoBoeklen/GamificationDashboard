@@ -27,29 +27,29 @@ public class CommitService {
     
     /**
      * Gives back all Commits from the user excluding merge commits
-     * @param user
+     * @param userId
      * @return count of Commits
      */
-    public Integer getCommitCount(User user) {
-        return commitRepository.getAllCommitsBy(user.getId());
+    public Integer getCommitCount(Long userId) {
+        return commitRepository.getAllCommitsBy(userId);
     }
 
     /**
      * Gives back all Deletions from the user excluding merge commits
-     * @param user
+     * @param userId
      * @return count of deletions
      */
-    public Integer getDeletionCount(User user) {
-        return commitRepository.getAllDeletionsBy(user.getId());
+    public Integer getDeletionCount(Long userId) {
+        return commitRepository.getAllDeletionsBy(userId);
     }
 
     /**
      * Gives back all Additions from the user excluding merge commits
-     * @param user
+     * @param userId
      * @return count of additions
      */
-    public Integer getAdditionCount(User user) {
-        return commitRepository.getAllAdditionsBy(user.getId());
+    public Integer getAdditionCount(Long userId) {
+        return commitRepository.getAllAdditionsBy(userId);
     }
 
     /**
