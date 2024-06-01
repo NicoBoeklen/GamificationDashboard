@@ -5,20 +5,18 @@ import Default.Issue.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class IssueStats {
-    @Autowired
-    IssueRepository issueRepository;
     public Integer amountTotalIssuesTeam;
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
     public Integer amountTotalIssuesUser;
     
-    public IssueStats(Long userId) {
-        this.amountTotalIssuesTeam = issueRepository.getAllIssuesTeam();
-        this.amountFixedIssuesTeam = issueRepository.getFixedIssuesTeam();
-        this.amountOpenIssuesTeam = issueRepository.getOpenIssuesTeam();
-        this.amountTotalIssuesUser = issueRepository.getTotalClosedIssuesUser(userId);
+    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser) {
+        this.amountTotalIssuesTeam = amountTotalIssuesTeam;
+        this.amountFixedIssuesTeam = amountFixedIssuesTeam;
+        this.amountOpenIssuesTeam = amountOpenIssuesTeam;
+        this.amountTotalIssuesUser = amountTotalIssuesUser;
         }
     public IssueStats() {
     }
