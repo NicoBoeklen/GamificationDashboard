@@ -1,6 +1,7 @@
 package Default.Commit;
 
 import Default.Commit.Stats.CodeGrowth;
+import Default.Commit.Stats.CommitsUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,10 +26,19 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     
     @Query("SELECT new Default.Commit.Stats.CodeGrowth(DATE_TRUNC('week', c.date), (SUM(c.additions) - SUM(c.deletions))) " +
         "FROM Commit c " +
+        "WHERE c.isMerge = false " +
         "GROUP BY DATE_TRUNC('week', c.date) " +
-        "ORDER BY DATE_TRUNC('week', c.date)")
+        "ORDER BY DATE_TRUNC('week', c.date) ")
     List<CodeGrowth> getCodeGrowth();
 
-    @Query("SELECT c FROM Commit c WHERE c.author.id = :userId ORDER BY c.date DESC")
+    @Query("SELECT c FROM Commit c WHERE c.author.id = :userId AND c.isMerge = false ORDER BY c.date DESC")
     List<Commit> findLastFiveCommitsByUser(@Param("userId") Long userId, Pageable pageable);
+
+    @Query("SELECT new Default.Commit.Stats.CommitsUser(DATE_TRUNC('week', c.date), COUNT(c)) " +
+        "FROM Commit c " +
+        "WHERE c.isMerge = false AND c.author.id = :userId " +
+        "GROUP BY DATE_TRUNC('week', c.date) " +
+        "ORDER BY DATE_TRUNC('week', c.date) ")
+    List<CommitsUser> getCommitsUser(@Param("userId") Long userId);
+    
 }

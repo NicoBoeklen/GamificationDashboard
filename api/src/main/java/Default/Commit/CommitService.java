@@ -1,6 +1,7 @@
 package Default.Commit;
 
 import Default.Commit.Stats.CodeGrowth;
+import Default.Commit.Stats.CommitsUser;
 import Default.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -76,5 +77,9 @@ public class CommitService {
             .mapToInt(Commit::getDeletions)
             .average()
             .orElse(0.0);
+    }
+
+    public List<CommitsUser> getCommitsUser(Long id) {
+        return commitRepository.getCommitsUser(id);
     }
 }
