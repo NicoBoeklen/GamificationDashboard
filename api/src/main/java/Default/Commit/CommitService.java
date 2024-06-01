@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @Service
@@ -25,9 +26,10 @@ public class CommitService {
     public Commit saveCommit(Commit commit) {
         return commitRepository.save(commit);
     }
-    
+
     /**
      * Gives back all Commits from the user excluding merge commits
+     *
      * @param userId
      * @return count of Commits
      */
@@ -37,6 +39,7 @@ public class CommitService {
 
     /**
      * Gives back all Deletions from the user excluding merge commits
+     *
      * @param userId
      * @return count of deletions
      */
@@ -46,6 +49,7 @@ public class CommitService {
 
     /**
      * Gives back all Additions from the user excluding merge commits
+     *
      * @param userId
      * @return count of additions
      */
@@ -54,7 +58,8 @@ public class CommitService {
     }
 
     /**
-     * Gives back a List of weeks with total Changes in the code (additions -  deletions) 
+     * Gives back a List of weeks with total Changes in the code (additions -  deletions)
+     *
      * @return List of Code Growth Objects
      */
     public List<CodeGrowth> getCodeGrowth() {
@@ -79,7 +84,27 @@ public class CommitService {
             .orElse(0.0);
     }
 
-    public List<CommitsUser> getCommitsUser(Long id) {
-        return commitRepository.getCommitsUser(id);
+    /**
+     * Gives back a List of weeks with total commits of user
+     *
+     * @return List of CommitsUser Objects
+     */
+    public List<CommitsUser> getCommitsUser(Long userId) {
+        return commitRepository.getCommitsUser(userId);
+    }
+
+    public Double getAverageUserProductivity(Long userId) {
+        List<Object[]> userProductivityList = commitRepository.getUserProductivity(userId);
+
+        List<Object[]> lastFiveDays = userProductivityList.subList(0, 5);
+
+        // Berechne die Summe der Produktivitätswerte der letzten 5 Arbeitstage.
+        long sumProductivity = lastFiveDays.stream()
+            .mapToLong(array -> (long) array[1]) // Der Index 1 enthält die Produktivität.
+            .sum();
+
+        // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
+        double averageProductivity = lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
+        return averageProductivity;
     }
 }

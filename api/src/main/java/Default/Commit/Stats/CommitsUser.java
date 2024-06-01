@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public class CommitsUser {
     private LocalDateTime week;
-    private Integer totalCommits;
+    private Long totalCommits;
 
-    public CommitsUser(LocalDateTime week, Integer totalCommits) {
+    public CommitsUser(LocalDateTime week, Long totalCommits) {
         this.week = week;
         this.totalCommits = totalCommits;
     }
@@ -19,11 +19,11 @@ public class CommitsUser {
         this.week = week;
     }
 
-    public Integer getTotalCommits() {
+    public Long getTotalCommits() {
         return totalCommits;
     }
 
-    public void setTotalCommits(Integer totalCommits) {
+    public void setTotalCommits(Long totalCommits) {
         this.totalCommits = totalCommits;
     }
 }
