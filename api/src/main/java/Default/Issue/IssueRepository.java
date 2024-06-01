@@ -9,7 +9,7 @@ Repository for Issues identified by ID (long)
 public interface IssueRepository extends JpaRepository<Issue, Integer>{
     @Query("SELECT COUNT(i) FROM Issue i")
     Integer getAllIssues();
-    @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'closed'")
+    @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'open'")
     Integer getOpenIssues();
     @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'closed'")
     Integer getFixedIssues();
