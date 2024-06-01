@@ -45,6 +45,6 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
         "FROM Commit c " +
         "WHERE c.author.id = :userId " +
         "GROUP BY DATE_TRUNC('day', c.date) " +
-        "ORDER BY DATE_TRUNC('day', c.date)")
+        "ORDER BY DATE_TRUNC('day', c.date) desc")
     List<Object[]> getUserProductivity(@Param("userId") Long userId);
 }

@@ -96,11 +96,11 @@ public class CommitService {
     public Double getAverageUserProductivity(Long userId) {
         List<Object[]> userProductivityList = commitRepository.getUserProductivity(userId);
 
-        List<Object[]> lastFiveDays = userProductivityList.subList(0, Math.min(userProductivityList.size(), 5));
+        List<Object[]> lastFiveDays = userProductivityList.subList(0, 5);
 
         // Berechne die Summe der Produktivitätswerte der letzten 5 Arbeitstage.
-        int sumProductivity = lastFiveDays.stream()
-            .mapToInt(array -> (int) array[1]) // Der Index 1 enthält die Produktivität.
+        long sumProductivity = lastFiveDays.stream()
+            .mapToLong(array -> (long) array[1]) // Der Index 1 enthält die Produktivität.
             .sum();
 
         // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
