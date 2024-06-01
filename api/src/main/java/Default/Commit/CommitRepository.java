@@ -40,5 +40,11 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
         "GROUP BY DATE_TRUNC('week', c.date) " +
         "ORDER BY DATE_TRUNC('week', c.date) ")
     List<CommitsUser> getCommitsUser(@Param("userId") Long userId);
-    
+
+    @Query("SELECT DATE_TRUNC('day', c.date) AS day, (SUM(c.additions) + SUM(c.deletions)) AS productivity " +
+        "FROM Commit c " +
+        "WHERE c.author.id = :userId " +
+        "GROUP BY DATE_TRUNC('day', c.date) " +
+        "ORDER BY DATE_TRUNC('day', c.date)")
+    List<Object[]> getUserProductivity(@Param("userId") Long userId);
 }
