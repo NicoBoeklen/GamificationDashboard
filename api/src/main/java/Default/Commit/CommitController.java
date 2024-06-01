@@ -70,8 +70,8 @@ public class CommitController {
      * @return
      */
     @GetMapping("/commitCount/{userId}")
-    public String getCommitCount(@PathVariable Long userId) {
-        return commitService.getCommitCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    public Integer getCommitCount(@PathVariable Long userId) {
+        return commitService.getCommitCount(userService.findById(userId).orElseThrow(NullPointerException::new));
     }
 
     /**
@@ -79,8 +79,8 @@ public class CommitController {
      * @return
      */
     @GetMapping("/deletionCount/{userId}")
-    public String getDeletionCount(@PathVariable Long userId) {
-        return commitService.getDeletionCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    public Integer getDeletionCount(@PathVariable Long userId) {
+        return commitService.getDeletionCount(userService.findById(userId).orElseThrow(NullPointerException::new));
     }
 
     /**
@@ -88,8 +88,8 @@ public class CommitController {
      * @return
      */
     @GetMapping("/additionCount/{userId}")
-    public String getAdditionCount(@PathVariable Long userId) {
-        return commitService.getAdditionCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    public Integer getAdditionCount(@PathVariable Long userId) {
+        return commitService.getAdditionCount(userService.findById(userId).orElseThrow(NullPointerException::new));
     }
 
     /**
@@ -98,5 +98,15 @@ public class CommitController {
     @GetMapping("/codeGrowth")
     public List<CodeGrowth> getCodeGrowth() {
         return commitService.getCodeGrowth();
+    }
+
+    @GetMapping("/averageAdditions/{userId}")
+    public Double getAverageAdditions(@PathVariable Long userId) {
+        return commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId);
+    }
+
+    @GetMapping("/averageDeletions/{userId}")
+    public Double getAverageDeletions(@PathVariable Long userId) {
+        return commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId);
     }
 }

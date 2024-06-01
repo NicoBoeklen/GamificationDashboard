@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
+
 
 /**
 Repository for Commits identified by ID/Sha (long)
@@ -26,4 +28,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
         "GROUP BY DATE_TRUNC('week', c.date) " +
         "ORDER BY DATE_TRUNC('week', c.date)")
     List<CodeGrowth> getCodeGrowth();
+
+    @Query("SELECT c FROM Commit c WHERE c.author.id = :userId ORDER BY c.date DESC")
+    List<Commit> findLastFiveCommitsByUser(@Param("userId") Long userId, Pageable pageable);
 }
