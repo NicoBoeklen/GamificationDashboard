@@ -1,5 +1,6 @@
 package Default.Commit;
 
+import Default.Commit.Stats.CodeGrowth;
 import Default.GithubAPI.GithubAPICommitService;
 import Default.User.User;
 import Default.User.UserService;
@@ -9,16 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
  * Controller to provide get URL for Commits (localhost)
  * Uses the GithubAPICommitService
  */
-@Controller
+@RestController
 public class CommitController {
 
     @Autowired
@@ -69,5 +72,31 @@ public class CommitController {
     @GetMapping("/commitCount/{userId}")
     public String getCommitCount(@PathVariable Long userId) {
         return commitService.getCommitCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping("/deletionCount/{userId}")
+    public String getDeletionCount(@PathVariable Long userId) {
+        return commitService.getDeletionCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping("/additionCount/{userId}")
+    public String getAdditionCount(@PathVariable Long userId) {
+        return commitService.getAdditionCount(userService.findById(userId).orElseThrow(NullPointerException::new)).toString();
+    }
+
+    /**
+     * @return
+     */
+    @GetMapping("/codeGrowth")
+    public List<CodeGrowth> getCodeGrowth() {
+        return commitService.getCodeGrowth();
     }
 }

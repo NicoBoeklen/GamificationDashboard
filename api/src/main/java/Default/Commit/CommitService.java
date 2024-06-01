@@ -1,8 +1,11 @@
 package Default.Commit;
 
+import Default.Commit.Stats.CodeGrowth;
 import Default.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CommitService {
@@ -27,5 +30,31 @@ public class CommitService {
      */
     public Integer getCommitCount(User user) {
         return commitRepository.getAllCommitsBy(user.getId());
+    }
+
+    /**
+     * Gives back all Deletions from the user excluding merge commits
+     * @param user
+     * @return count of deletions
+     */
+    public Integer getDeletionCount(User user) {
+        return commitRepository.getAllDeletionsBy(user.getId());
+    }
+
+    /**
+     * Gives back all Additions from the user excluding merge commits
+     * @param user
+     * @return count of additions
+     */
+    public Integer getAdditionCount(User user) {
+        return commitRepository.getAllAdditionsBy(user.getId());
+    }
+
+    /**
+     * Gives back a List of weeks with total Changes in the code (additions -  deletions) 
+     * @return List of Code Growth Objects
+     */
+    public List<CodeGrowth> getCodeGrowth() {
+        return commitRepository.getCodeGrowth();
     }
 }
