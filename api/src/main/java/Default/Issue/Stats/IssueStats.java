@@ -1,47 +1,49 @@
 package Default.Issue.Stats;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import Default.Issue.IssueRepository;
+import Default.Issue.IssueService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
-
+@Component
 public class IssueStats {
-
+    @Autowired
+    IssueRepository issueRepository;
+    public Integer amountTotalIssuesTeam;
+    public Integer amountFixedIssuesTeam;
+    public Integer amountOpenIssuesTeam;
+    public Integer amountTotalIssuesUser;
     
-
-    public Integer amountTotalIssues;
-    public Integer amountFixedIssues;
-    public Integer amountOpenIssues;
+    public IssueStats(Long userId) {
+        this.amountTotalIssuesTeam = issueRepository.getAllIssuesTeam();
+        this.amountFixedIssuesTeam = issueRepository.getFixedIssuesTeam();
+        this.amountOpenIssuesTeam = issueRepository.getOpenIssuesTeam();
+        this.amountTotalIssuesUser = issueRepository.getTotalClosedIssuesUser(userId);
+        }
+    public IssueStats() {
+    }
     
-
-    public IssueStats(Integer amountTotalIssues, Integer amountFixedIssues, Integer amountOpenIssues) {
-        this.amountTotalIssues = amountTotalIssues;
-        this.amountFixedIssues = amountFixedIssues;
-        this.amountOpenIssues = amountOpenIssues;
-    }
-    public Integer getAmountTotalIssues() {
-        return amountTotalIssues;
+    public Integer getAmountTotalIssuesTeam() {
+        return amountTotalIssuesTeam;
     }
 
-    public void setAmountTotalIssues(Integer amountTotalIssues) {
-        this.amountTotalIssues = amountTotalIssues;
+    public void setAmountTotalIssuesTeam(Integer amountTotalIssuesTeam) {
+        this.amountTotalIssuesTeam = amountTotalIssuesTeam;
     }
 
-    public Integer getAmountFixedIssues() {
-        return amountFixedIssues;
+    public Integer getAmountFixedIssuesTeam() {
+        return amountFixedIssuesTeam;
     }
 
-    public void setAmountFixedIssues(Integer amountFixedIssues) {
-        this.amountFixedIssues = amountFixedIssues;
+    public void setAmountFixedIssuesTeam(Integer amountFixedIssuesTeam) {
+        this.amountFixedIssuesTeam = amountFixedIssuesTeam;
     }
 
-    public Integer getAmountOpenIssues() {
-        return amountOpenIssues;
+    public Integer getAmountOpenIssuesTeam() {
+        return amountOpenIssuesTeam;
     }
 
-    public void setAmountOpenIssues(Integer amountOpenIssues) {
-        this.amountOpenIssues = amountOpenIssues;
+    public void setAmountOpenIssuesTeam(Integer amountOpenIssuesTeam) {
+        this.amountOpenIssuesTeam = amountOpenIssuesTeam;
     }
 }

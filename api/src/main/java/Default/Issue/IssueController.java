@@ -3,7 +3,6 @@ package Default.Issue;
 import Default.GithubAPI.GithubAPIIssueService;
 import Default.Issue.Stats.IssueStats;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +39,8 @@ public class IssueController {
             .then(Mono.just(ResponseEntity.ok("Issues saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
-    @GetMapping("/issuesStats")
-    public IssueStats getIssueInfo() {
-        return new IssueStats(issueRepository.getAllIssues(), issueRepository.getFixedIssues(), issueRepository.getOpenIssues());
+    @GetMapping("/issuesStats/{userId}")
+    public IssueStats getIssueInfo(@PathVariable Long userId) {
+        return new IssueStats(userId);
     }
 }
