@@ -7,16 +7,19 @@ import org.springframework.stereotype.Component;
 
 
 public class IssueStats {
+    public Double averageAgeOfOpenIssuesTeam;
     public Integer amountTotalIssuesTeam;
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
     public Integer amountTotalIssuesUser;
     
-    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser) {
+    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageAgeOfOpenIssuesTeam) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
         this.amountTotalIssuesUser = amountTotalIssuesUser;
+        this.averageAgeOfOpenIssuesTeam = averageAgeOfOpenIssuesTeam;
+        
         }
     public IssueStats() {
     }

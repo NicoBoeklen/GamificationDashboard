@@ -20,7 +20,7 @@ public class CommitMetric {
     
     private Double productivityUser;
 
-    public CommitMetric(List<CodeGrowth> codeGrowthList, Integer commitCountUser, Integer deletionCountUser, Integer additionCountUser, Double averageAdditionsUser, Double averageDeletionsUser, List<CommitsUser> commitsUser) {
+    public CommitMetric(List<CodeGrowth> codeGrowthList, Integer commitCountUser, Integer deletionCountUser, Integer additionCountUser, Double averageAdditionsUser, Double averageDeletionsUser, List<CommitsUser> commitsUser, Double productivityUser) {
         this.codeGrowthList = codeGrowthList;
         this.commitCountUser = commitCountUser;
         this.deletionCountUser = deletionCountUser;
@@ -28,6 +28,7 @@ public class CommitMetric {
         this.averageAdditionsUser = averageAdditionsUser;
         this.averageDeletionsUser = averageDeletionsUser;
         this.commitsUser = commitsUser;
+        this.productivityUser = productivityUser;
     }
 
     public Double getProductivityUser() {

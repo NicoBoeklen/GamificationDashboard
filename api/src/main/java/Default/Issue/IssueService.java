@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import Default.User.User;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 @Service
 public class IssueService {
 
@@ -51,6 +54,9 @@ public class IssueService {
     }
     public Integer getTotalClosedIssuesUser(Long userId) {
         return issueRepository.getTotalClosedIssuesUser(userId);
+    }
+    public Double getAverageAgeOfOpenIssuesTeam() {
+        return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
     
 }
