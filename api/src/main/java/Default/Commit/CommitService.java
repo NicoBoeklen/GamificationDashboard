@@ -79,7 +79,11 @@ public class CommitService {
             .orElse(0.0);
     }
 
-    public List<CommitsUser> getCommitsUser(Long id) {
-        return commitRepository.getCommitsUser(id);
+    /**
+     * Gives back a List of weeks with total commits of user 
+     * @return List of CommitsUser Objects
+     */
+    public List<CommitsUser> getCommitsUser(Long userId) {
+        return commitRepository.getCommitsUser(userId);
     }
 }
