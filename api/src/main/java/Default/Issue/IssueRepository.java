@@ -14,6 +14,6 @@ public interface IssueRepository extends JpaRepository<Issue, Integer>{
     Integer getOpenIssuesTeam();
     @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'closed'")
     Integer getFixedIssuesTeam();
-    @Query("SELECT COUNT(i) FROM Issue i WHERE i.closedBy = :userId")
+    @Query("SELECT COUNT(i) FROM Issue i WHERE i.closedBy.id = :userId")
     Integer getTotalClosedIssuesUser(@Param("userId") Long userId);
 }
