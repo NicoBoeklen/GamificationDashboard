@@ -40,12 +40,12 @@ public class ReleaseService {
             return 0.0;
         }
         // Calculate the time differences between consecutive releases
-        double totalHours = 0.0;
+        double totalDays = 0.0;
         for (int i = 0; i < releases.size() - 1; i++) {
             Duration duration = Duration.between(releases.get(i + 1).getPublishedAt(), releases.get(i).getPublishedAt());
-            totalHours += duration.toHours();
+            totalDays += duration.toDays();
         }
-        double averageHours = totalHours / (releases.size() - 1);
-        return Math.round(averageHours * 10.0) / 10.0;
+        double averageDays = totalDays / (releases.size() - 1);
+        return Math.round(averageDays * 10.0) / 10.0;
     }
 }
