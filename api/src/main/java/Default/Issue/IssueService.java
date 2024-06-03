@@ -58,5 +58,8 @@ public class IssueService {
     public Double getAverageAgeOfOpenIssuesTeam() {
         return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
+    public Double getAverageAgeOfTotalIssuesTeam() {
+        return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("closed")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0);
+    }
     
 }
