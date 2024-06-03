@@ -34,6 +34,9 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     @Query("SELECT SUM(c.additions) - SUM(c.deletions) FROM Commit c WHERE c.isMerge = false")
     Long getTotalLoC();
 
+    @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false")
+    Integer getTotalCommitCount();
+
     @Query("SELECT c FROM Commit c WHERE c.author.id = :userId AND c.isMerge = false ORDER BY c.date DESC")
     List<Commit> findLastFiveCommitsByUser(@Param("userId") Long userId, Pageable pageable);
 

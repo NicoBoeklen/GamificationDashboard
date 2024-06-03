@@ -105,6 +105,6 @@ public class CommitController {
 
     @GetMapping("/commitMetrics/{userId}")
     public CommitMetric getCommitMetrics(@PathVariable Long userId) {
-        return new CommitMetric(commitService.getCodeGrowth(), commitService.getCommitCount(userId), commitService.getDeletionCount(userId), commitService.getAdditionCount(userId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId), commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId), commitService.getCommitsUser(userId), commitService.getAverageUserProductivity(userId), userService.findAll().size(), commitService.getTotalLoC());
+        return new CommitMetric(commitService.getCodeGrowth(), commitService.getCommitCount(userId), commitService.getDeletionCount(userId), commitService.getAdditionCount(userId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId), commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId), commitService.getCommitsUser(userId), commitService.getAverageUserProductivity(userId), userService.findAll().size(), commitService.getTotalLoC(), commitService.getTotalCommits());
     }
 }

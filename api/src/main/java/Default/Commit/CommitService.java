@@ -74,6 +74,15 @@ public class CommitService {
     public Long getTotalLoC() {
         return commitRepository.getTotalLoC();
     }
+    
+    /**
+     * Gives back all commits (excluding mergeCommits)
+     *
+     * @return total Commits
+     */
+    public Integer getTotalCommits() {
+        return commitRepository.getTotalCommitCount();
+    }
 
     public Double getAverageAdditionsOfLastFiveCommitsByUser(Long userId) {
         Pageable pageable = PageRequest.of(0, 5);
