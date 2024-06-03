@@ -6,145 +6,62 @@
     >
       <v-img
         class="mb-4"
-        height="150"
-        src="@/assets/logo.png"
+        height="200"
+        src="@/assets/LogoDashboard.png"
       />
 
       <div class="text-center">
         <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
 
-        <h1 class="text-h2 font-weight-bold">Vuetify</h1>
+        <h1 class="text-h2 font-weight-bold">GameDash</h1>
       </div>
 
       <div class="py-4" />
 
-      <v-row>
-        <v-col cols="12">
-          <v-card
-            class="py-4"
-            color="surface-variant"
-            image="https://cdn.vuetifyjs.com/docs/images/one/create/feature.png"
-            prepend-icon="mdi-rocket-launch-outline"
-            rounded="lg"
-            variant="outlined"
-          >
-            <template #image>
-              <v-img position="top right" />
-            </template>
-
-            <template #title>
-              <h2 class="text-h5 font-weight-bold">Get started</h2>
-            </template>
-
-            <template #subtitle>
-              <div class="text-subtitle-1">
-                Replace this page by removing <v-kbd>{{ `<HelloWorld />` }}</v-kbd> in <v-kbd>pages/index.vue</v-kbd>.
-              </div>
-            </template>
-
-            <v-overlay
-              opacity=".12"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://vuetifyjs.com/"
-            prepend-icon="mdi-text-box-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Learn about all things Vuetify in our documentation."
-            target="_blank"
-            title="Documentation"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://vuetifyjs.com/introduction/why-vuetify/#feature-guides"
-            prepend-icon="mdi-star-circle-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Explore available framework Features."
-            target="_blank"
-            title="Features"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://vuetifyjs.com/components/all"
-            prepend-icon="mdi-widgets-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Discover components in the API Explorer."
-            target="_blank"
-            title="Components"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
-          </v-card>
-        </v-col>
-
-        <v-col cols="6">
-          <v-card
-            append-icon="mdi-open-in-new"
-            class="py-4"
-            color="surface-variant"
-            href="https://discord.vuetifyjs.com"
-            prepend-icon="mdi-account-group-outline"
-            rel="noopener noreferrer"
-            rounded="lg"
-            subtitle="Connect with Vuetify developers."
-            target="_blank"
-            title="Community"
-            variant="text"
-          >
-            <v-overlay
-              opacity=".06"
-              scrim="primary"
-              contained
-              model-value
-              persistent
-            />
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="10" md="6" lg="4">
+          <v-card class="pa-5">
+            <v-card-title class="headline">Login</v-card-title>
+            <v-card-text>
+              <v-form @submit.prevent="submitForm">
+                <v-text-field
+                  label="Username"
+                  v-model="username"
+                  :rules="[rules.required]"
+                  required
+                  clearable
+                  prepend-inner-icon="mdi-account"
+                  outlined
+                  dense
+                  class="mb-4"
+                ></v-text-field>
+                <v-text-field
+                  label="Repository Name"
+                  v-model="repositoryName"
+                  :type="'repositoryName'"
+                  :rules="[rules.required]"
+                  required
+                  clearable
+                  prepend-inner-icon="mdi-server"
+                  outlined
+                  dense
+                  class="mb-4"
+                ></v-text-field>
+                <v-text-field
+                  label="Owner Name"
+                  v-model="ownerName"
+                  :type="'ownerName'"
+                  :rules="[rules.required]"
+                  required
+                  clearable
+                  prepend-inner-icon="mdi-account"
+                  outlined
+                  dense
+                  class="mb-4"
+                ></v-text-field>
+                <v-btn color="primary" type="submit" block class="mt-4">Login</v-btn>
+              </v-form>
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -153,5 +70,50 @@
 </template>
 
 <script setup lang="ts">
-  //
+import { ref } from 'vue';
+
+const username = ref('');
+const repositoryName = ref('');
+const ownerName = ref('');
+
+const rules = {
+  required: (value: string) => !!value || 'Required.'
+};
+
+const submitForm = () => {
+  console.log('Username:', username.value);
+  console.log('Repository Name:', repositoryName.value);
+  console.log('Owner Name:', ownerName.value);
+};
 </script>
+<style scoped>
+.fill-height {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+v-card {
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+v-card-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #3f51b5;
+}
+
+v-text-field {
+  margin-bottom: 16px;
+}
+
+v-btn {
+  background-color: #3f51b5;
+  color: #ffffff;
+  font-weight: bold;
+}
+</style>
