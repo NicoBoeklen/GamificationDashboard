@@ -57,10 +57,10 @@ public class IssueService {
     public Integer getTotalClosedIssuesUser(Long userId) {
         return issueRepository.getTotalClosedIssuesUser(userId);
     }
-    public Double getAverageAgeOfOpenIssuesTeam() {
+    public Double getAverageAgeOfOpenIssues() {
         return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
-    public Double getAverageAgeOfTotalIssuesTeam() {
+    public Double getTeamAverageTimeFixIssue() {
         Pageable pageable = PageRequest.of(0, 5);
         return issueRepository.findLastFiveClosedIssues(pageable).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
     }
