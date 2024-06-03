@@ -66,6 +66,15 @@ public class CommitService {
         return commitRepository.getCodeGrowth();
     }
 
+    /**
+     * Gives back all Lines of code (additions -  deletions excluding mergeCommits)
+     *
+     * @return long TotalLoC
+     */
+    public Long getTotalLoC() {
+        return commitRepository.getTotalLoC();
+    }
+
     public Double getAverageAdditionsOfLastFiveCommitsByUser(Long userId) {
         Pageable pageable = PageRequest.of(0, 5);
         List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable);
