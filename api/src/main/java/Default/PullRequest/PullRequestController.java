@@ -1,18 +1,21 @@
 package Default.PullRequest;
 
+import Default.Commit.Stats.CommitMetric;
 import Default.GithubAPI.GithubAPIPullRequestService;
+import Default.PullRequest.Stats.PullRequestMetric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
  * Controller to provide get URL for PullRequest (localhost)
  * Uses the GithubAPIPullRequestService
  */
-@Controller
+@RestController
 public class PullRequestController {
 
     @Autowired
@@ -35,5 +38,13 @@ public class PullRequestController {
             .flatMap(pullRequestService::savePullRequest)  // Save each Pull Request
             .then(Mono.just(ResponseEntity.ok("PullRequests saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
+    }
+
+    @GetMapping("/pullMetrics/{userId}")
+    public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId) {
+        return new PullRequestMetric(null, 
+            null, null, 
+            null, null, null, 
+            null, null);
     }
 }

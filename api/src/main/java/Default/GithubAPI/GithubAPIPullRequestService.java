@@ -1,6 +1,7 @@
 package Default.GithubAPI;
 
 import Default.Apikey;
+import Default.Issue.Issue;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
 import Default.User.UserService;
@@ -57,7 +58,9 @@ public class GithubAPIPullRequestService {
      */
     public Flux<PullRequest> getPullRequests(String owner, String repo) {
         String url = String.format("/repos/%s/%s/pulls?state=closed", owner, repo);
-        return getPullsRecursively(url)
+        String url2 = String.format("/repos/%s/%s/pulls?state=open", owner, repo);
+        return Flux.merge(getPullsRecursively(url), getPullsRecursively(url2))
+            .distinct(PullRequest::getId) // Remove duplicates by ID
             .flatMap(pull -> fetchPullDetails(pull, owner, repo));
     }
 
