@@ -16,7 +16,7 @@ public class PullRequestMetric {
 
     private Double averageCommitsPerPRTeam;
     
-    private Double averageProcessTime;
+    private Double averageProcessTimeInHours;
 
     public PullRequestMetric(Integer numberReviewsUser, Double averageCommentsPerReviewUser, Integer openPullRequests, Integer closedPullRequestsLastMonth, Double averageAdditionsPerPRTeam, Double averageDeletionsPerPRTeam, Double averageCommitsPerPRTeam, Double averageProcessTime) {
         this.numberReviewsUser = numberReviewsUser;
@@ -26,7 +26,7 @@ public class PullRequestMetric {
         this.averageAdditionsPerPRTeam = averageAdditionsPerPRTeam;
         this.averageDeletionsPerPRTeam = averageDeletionsPerPRTeam;
         this.averageCommitsPerPRTeam = averageCommitsPerPRTeam;
-        this.averageProcessTime = averageProcessTime;
+        this.averageProcessTimeInHours = averageProcessTime;
     }
 
     public Integer getNumberReviewsUser() {
@@ -86,10 +86,10 @@ public class PullRequestMetric {
     }
 
     public Double getAverageProcessTime() {
-        return averageProcessTime;
+        return averageProcessTimeInHours;
     }
 
     public void setAverageProcessTime(Double averageProcessTime) {
-        this.averageProcessTime = averageProcessTime;
+        this.averageProcessTimeInHours = averageProcessTime;
     }
 }

@@ -8,13 +8,13 @@ public class ReleaseMetrics {
     
     private Integer numberOfReleases;
     
-    private Double averageTimeBetweenReleases;
+    private Double averageTimeBetweenReleasesInDays;
     
     private List<Release> releaseList;
 
     public ReleaseMetrics(Integer numberOfReleases, Double averageTimeBetweenReleases, List<Release> releaseList) {
         this.numberOfReleases = numberOfReleases;
-        this.averageTimeBetweenReleases = averageTimeBetweenReleases;
+        this.averageTimeBetweenReleasesInDays = averageTimeBetweenReleases;
         this.releaseList = releaseList;
     }
 
@@ -27,11 +27,11 @@ public class ReleaseMetrics {
     }
 
     public Double getAverageTimeBetweenReleases() {
-        return averageTimeBetweenReleases;
+        return averageTimeBetweenReleasesInDays;
     }
 
     public void setAverageTimeBetweenReleases(Double averageTimeBetweenReleases) {
-        this.averageTimeBetweenReleases = averageTimeBetweenReleases;
+        this.averageTimeBetweenReleasesInDays = averageTimeBetweenReleases;
     }
 
     public List<Release> getReleaseList() {
