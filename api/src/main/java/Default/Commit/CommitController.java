@@ -49,10 +49,8 @@ public class CommitController {
                     if (userOptional.isEmpty()) {
                         commit.setAuthor(null);
                     }
-                    return commitService.saveCommit(commit);
-                } else {
-                    return commitService.saveCommit(commit);
                 }
+                return commitService.saveCommit(commit);
             })
             .then(Mono.just(ResponseEntity.ok("Commits saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));

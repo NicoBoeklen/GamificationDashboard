@@ -122,7 +122,6 @@ public class CommitService {
             .sum();
 
         // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
-        double averageProductivity = lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
-        return averageProductivity;
+        return lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
     }
 }

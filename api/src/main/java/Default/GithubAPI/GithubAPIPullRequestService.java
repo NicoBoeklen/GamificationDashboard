@@ -1,7 +1,6 @@
 package Default.GithubAPI;
 
 import Default.Apikey;
-import Default.Issue.Issue;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
 import Default.User.UserService;
