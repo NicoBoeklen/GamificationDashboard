@@ -2,6 +2,8 @@ package Default.Issue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import Default.User.User;
 import reactor.core.publisher.Mono;
@@ -59,7 +61,8 @@ public class IssueService {
         return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
     public Double getAverageAgeOfTotalIssuesTeam() {
-        return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("closed")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0);
+        Pageable pageable = PageRequest.of(0, 5);
+        return issueRepository.findLastFiveClosedIssues(pageable).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
     }
     public Object getWeeklyClosedIssues() {
         return issueRepository.findWeeklyClosedIssues();
