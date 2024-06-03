@@ -9,14 +9,16 @@ public class IssueStats {
     public Integer amountTotalIssuesUser;
     public Double averageTimeFixIssueOpenTeam;
     public Double averageTimeFixIssueTotalTeam;
+    public Object weeklyClosedPullRequests;
     
-    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam) {
+    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam,Object weejklyClosedPullRequests) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
         this.amountTotalIssuesUser = amountTotalIssuesUser;
         this.averageTimeFixIssueOpenTeam = averageTimeFixIssueOpenTeam;
         this.averageTimeFixIssueTotalTeam = averageTimeFixIssueTotalTeam;
+        this.weeklyClosedPullRequests = weejklyClosedPullRequests;
         }
     public IssueStats() {
     } 
