@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,6 +31,10 @@ public class PullRequestService {
         return Mono.fromCallable(() -> pullRequestRepository.save(pullRequest));
     }
 
+    public Integer getNumberReviews(Long userId) {
+        return pullRequestRepository.getNumberReviews(userId);
+    }
+    
     public Double getAverageCommentsOfLastFivePullRequestsByUser(Long userId) {
         Pageable pageable = PageRequest.of(0, 5);
         List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequestsByUser(userId, pageable);
@@ -36,6 +42,52 @@ public class PullRequestService {
             .mapToInt(PullRequest::getCommentNumber)
             .average()
             .orElse(0.0);
+    }
+
+    public Double getAverageAdditionsOfLastFivePullRequests() {
+        Pageable pageable = PageRequest.of(0, 5);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        return pullRequests.stream()
+            .mapToInt(PullRequest::getAdditions)
+            .average()
+            .orElse(0.0);
+    }
+
+    public Double getAverageDeletionsOfLastFivePullRequests() {
+        Pageable pageable = PageRequest.of(0, 5);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        return pullRequests.stream()
+            .mapToInt(PullRequest::getDeletions)
+            .average()
+            .orElse(0.0);
+    }
+    
+    public Double getAverageCommitsOfLastFivePullRequests() {
+        Pageable pageable = PageRequest.of(0, 5);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        return pullRequests.stream()
+            .mapToInt(PullRequest::getCommitNumber)
+            .average()
+            .orElse(0.0);
+    }
+    
+    public Double getAverageProcessTimeOfLastFivePullRequests() {
+        Pageable pageable = PageRequest.of(0, 5);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        double averageHours =  pullRequests.stream()
+            .mapToDouble(pr -> ((double) Duration.between(pr.getDateOpened(), pr.getDateClosed()).toMinutes()) /60)
+            .average()
+            .orElse(0.0);
+
+        return Math.round(averageHours * 10.0) / 10.0;
+    }
+    
+    public Integer getOpenPullRequests() {
+        return pullRequestRepository.getOpenPullRequests();
+    }
+    
+    public Integer getClosedPullRequestsLastMonth() {
+        return pullRequestRepository.getClosedPullRequestsLastMonth();
     }
     
 }

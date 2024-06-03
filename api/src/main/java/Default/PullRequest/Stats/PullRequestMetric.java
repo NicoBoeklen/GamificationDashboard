@@ -6,7 +6,7 @@ public class PullRequestMetric {
     
     private Double averageCommentsPerReviewUser;
     
-    private Integer openPullRequestsLastMonth;
+    private Integer openPullRequests;
     
     private Integer closedPullRequestsLastMonth;
     
@@ -18,10 +18,10 @@ public class PullRequestMetric {
     
     private Double averageProcessTime;
 
-    public PullRequestMetric(Integer numberReviewsUser, Double averageCommentsPerReviewUser, Integer openPullRequestsLastMonth, Integer closedPullRequestsLastMonth, Double averageAdditionsPerPRTeam, Double averageDeletionsPerPRTeam, Double averageCommitsPerPRTeam, Double averageProcessTime) {
+    public PullRequestMetric(Integer numberReviewsUser, Double averageCommentsPerReviewUser, Integer openPullRequests, Integer closedPullRequestsLastMonth, Double averageAdditionsPerPRTeam, Double averageDeletionsPerPRTeam, Double averageCommitsPerPRTeam, Double averageProcessTime) {
         this.numberReviewsUser = numberReviewsUser;
         this.averageCommentsPerReviewUser = averageCommentsPerReviewUser;
-        this.openPullRequestsLastMonth = openPullRequestsLastMonth;
+        this.openPullRequests = openPullRequests;
         this.closedPullRequestsLastMonth = closedPullRequestsLastMonth;
         this.averageAdditionsPerPRTeam = averageAdditionsPerPRTeam;
         this.averageDeletionsPerPRTeam = averageDeletionsPerPRTeam;
@@ -45,12 +45,12 @@ public class PullRequestMetric {
         this.averageCommentsPerReviewUser = averageCommentsPerReviewUser;
     }
 
-    public Integer getOpenPullRequestsLastMonth() {
-        return openPullRequestsLastMonth;
+    public Integer getOpenPullRequests() {
+        return openPullRequests;
     }
 
-    public void setOpenPullRequestsLastMonth(Integer openPullRequestsLastMonth) {
-        this.openPullRequestsLastMonth = openPullRequestsLastMonth;
+    public void setOpenPullRequests (Integer openPullRequests) {
+        this.openPullRequests = openPullRequests;
     }
 
     public Integer getClosedPullRequestsLastMonth() {

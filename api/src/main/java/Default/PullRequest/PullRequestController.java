@@ -1,11 +1,9 @@
 package Default.PullRequest;
 
-import Default.Commit.Stats.CommitMetric;
 import Default.GithubAPI.GithubAPIPullRequestService;
 import Default.PullRequest.Stats.PullRequestMetric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,9 +40,13 @@ public class PullRequestController {
 
     @GetMapping("/pullMetrics/{userId}")
     public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId) {
-        return new PullRequestMetric(null, 
-            null, null, 
-            null, null, null, 
-            null, null);
+        return new PullRequestMetric(pullRequestService.getNumberReviews(userId),
+            pullRequestService.getAverageCommentsOfLastFivePullRequestsByUser(userId),
+            pullRequestService.getOpenPullRequests(),
+            pullRequestService.getClosedPullRequestsLastMonth(), 
+            pullRequestService.getAverageAdditionsOfLastFivePullRequests(),
+            pullRequestService.getAverageDeletionsOfLastFivePullRequests(),
+            pullRequestService.getAverageCommitsOfLastFivePullRequests(), 
+            pullRequestService.getAverageProcessTimeOfLastFivePullRequests());
     }
 }

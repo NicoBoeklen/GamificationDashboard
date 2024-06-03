@@ -28,7 +28,7 @@ public class GithubAPIController {
      *
      * @return 200 if successful
      */
-    @GetMapping("/updateData/{owner}/{repo}")
+    @GetMapping("/updateYourData/{owner}/{repo}")
     @Transactional
     public Mono<ResponseEntity<String>> getData(@PathVariable String owner, @PathVariable String repo) {
         return getDataFromContributors(owner, repo)
