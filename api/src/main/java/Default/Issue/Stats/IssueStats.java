@@ -2,22 +2,22 @@ package Default.Issue.Stats;
 
 
 public class IssueStats {
-    public Double averageTimeFixIssue;
+    public Double averageTimeFixIssueOpen;
     public Integer amountTotalIssuesTeam;
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
     public Integer amountTotalIssuesUser;
     
-    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageTimeFixIssue) {
+    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageTimeFixIssueOpen) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
         this.amountTotalIssuesUser = amountTotalIssuesUser;
-        this.averageTimeFixIssue = averageTimeFixIssue;
+        this.averageTimeFixIssueOpen = averageTimeFixIssueOpen;
         
         }
     public IssueStats() {
-    }
+    } 
     
     public Integer getAmountTotalIssuesTeam() {
         return amountTotalIssuesTeam;
