@@ -1,24 +1,19 @@
 package Default.Issue.Stats;
 
-import Default.Issue.IssueRepository;
-import Default.Issue.IssueService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 
 public class IssueStats {
-    public Double averageAgeOfOpenIssuesTeam;
+    public Double averageTimeFixIssue;
     public Integer amountTotalIssuesTeam;
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
     public Integer amountTotalIssuesUser;
     
-    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageAgeOfOpenIssuesTeam) {
+    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageTimeFixIssue) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
         this.amountTotalIssuesUser = amountTotalIssuesUser;
-        this.averageAgeOfOpenIssuesTeam = averageAgeOfOpenIssuesTeam;
+        this.averageTimeFixIssue = averageTimeFixIssue;
         
         }
     public IssueStats() {
