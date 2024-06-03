@@ -24,6 +24,16 @@ public interface IssueRepository extends JpaRepository<Issue, Integer>{
         "WHERE (i.state = 'closed' AND NOT TYPE(i)=PullRequest)"+
         "GROUP BY DATE_TRUNC('WEEK', i.dateOpened) ")
     List<Object[]> findWeeklyClosedIssues();
+    @Query("SELECT DATE_TRUNC('WEEK', i.dateOpened) AS week, COUNT(i) AS issueCount " +
+        "FROM Issue i " +
+        "WHERE (i.state = 'open' AND NOT TYPE(i)=PullRequest)"+
+        "GROUP BY DATE_TRUNC('WEEK', i.dateOpened) ")
+    List<Object[]> findWeeklyOpenIssues();
+    @Query("SELECT DATE_TRUNC('WEEK', i.dateOpened) AS week, COUNT(i) AS issueCount " +
+        "FROM Issue i " +
+        "WHERE NOT (TYPE(i)=PullRequest)"+
+        "GROUP BY DATE_TRUNC('WEEK', i.dateOpened) ")
+    List<Object[]> findWeeklyTotalIssues();
 
     @Query("SELECT i FROM Issue i WHERE i.state= 'closed' ORDER BY i.dateClosed DESC")
     List<Issue> findLastFiveClosedIssues(Pageable pageable);
