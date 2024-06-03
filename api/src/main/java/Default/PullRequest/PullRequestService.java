@@ -3,13 +3,14 @@ package Default.PullRequest;
 import Default.Issue.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class PullRequestService {
-    
+
     @Autowired
     private PullRequestRepository pullRequestRepository;
-    
+
     @Autowired
     private IssueService issueService;
 
@@ -19,8 +20,8 @@ public class PullRequestService {
      * @param pullRequest pullRequest to be saved
      * @return The saved pullRequest
      */
-    public PullRequest savePullRequest(PullRequest pullRequest) {
+    public Mono<PullRequest> savePullRequest(PullRequest pullRequest) {
         issueService.deleteIssueById(pullRequest.getId());
-        return pullRequestRepository.save(pullRequest);
+        return Mono.fromCallable(() -> pullRequestRepository.save(pullRequest));
     }
 }

@@ -2,12 +2,12 @@ package Default.Commit;
 
 import Default.Commit.Stats.CodeGrowth;
 import Default.Commit.Stats.CommitsUser;
-import Default.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -23,8 +23,8 @@ public class CommitService {
      * @param commit Commit to be saved
      * @return The saved commit
      */
-    public Commit saveCommit(Commit commit) {
-        return commitRepository.save(commit);
+    public Mono<Commit> saveCommit(Commit commit) {
+        return Mono.fromCallable(() -> commitRepository.save(commit));
     }
 
     /**
