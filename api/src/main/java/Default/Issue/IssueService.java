@@ -67,5 +67,10 @@ public class IssueService {
     public Object getWeeklyClosedIssues() {
         return issueRepository.findWeeklyClosedIssues();
     }
-    
+    public Object getWeeklyOpenIssues() {
+        return issueRepository.findWeeklyOpenIssues();
+    }
+    public Object getWeeklyTotalIssues() {
+        return issueRepository.findWeeklyTotalIssues();
+    }
 }
