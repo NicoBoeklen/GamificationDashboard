@@ -1,6 +1,8 @@
 package Default.Issue.Stats;
 
 
+import java.util.List;
+
 public class IssueStats {
     
     public Integer amountTotalIssuesTeam;
@@ -9,12 +11,12 @@ public class IssueStats {
     public Integer amountTotalIssuesUser;
     public Double averageTimeFixIssueOpenTeam;
     public Double averageTimeFixIssueTotalTeam;
-    public Object weeklyClosedIssues;
-    public Object weeklyOpenIssues;
-    public Object weeklyTotalIssues;
+    public List<IssuesWeekly> weeklyClosedIssues;
+    public List<IssuesWeekly> weeklyOpenIssues;
+    public List<IssuesWeekly> weeklyTotalIssues;
     
     public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam, Integer amountOpenIssuesTeam, Integer amountTotalIssuesUser,
-                      Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam, Object weeklyClosedIssues, Object weeklyOpenIssues, Object weeklyTotalIssues) {
+                      Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam, List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues, List<IssuesWeekly> weeklyTotalIssues) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;

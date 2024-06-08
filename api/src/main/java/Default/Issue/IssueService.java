@@ -1,5 +1,6 @@
 package Default.Issue;
 
+import Default.Issue.Stats.IssuesWeekly;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class IssueService {
@@ -64,13 +66,13 @@ public class IssueService {
         Pageable pageable = PageRequest.of(0, 5);
         return issueRepository.findLastFiveClosedIssues(pageable).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
     }
-    public Object getWeeklyClosedIssues() {
+    public List<IssuesWeekly> getWeeklyClosedIssues() {
         return issueRepository.findWeeklyClosedIssues();
     }
-    public Object getWeeklyOpenIssues() {
+    public List<IssuesWeekly> getWeeklyOpenIssues() {
         return issueRepository.findWeeklyOpenIssues();
     }
-    public Object getWeeklyTotalIssues() {
+    public List<IssuesWeekly> getWeeklyTotalIssues() {
         return issueRepository.findWeeklyTotalIssues();
     }
 }
