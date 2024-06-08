@@ -42,6 +42,7 @@ public class IssueController {
     @GetMapping("/issuesStats/{userId}")
     public IssueStats getIssueInfo(@PathVariable Long userId) {
         return new IssueStats(issueService.getAllIssuesTeam(), issueService.getFixedIssuesTeam(), issueService.getOpenIssuesTeam(), issueService.getTotalClosedIssuesUser(userId),
-            issueService.getAverageAgeOfOpenIssues(),issueService.getTeamAverageTimeFixIssue(),issueService.getWeeklyClosedIssues(),issueService.getWeeklyOpenIssues(),issueService.getWeeklyTotalIssues());
+            issueService.getAverageAgeOfOpenIssues(),issueService.getTeamAverageTimeFixIssue(),issueService.getWeeklyClosedIssues(),
+            issueService.getWeeklyOpenIssues(),issueService.getWeeklyTotalIssues(),issueService.getIssuesPer1000LoCPerWeek());
     }
 }

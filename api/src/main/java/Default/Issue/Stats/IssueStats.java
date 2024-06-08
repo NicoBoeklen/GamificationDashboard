@@ -1,7 +1,9 @@
 package Default.Issue.Stats;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class IssueStats {
     
@@ -14,9 +16,11 @@ public class IssueStats {
     public List<IssuesWeekly> weeklyClosedIssues;
     public List<IssuesWeekly> weeklyOpenIssues;
     public List<IssuesWeekly> weeklyTotalIssues;
+    Map<LocalDateTime,Long> IssuesPer1000LoC;
     
     public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam, Integer amountOpenIssuesTeam, Integer amountTotalIssuesUser,
-                      Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam, List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues, List<IssuesWeekly> weeklyTotalIssues) {
+                      Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam, List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues,
+                      List<IssuesWeekly> weeklyTotalIssues, Map<LocalDateTime,Long> IssuesPer1000LoC) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
@@ -26,6 +30,7 @@ public class IssueStats {
         this.weeklyClosedIssues = weeklyClosedIssues;
         this.weeklyOpenIssues = weeklyOpenIssues;
         this.weeklyTotalIssues = weeklyTotalIssues;
+        this.IssuesPer1000LoC = IssuesPer1000LoC;
         }
     public IssueStats() {
     } 

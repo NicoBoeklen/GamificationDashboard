@@ -1,5 +1,6 @@
 package Default.Issue;
 
+import Default.Commit.Stats.CodeGrowth;
 import Default.Issue.Stats.IssuesWeekly;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -11,13 +12,17 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class IssueService {
 
     @Autowired
     private IssueRepository issueRepository;
+    @Autowired
+    private Default.Commit.CommitRepository commitRepository;
 
     /**
      * Saves an issue in the repository
@@ -75,4 +80,12 @@ public class IssueService {
     public List<IssuesWeekly> getWeeklyTotalIssues() {
         return issueRepository.findWeeklyTotalIssues();
     }
+    public Map<LocalDateTime, Long> getIssuesPer1000LoCPerWeek() {
+        List<IssuesWeekly> weeklyIssues = issueRepository.findWeeklyOpenIssues();
+        Long TotalLoC = commitRepository.getTotalLoC();
+        HashMap<LocalDateTime, Long> issuesPer1000LoCPerWeek = new HashMap<>();
+        weeklyIssues.forEach(issuesWeekly -> issuesPer1000LoCPerWeek.put(issuesWeekly.getWeek(), (issuesWeekly.getIssues() * 1000) / TotalLoC));
+        return issuesPer1000LoCPerWeek;
+    }
+    
 }
