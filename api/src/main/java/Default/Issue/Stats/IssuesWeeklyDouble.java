@@ -9,10 +9,10 @@ welchen Konstuktor er verwenden soll, deshalb wurde eine neue Klasse erstellt
 public class IssuesWeeklyDouble {
     private LocalDateTime week;
     private Long issues;
-    private Double issuesDouble;
-    public IssuesWeeklyDouble(LocalDateTime week, Double issuesDouble) {
+    private Double issueDensity;
+    public IssuesWeeklyDouble(LocalDateTime week, Double issueDensity) {
         this.week = week;
-        this.issuesDouble = issuesDouble;
+        this.issueDensity = issueDensity;
     }
     // Getter und Setter
     public LocalDateTime getWeek() {
@@ -30,12 +30,12 @@ public class IssuesWeeklyDouble {
     public void setIssues(Long issues) {
         this.issues = issues;
     }
-    public Double getIssuesDouble() {
-        return issuesDouble;
+    public Double getIssueDensity() {
+        return issueDensity;
     }
 
-    public void setIssuesDouble(Double issuesDouble) {
-        this.issuesDouble = issuesDouble;
+    public void setIssueDensity(Double issueDensity) {
+        this.issueDensity = issueDensity;
     }
 }
 
