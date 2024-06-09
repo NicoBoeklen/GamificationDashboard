@@ -84,16 +84,11 @@ public class IssueService {
         return issueRepository.findWeeklyTotalIssues();
     }
     public List<IssuesWeekly> getIssuesPer1000LoCPerWeek() {
-        List<IssuesWeekly> weeklyIssues = issueRepository.findWeeklyTotalIssues();
-        Long TotalLoC = commitRepository.getTotalLoC();
-        System.out.println("Total Lines"+TotalLoC);
+        List<IssuesWeekly> weeklyIssues = issueRepository.findExactDateTotalIssues();
         List<IssuesWeekly> issuesPer1000LoCPerWeek = new ArrayList<>();
         weeklyIssues.forEach(issuesWeekly -> System.out.println("LOL"+issuesWeekly.getWeek()));
         weeklyIssues.forEach(issuesWeekly -> System.out.println(issuesWeekly.getWeek()+" is "+(commitRepository.getLoCTillDate(issuesWeekly.getWeek()))));
-        //weeklyIssues.forEach(issuesWeekly -> System.out.println("Ergebnis"+(issuesWeekly.getIssues()*10000) / TotalLoC));
-        
-        weeklyIssues.forEach(issuesWeekly -> issuesPer1000LoCPerWeek.add(new IssuesWeekly(issuesWeekly.getWeek(),(issuesWeekly.getIssues()*10000) / TotalLoC)));
-        
+        weeklyIssues.forEach(issuesWeekly -> issuesPer1000LoCPerWeek.add(new IssuesWeekly(issuesWeekly.getWeek(),(double)issuesWeekly.getIssues()/(double)commitRepository.getLoCTillDate(issuesWeekly.getWeek())/1000)));
         return issuesPer1000LoCPerWeek;
     }
 }
