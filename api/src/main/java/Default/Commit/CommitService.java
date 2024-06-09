@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -123,5 +124,8 @@ public class CommitService {
 
         // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
         return lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
+    }
+    public List<CodeGrowth> getLoCTillDate(LocalDateTime date) {
+        return commitRepository.getLoCTillDate(date);
     }
 }

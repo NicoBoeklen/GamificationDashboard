@@ -2,6 +2,7 @@ package Default.Issue;
 
 import Default.Commit.Stats.CodeGrowth;
 import Default.Issue.Stats.IssuesWeekly;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,7 @@ public class IssueService {
     public Double getAverageAgeOfOpenIssues() {
         return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
+    //get the average time to fix an issue for the last 5 closed issues
     public Double getTeamAverageTimeFixIssue() {
         Pageable pageable = PageRequest.of(0, 5);
         return issueRepository.findLastFiveClosedIssues(pageable).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
@@ -80,12 +83,16 @@ public class IssueService {
     public List<IssuesWeekly> getWeeklyTotalIssues() {
         return issueRepository.findWeeklyTotalIssues();
     }
-    public Map<LocalDateTime, Long> getIssuesPer1000LoCPerWeek() {
-        List<IssuesWeekly> weeklyIssues = issueRepository.findWeeklyOpenIssues();
+    public List<IssuesWeekly> getIssuesPer1000LoCPerWeek() {
+        List<IssuesWeekly> weeklyIssues = issueRepository.findWeeklyTotalIssues();
         Long TotalLoC = commitRepository.getTotalLoC();
-        HashMap<LocalDateTime, Long> issuesPer1000LoCPerWeek = new HashMap<>();
-        weeklyIssues.forEach(issuesWeekly -> issuesPer1000LoCPerWeek.put(issuesWeekly.getWeek(), (issuesWeekly.getIssues() * 1000) / TotalLoC));
+        System.out.println("Total Lines"+TotalLoC);
+        List<IssuesWeekly> issuesPer1000LoCPerWeek = new ArrayList<>();
+        weeklyIssues.forEach(issuesWeekly -> System.out.println("LOL"+issuesWeekly.getWeek()));
+        //weeklyIssues.forEach(issuesWeekly -> System.out.println("Ergebnis"+(issuesWeekly.getIssues()*10000) / TotalLoC));
+        
+        weeklyIssues.forEach(issuesWeekly -> issuesPer1000LoCPerWeek.add(new IssuesWeekly(issuesWeekly.getWeek(),(issuesWeekly.getIssues()*10000) / TotalLoC)));
+        
         return issuesPer1000LoCPerWeek;
     }
-    
 }
