@@ -23,10 +23,10 @@
           <v-card class="pa-5">
             <v-card-title class="headline">Login</v-card-title>
             <v-card-text>
-              <v-form @submit.prevent="submitForm">
+              <v-form @submit.prevent="submitForm" ref="form">
                 <v-text-field
                   label="Username"
-                  v-model="username"
+                  v-model="login.userName"
                   :rules="[rules.required]"
                   required
                   clearable
@@ -37,7 +37,7 @@
                 ></v-text-field>
                 <v-text-field
                   label="Repository Name"
-                  v-model="repositoryName"
+                  v-model="login.repoName"
                   :type="'repositoryName'"
                   :rules="[rules.required]"
                   required
@@ -49,7 +49,7 @@
                 ></v-text-field>
                 <v-text-field
                   label="Owner Name"
-                  v-model="ownerName"
+                  v-model="login.ownerName"
                   :type="'ownerName'"
                   :rules="[rules.required]"
                   required
@@ -70,22 +70,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+
+import config from "../config";
+import {ref, Ref} from "vue";
+import {showToast, Toast} from "@/ts/toasts";
+interface Login {
+  userName: string;
+  repoName: string;
+  ownerName: string;
+}
+const toLogin: Ref<Login> = ref<Login>({
+  userName: '',
+  repoName: '',
+  ownerName: ''
+});
+function login(){
+  fetch(`${config.apiBaseUrl}/login`,
+    {method: "POST", headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(toLogin.value)})
+
+    .then(response => response.json())
+    .then(data => data as Login[])
+    .then(data => {
+      console.log(data);
+      showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
+    })
+    .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
+}
+
+}
 
 
-const username = ref('');
-const repositoryName = ref('');
-const ownerName = ref('');
 
-const rules = {
-  required: (value: string) => !!value || 'Required.'
-};
 
-const submitForm = () => {
-  console.log('Username:', username.value);
-  console.log('Repository Name:', repositoryName.value);
-  console.log('Owner Name:', ownerName.value);
-};
+
+
+
 </script>
 <style scoped>
 .fill-height {

@@ -16,7 +16,7 @@ public class LoginController {
     
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.CREATED)
-    public Login createToDo(@Valid @RequestBody Login loginRequest) {
+    public Login login(@Valid @RequestBody Login loginRequest) {
         Login login = new Login();
         login.setOwnerName(loginRequest.getOwnerName());
         login.setRepoName(loginRequest.getRepoName());

@@ -5,7 +5,7 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from "../components/Home.vue";
 import DashboardHome from "../components/DashboardHome.vue"
 const router = createRouter({
