@@ -1,8 +1,7 @@
 package Default.Issue;
 
-import Default.Commit.Stats.CodeGrowth;
 import Default.Issue.Stats.IssuesWeekly;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import Default.Issue.Stats.IssuesWeeklyDouble;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +13,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class IssueService {
@@ -83,12 +80,18 @@ public class IssueService {
     public List<IssuesWeekly> getWeeklyTotalIssues() {
         return issueRepository.findWeeklyTotalIssues();
     }
-    public List<IssuesWeekly> getIssuesPer1000LoCPerWeek() {
+    public List<IssuesWeeklyDouble> getIssuesPer1000LoCPerWeek() {
         List<IssuesWeekly> weeklyIssues = issueRepository.findExactDateTotalIssues();
-        List<IssuesWeekly> issuesPer1000LoCPerWeek = new ArrayList<>();
-        weeklyIssues.forEach(issuesWeekly -> System.out.println("LOL"+issuesWeekly.getWeek()));
-        weeklyIssues.forEach(issuesWeekly -> System.out.println(issuesWeekly.getWeek()+" is "+(commitRepository.getLoCTillDate(issuesWeekly.getWeek()))));
-        weeklyIssues.forEach(issuesWeekly -> issuesPer1000LoCPerWeek.add(new IssuesWeekly(issuesWeekly.getWeek(),(double)issuesWeekly.getIssues()/(double)commitRepository.getLoCTillDate(issuesWeekly.getWeek())/1000)));
-        return issuesPer1000LoCPerWeek;
+        List<IssuesWeeklyDouble> issuesPer1000LoC = new ArrayList<>();
+        weeklyIssues.forEach(issuesWeeklyDouble -> System.out.println(issuesWeeklyDouble.getWeek()+" is "+(((double)commitRepository.getLoCTillDate(issuesWeeklyDouble.getWeek())/1000))));
+        for (IssuesWeekly issuesWeekly : weeklyIssues) {
+            double issues = issuesWeekly.getIssues();
+            double locTillDate = commitRepository.getLoCTillDate(issuesWeekly.getWeek());
+            double issuesPerThousandLoc = issues / (locTillDate / 1000);
+            double roundedIssuesPerThousandLoc = Math.round(issuesPerThousandLoc * 100.0) / 100.0;
+            IssuesWeeklyDouble newIssuesWeekly = new IssuesWeeklyDouble(issuesWeekly.getWeek(),roundedIssuesPerThousandLoc);
+            issuesPer1000LoC.add(newIssuesWeekly);
+        }
+        return issuesPer1000LoC;
     }
 }

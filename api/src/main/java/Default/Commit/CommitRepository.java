@@ -32,7 +32,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
         "ORDER BY DATE_TRUNC('week', c.date) ")
     List<CodeGrowth> getCodeGrowth();
     
-    @Query("SELECT COALESCE(SUM(c.additions - c.deletions), 999) " +
+    @Query("SELECT SUM(c.additions - c.deletions) " +
         "FROM Commit c " +
         "WHERE c.isMerge = false AND c.date<= :date ")
     Long getLoCTillDate(@Param("date") LocalDateTime date);
