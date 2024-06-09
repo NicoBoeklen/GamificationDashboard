@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Axios: typeof import('./src/components/axios.vue')['default']
     DashboardHome: typeof import('./src/components/DashboardHome.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']

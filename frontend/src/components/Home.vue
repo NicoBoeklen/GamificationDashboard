@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height">
     <v-responsive
-      class="align-centerfill-height mx-auto"
+      class="align-center fill-height mx-auto"
       max-width="900"
     >
       <v-img
@@ -23,7 +23,7 @@
           <v-card class="pa-5">
             <v-card-title class="headline">Login</v-card-title>
             <v-card-text>
-              <v-form @submit.prevent="submitForm" ref="form">
+              <v-form @submit.prevent="login" ref="form">
                 <v-text-field
                   label="Username"
                   v-model="login.userName"
@@ -38,7 +38,6 @@
                 <v-text-field
                   label="Repository Name"
                   v-model="login.repoName"
-                  :type="'repositoryName'"
                   :rules="[rules.required]"
                   required
                   clearable
@@ -50,7 +49,6 @@
                 <v-text-field
                   label="Owner Name"
                   v-model="login.ownerName"
-                  :type="'ownerName'"
                   :rules="[rules.required]"
                   required
                   clearable
@@ -69,11 +67,13 @@
   </v-container>
 </template>
 
+
 <script setup lang="ts">
 
 import config from "../config";
 import {ref, Ref} from "vue";
-import {showToast, Toast} from "@/ts/toasts";
+import {showToast, Toast} from "../ts/toasts";
+import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 interface Login {
   userName: string;
   repoName: string;
@@ -84,6 +84,9 @@ const toLogin: Ref<Login> = ref<Login>({
   repoName: '',
   ownerName: ''
 });
+const rules = {
+  required: (value: string) => !!value || 'Required!'
+};
 function login(){
   fetch(`${config.apiBaseUrl}/login`,
     {method: "POST", headers: { 'Content-Type': 'application/json'},
@@ -98,7 +101,7 @@ function login(){
     .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
 }
 
-}
+
 
 
 
