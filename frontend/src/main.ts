@@ -12,9 +12,12 @@ import App from './App.vue'
 
 // Composables
 import { createApp } from 'vue'
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faServer, faLock } from '@fortawesome/free-solid-svg-icons';
 
 const app = createApp(App)
 
 registerPlugins(app)
-
+app.component('font-awesome-icon', FontAwesomeIcon);
 app.mount('#app')

@@ -25,7 +25,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "./src/typed-router.d.ts"
+    "./src/typed-router.d.ts", "vite.config.*", "env.d.ts", "src/**/*", "src/**/*.vue"
   ],
   "exclude": ["dist", "node_modules", "cypress"],
   "references": [
