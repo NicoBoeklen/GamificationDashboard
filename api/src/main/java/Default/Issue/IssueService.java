@@ -89,6 +89,7 @@ public class IssueService {
         System.out.println("Total Lines"+TotalLoC);
         List<IssuesWeekly> issuesPer1000LoCPerWeek = new ArrayList<>();
         weeklyIssues.forEach(issuesWeekly -> System.out.println("LOL"+issuesWeekly.getWeek()));
+        weeklyIssues.forEach(issuesWeekly -> System.out.println(issuesWeekly.getWeek()+" is "+(commitRepository.getLoCTillDate(issuesWeekly.getWeek()))));
         //weeklyIssues.forEach(issuesWeekly -> System.out.println("Ergebnis"+(issuesWeekly.getIssues()*10000) / TotalLoC));
         
         weeklyIssues.forEach(issuesWeekly -> issuesPer1000LoCPerWeek.add(new IssuesWeekly(issuesWeekly.getWeek(),(issuesWeekly.getIssues()*10000) / TotalLoC)));

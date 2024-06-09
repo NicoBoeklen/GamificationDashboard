@@ -125,7 +125,7 @@ public class CommitService {
         // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
         return lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
     }
-    public List<CodeGrowth> getLoCTillDate(LocalDateTime date) {
+    public Long getLoCTillDate(LocalDateTime date) {
         return commitRepository.getLoCTillDate(date);
     }
 }
