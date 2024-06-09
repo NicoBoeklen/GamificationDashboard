@@ -1,7 +1,11 @@
 package Default.Issue.Stats;
 
 import java.time.LocalDateTime;
-
+/*
+zweite Klasse für die Issues pro 1000 LoC
+Versucht IssuesWeekly zu überladen aber Java scheint bei JPA Abfragen nicht zu wissen,
+welchen Konstuktor er verwenden soll, deshalb wurde eine neue Klasse erstellt
+ */
 public class IssuesWeeklyDouble {
     private LocalDateTime week;
     private Long issues;
