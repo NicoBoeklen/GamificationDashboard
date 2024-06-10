@@ -6,7 +6,7 @@
         srcSet="..."
         class="img"
       />
-      <div class="div-3">login.userName</div>
+      <div class="div-3">toLogin.userName</div>
     </div>
     <div class="div-4">GitHub Dashboard</div>
     <div class="div-5">

@@ -60,7 +60,9 @@
                   dense
                   class="mb-4"
                 ></v-text-field>
+                <router-link :to="'/dashboard'">
                 <v-btn color="primary" type="submit" block class="mt-4">Login</v-btn>
+                </router-link>
               </v-form>
             </v-card-text>
           </v-card>
