@@ -27,6 +27,7 @@
                 <v-text-field
                   label="Username"
                   :rules="[rules.required]"
+                  v-model="toLogin.userName"
                   color="blue"
                   required
                   clearable
@@ -38,6 +39,7 @@
                 <v-text-field
                   label="Repository Name"
                   :rules="[rules.required]"
+                  v-model="toLogin.repoName"
                   color="blue"
                   required
                   clearable
@@ -49,6 +51,7 @@
                 <v-text-field
                   label="Owner Name"
                   :rules="[rules.required]"
+                  v-model="toLogin.ownerName"
                   color="blue"
                   required
                   clearable
