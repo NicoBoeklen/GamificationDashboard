@@ -95,7 +95,7 @@ const router = useRouter()
 
 function login(){
   console.log("login ist durchgeführt");
-  fetch(`${config.apiBaseUrl}/login`,
+  fetch(`${config.fetchBaseUrl}/login`,
     {method: "POST", headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify(toLogin.value)})
 
