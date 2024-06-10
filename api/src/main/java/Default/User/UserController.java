@@ -35,4 +35,8 @@ public class UserController {
             .then(Mono.just(ResponseEntity.ok("Contributors saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
+    @GetMapping("/avatar/user/{username}")
+    public String getAvatar(@PathVariable String username) {
+        return userService.getUserAvatar(username);
+    }
 }
