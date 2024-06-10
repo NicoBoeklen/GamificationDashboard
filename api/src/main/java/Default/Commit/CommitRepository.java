@@ -5,6 +5,7 @@ import Default.Commit.Stats.CommitsUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -30,6 +31,17 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
         "GROUP BY DATE_TRUNC('week', c.date) " +
         "ORDER BY DATE_TRUNC('week', c.date) ")
     List<CodeGrowth> getCodeGrowth();
+    
+    @Query("SELECT SUM(c.additions - c.deletions) " +
+        "FROM Commit c " +
+        "WHERE c.isMerge = false AND c.date<= :date ")
+    Long getLoCTillDate(@Param("date") LocalDateTime date);
+    
+    @Query("SELECT SUM(c.additions) - SUM(c.deletions) FROM Commit c WHERE c.isMerge = false")
+    Long getTotalLoC();
+
+    @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false")
+    Integer getTotalCommitCount();
 
     @Query("SELECT c FROM Commit c WHERE c.author.id = :userId AND c.isMerge = false ORDER BY c.date DESC")
     List<Commit> findLastFiveCommitsByUser(@Param("userId") Long userId, Pageable pageable);

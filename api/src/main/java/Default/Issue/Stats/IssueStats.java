@@ -1,28 +1,35 @@
 package Default.Issue.Stats;
 
-import Default.Issue.IssueRepository;
-import Default.Issue.IssueService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import java.util.List;
 
 public class IssueStats {
-    public Double averageAgeOfOpenIssuesTeam;
+    
     public Integer amountTotalIssuesTeam;
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
-    public Integer amountTotalIssuesUser;
+    public Integer amountTotalClosedIssuesUser;
+    public Double averageTimeFixIssueOpenTeam;
+    public Double averageTimeFixIssueTotalTeam;
+    public List<IssuesWeekly> weeklyClosedIssues;
+    public List<IssuesWeekly> weeklyOpenIssues;
+    public List<IssuesWeekly> weeklyTotalIssues;
+    public List<IssuesWeeklyDouble> issuesPer1000LoC;
     
-    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam,Integer amountOpenIssuesTeam,Integer amountTotalIssuesUser,Double averageAgeOfOpenIssuesTeam) {
+    public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam, Integer amountOpenIssuesTeam, Integer amountTotalClosedIssuesUser,
+                      Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam, List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues,
+                      List<IssuesWeekly> weeklyTotalIssues, List<IssuesWeeklyDouble> issuesPer1000LoC) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
-        this.amountTotalIssuesUser = amountTotalIssuesUser;
-        this.averageAgeOfOpenIssuesTeam = averageAgeOfOpenIssuesTeam;
-        
+        this.amountTotalClosedIssuesUser = amountTotalClosedIssuesUser;
+        this.averageTimeFixIssueOpenTeam = averageTimeFixIssueOpenTeam;
+        this.averageTimeFixIssueTotalTeam = averageTimeFixIssueTotalTeam;
+        this.weeklyClosedIssues = weeklyClosedIssues;
+        this.weeklyOpenIssues = weeklyOpenIssues;
+        this.weeklyTotalIssues = weeklyTotalIssues;
+        this.issuesPer1000LoC = issuesPer1000LoC;
         }
-    public IssueStats() {
-    }
     
     public Integer getAmountTotalIssuesTeam() {
         return amountTotalIssuesTeam;
@@ -46,5 +53,12 @@ public class IssueStats {
 
     public void setAmountOpenIssuesTeam(Integer amountOpenIssuesTeam) {
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
+    }
+    public List<IssuesWeeklyDouble> getIssuesPer1000LoC() {
+        return issuesPer1000LoC;
+    }
+
+    public void setIssuesPer1000LoC(List<IssuesWeeklyDouble> issuesPer1000LoC) {
+        this.issuesPer1000LoC = issuesPer1000LoC;
     }
 }
