@@ -24,39 +24,39 @@
             <v-card-title class="headline">Login</v-card-title>
             <v-card-text>
               <v-form @submit.prevent="login" ref="form">
-                <v-input-field
+                <v-text-field
                   label="Username"
-                  v-model="login.userName"
                   :rules="[rules.required]"
+                  color="blue"
                   required
                   clearable
                   prepend-inner-icon="mdi-account"
                   outlined
                   dense
                   class="mb-4"
-                ></v-input-field>
-                <v-input-field
+                ></v-text-field>
+                <v-text-field
                   label="Repository Name"
-                  v-model="login.repoName"
                   :rules="[rules.required]"
+                  color="blue"
                   required
                   clearable
                   prepend-inner-icon="mdi-server"
                   outlined
                   dense
                   class="mb-4"
-                ></v-input-field>
-                <v-input-field
+                ></v-text-field>
+                <v-text-field
                   label="Owner Name"
-                  v-model="login.ownerName"
                   :rules="[rules.required]"
+                  color="blue"
                   required
                   clearable
                   prepend-inner-icon="mdi-account"
                   outlined
                   dense
                   class="mb-4"
-                ></v-input-field>
+                ></v-text-field>
                 <v-btn color="primary" type="submit" block class="mt-4">Login</v-btn>
               </v-form>
             </v-card-text>
