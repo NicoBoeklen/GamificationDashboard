@@ -1,16 +1,23 @@
-import './assets/main.css'
+/**
+ * main.ts
+ *
+ * Bootstraps Vuetify and other plugins then mounts the App`
+ */
 
-import {createApp} from 'vue'
+// Plugins
+import { registerPlugins } from '@/plugins'
+
+// Components
 import App from './App.vue'
-import router from './router'
 
-// fontawesome 5 icons
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-import {fas} from '@fortawesome/free-solid-svg-icons'
-library.add(fas);
+// Composables
+import { createApp } from 'vue'
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faServer, faLock } from '@fortawesome/free-solid-svg-icons';
 
 const app = createApp(App)
-app.component("font-awesome-icon", FontAwesomeIcon)
-app.use(router)
+
+registerPlugins(app)
+app.component('font-awesome-icon', FontAwesomeIcon);
 app.mount('#app')
