@@ -8,7 +8,6 @@ welchen Konstuktor er verwenden soll, deshalb wurde eine neue Klasse erstellt
  */
 public class IssuesWeeklyDouble {
     private LocalDateTime week;
-    private Long issues;
     private Double issueDensity;
     public IssuesWeeklyDouble(LocalDateTime week, Double issueDensity) {
         this.week = week;
@@ -23,13 +22,6 @@ public class IssuesWeeklyDouble {
         this.week = week;
     }
 
-    public Long getIssues() {
-        return issues;
-    }
-
-    public void setIssues(Long issues) {
-        this.issues = issues;
-    }
     public Double getIssueDensity() {
         return issueDensity;
     }

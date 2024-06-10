@@ -1,6 +1,7 @@
 import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {type Ref, ref} from "vue";
 interface WeeklyIssues {
   week: string;
   issues: number;
@@ -54,8 +55,8 @@ function fetchIssues()  {
   })
   .catch(error => showToast(new Toast("Error", error.message, "error", faXmark, 10)))
 }
-export function getIssues(): Issue{
+export function getIssues(): Ref<Issue>{
   fetchIssues();
-  return issue;
+  return ref(issue);
 }
 
