@@ -40,7 +40,7 @@ let issue: Issue = {
 
 function fetchIssues()  {
   fetch(`${config.fetchBaseUrl}/issuesStats/133352623`,  {
-  method: "PUT",
+  method: "GET",
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
