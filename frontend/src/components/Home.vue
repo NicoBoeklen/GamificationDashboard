@@ -60,9 +60,7 @@
                   dense
                   class="mb-4"
                 ></v-text-field>
-                <router-link :to="'/dashboard'">
-                <v-btn color="primary" type="submit" block class="mt-4">Login</v-btn>
-                </router-link>
+                <v-btn color="primary" type="submit" block class="mt-4" @click="login()">Login</v-btn>
               </v-form>
             </v-card-text>
           </v-card>
@@ -79,6 +77,7 @@ import config from "../config";
 import {ref, Ref} from "vue";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {useRouter} from "vue-router";
 interface Login {
   userName: string;
   repoName: string;
@@ -92,7 +91,10 @@ const toLogin: Ref<Login> = ref<Login>({
 const rules = {
   required: (value: string) => !!value || 'Required!'
 };
+const router = useRouter()
+
 function login(){
+  console.log("login ist durchgeführt");
   fetch(`${config.apiBaseUrl}/login`,
     {method: "POST", headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify(toLogin.value)})
@@ -102,8 +104,10 @@ function login(){
     .then(data => {
       console.log(data);
       showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
+      router.push('/dashboard')
     })
     .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
+
 }
 
 
