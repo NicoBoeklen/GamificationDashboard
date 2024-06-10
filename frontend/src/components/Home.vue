@@ -24,7 +24,7 @@
             <v-card-title class="headline">Login</v-card-title>
             <v-card-text>
               <v-form @submit.prevent="login" ref="form">
-                <v-text-field
+                <v-input-field
                   label="Username"
                   v-model="login.userName"
                   :rules="[rules.required]"
@@ -34,8 +34,8 @@
                   outlined
                   dense
                   class="mb-4"
-                ></v-text-field>
-                <v-text-field
+                ></v-input-field>
+                <v-input-field
                   label="Repository Name"
                   v-model="login.repoName"
                   :rules="[rules.required]"
@@ -45,8 +45,8 @@
                   outlined
                   dense
                   class="mb-4"
-                ></v-text-field>
-                <v-text-field
+                ></v-input-field>
+                <v-input-field
                   label="Owner Name"
                   v-model="login.ownerName"
                   :rules="[rules.required]"
@@ -56,7 +56,7 @@
                   outlined
                   dense
                   class="mb-4"
-                ></v-text-field>
+                ></v-input-field>
                 <v-btn color="primary" type="submit" block class="mt-4">Login</v-btn>
               </v-form>
             </v-card-text>
