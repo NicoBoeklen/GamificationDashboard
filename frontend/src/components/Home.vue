@@ -23,7 +23,7 @@
           <v-card class="pa-5">
             <v-card-title class="headline">Login</v-card-title>
             <v-card-text>
-              <v-form @submit.prevent="login" ref="form">
+              <v-form  ref="form">
                 <v-text-field
                   label="Username"
                   :rules="[rules.required]"
@@ -60,7 +60,7 @@
                   dense
                   class="mb-4"
                 ></v-text-field>
-                <v-btn color="primary" type="submit" block class="mt-4" @click="login()">Login</v-btn>
+                <v-btn color="primary" type="button" block class="mt-4" @click="login()">Login</v-btn>
               </v-form>
             </v-card-text>
           </v-card>

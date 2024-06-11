@@ -4,6 +4,7 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {type Ref, ref} from "vue";
 import {useRouter} from "vue-router";
 import {da} from "vuetify/locale";
+import router from "../router";
 
 let userNameSave: string;
 
@@ -17,7 +18,8 @@ export const toLogin: Ref<Login> = ref<Login>({
   repoName: '',
   ownerName: ''
 });
-const router = useRouter()
+
+
 export function login(){
   console.log("login ist durchgeführt");
   fetch(`${config.fetchBaseUrl}/login`,
@@ -30,12 +32,13 @@ export function login(){
       console.log(data);
       showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
       userNameSave = toLogin.value.userName
-      router.push('/dashboard')
+      router.push('/dashboard');
     })
     .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
 
 }
-export function getUserName(): string{
+export function getUserName(): string {
 
   return userNameSave;
 }
+
