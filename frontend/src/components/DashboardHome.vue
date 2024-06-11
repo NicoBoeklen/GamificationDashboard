@@ -1,14 +1,22 @@
 <template>
     <Header/>
     <v-container class="container">
-      <v-row class="counter-wrapper">
-        <v-col cols="12" md="6" class="counter-box">
-          <v-row class="align-center">
-            <v-avatar color="white darken-1" size="37" class="counter-number">level</v-avatar>
-            <v-progress-linear value="50" height="20" md="4" color="yellow " class="progress-bar" />
-          </v-row>
+      <v-row>
+        <v-col cols="12" md="4">
+          <div class="d-flex align-center">
+            <v-avatar color="white darken-1" size="50" class="counter-number"
+            >level</v-avatar
+            >
+            <v-progress-linear
+              model-value="50"
+              height="20"
+              color="yellow"
+              class="progress-bar"
+            />
+          </div>
         </v-col>
-        <v-col cols="12" md="4" class="commitment-wrapper">
+
+        <v-col  class="commitment-wrapper">
           <v-img
             :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/a15a58212de51f3f8af173f0f65e334091b691385ab3ae8e623d83ef49bba2bc?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
             class="commitment-logo"
@@ -19,6 +27,7 @@
           </p>
         </v-col>
         <v-btn class="insights-button" color="grey darken-2">Insights</v-btn>
+
       </v-row>
     </v-container>
 
@@ -77,12 +86,12 @@
             <v-card-title class="section-title">Daily Quests</v-card-title>
             <v-card-text>
               <div class="quest-details">
-                <p class="team-quest">Team:create 3 commits
-                  <v-progress-linear value="50" height="21" color="green darken-2" class="team-progress-bar" />
-                </p>
-                <p class="individual-quest">Individual:fix 1 Issue
-                  <v-progress-linear value="25" height="21" color="orange" class="individual-progress-bar" />
-                </p>
+                <p class="team-quest">Team:create 3 commits</p>
+                  <v-progress-linear model-value="50" height="20" color="green darken-2"></v-progress-linear>
+
+                <p class="individual-quest">Individual:fix 1 Issue </p>
+                  <v-progress-linear model-value="25" height="20" color="orange"></v-progress-linear>
+
               </div>
             </v-card-text>
           </v-card>
@@ -92,10 +101,10 @@
             <v-card-text>
               <div class="milestone-details">
                 <p class="individual-milestone">Individual: Write 1000 LoC
-                  <v-progress-linear value="75" height="21" color="green darken-2" class="individual-progress-bar" />
+                  <v-progress-linear model-value="75" height="21" color="green darken-2" class="individual-progress-bar" />
                 </p>
                 <p class="team-milestone">Team: 100% Test Coverage
-                  <v-progress-linear value="60" height="21" color="orange" class="team-progress-bar" />
+                  <v-progress-linear model-value="60" height="21" color="orange" class="team-progress-bar" />
                 </p>
               </div>
             </v-card-text>
@@ -111,25 +120,20 @@
               />
             </v-card-text>
           </v-card>
+
         </v-col>
+
 
         <v-col cols="12" md="4" class="Leaderboard">
           <v-card class="leaderboard-section">
             <v-card-title>Leaderboard</v-card-title>
-            <v-row>
-
-                <v-col cols="12" sm="6" md="4" v-for="leader in leaders" :key="leader.rank">
-                  <v-card class="leaderboard-item">
-                    <p class="rank">{{ leader.rank }}</p>
-                    <v-avatar class="avatar">
-                      <v-img :src="leader.avatar" :alt="`Avatar of ${leader.name}`"></v-img>
-                    </v-avatar>
-                    <p class="name">{{ leader.name }}</p>
-                    <v-img :src="leader.badge" :alt="`Rank ${leader.rank} Badge`" height="32" width="32"></v-img>
-                  </v-card>
-                </v-col>
-
-            </v-row>
+              <v-list lines="one" v-for="leader in leaders" :key="leader.rank">
+                <v-list-item
+                  :key="leader.rank"
+                  :title="leader.rank +'  '+ leader.name  "
+                >
+                </v-list-item>
+              </v-list>
           </v-card>
         </v-col>
       </v-row>
@@ -167,7 +171,18 @@ export default defineComponent({
           name: 'Irene Mustermann',
           badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e372f5bef41dc732160069bbfdec8c6db632f36f961f734593352180524e99ba?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
         },
-        // Add more leaders as needed
+        {
+          rank: 3,
+          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
+          name: 'Jeff Bezos',
+          badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
+        },
+        {
+          rank: 4,
+          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
+          name: 'Jeff Joe',
+          badge: '',
+        },
       ],
     };
   },
@@ -230,19 +245,10 @@ export default defineComponent({
 
 .project-stats {
   display: flex;
-  align-items: center;
   justify-content: space-between;
 }
 
-.stats-details {
-  display: flex;
-  align-items: center;
-}
 
-.pull-requests,
-.issues {
-  margin-right: 10px;
-}
 
 .daily-quests,
 .milestones {
@@ -259,50 +265,15 @@ export default defineComponent({
   margin-bottom: 1px;
 }
 
-.quest-progress,
-.milestone-progress {
-  display: flex;
-  align-items: center;
 
-}
 
 .badge {
   margin-right: 10px;
   height: 50px; /* Adjust height as needed */
-  width: auto; /* Maintain aspect ratio */
+  width: auto;
+  align-items: start
 }
 
-.additional-info {
-  margin-bottom: 20px;
-}
-
-.leaderboard {
-  margin-bottom: 20px;
-  float: right;
-}
-
-.leaderboard-list {
-  margin-top: 10px;
-}
-
-.leaderboard-item {
-  margin-bottom: 10px;
-}
-
-.rank {
-  font-size: 20px; /* Adjust font size as needed */
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.avatar {
-  margin-bottom: 5px;
-}
-
-.name {
-  font-size: 16px; /* Adjust font size as needed */
-  margin-bottom: 5px;
-}
 
 .avatar img {
   border-radius: 50%;
