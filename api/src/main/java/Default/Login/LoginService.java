@@ -11,4 +11,10 @@ public class LoginService {
     public Login saveLogin(Login login) {
         return loginRepository.save(login);
     }
+    public Login getLoggedUsers(Long sessionId) {
+        return loginRepository.getLoggedUsers(sessionId);
+    }
+    public void deleteAll() {
+        loginRepository.deleteAll();
+    }
 }
