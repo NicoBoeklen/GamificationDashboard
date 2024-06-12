@@ -16,11 +16,16 @@ public class LoginController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.CREATED)
     public Login login(@Valid @RequestBody Login loginRequest) {
+        loginService.deleteAll();
         Login login = new Login();
         login.setOwnerName(loginRequest.getOwnerName());
         login.setRepoName(loginRequest.getRepoName());
         login.setUserName(loginRequest.getUserName());
-        
         return loginService.saveLogin(login);
+    }
+    @PostMapping("/api/loggedUser")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Login getLoggedUsers(@Valid @RequestBody Long sessionId) {
+        return loginService.getLoggedUsers(sessionId);
     }
 }
