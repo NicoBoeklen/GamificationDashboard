@@ -9,8 +9,8 @@ public class IssueStats {
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
     public Integer amountTotalClosedIssuesUser;
-    public Double averageTimeFixIssueOpenTeam;
-    public Double averageTimeFixIssueTotalTeam;
+    public Double averageAgeOfOpenIssuesInDays;
+    public Double averageTimeToFixIssueInDaysTeam;
     public List<IssuesWeekly> weeklyClosedIssues;
     public List<IssuesWeekly> weeklyOpenIssues;
     public List<IssuesWeekly> weeklyTotalIssues;
@@ -23,8 +23,8 @@ public class IssueStats {
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
         this.amountTotalClosedIssuesUser = amountTotalClosedIssuesUser;
-        this.averageTimeFixIssueOpenTeam = averageTimeFixIssueOpenTeam;
-        this.averageTimeFixIssueTotalTeam = averageTimeFixIssueTotalTeam;
+        this.averageAgeOfOpenIssuesInDays = averageTimeFixIssueOpenTeam;
+        this.averageTimeToFixIssueInDaysTeam = averageTimeFixIssueTotalTeam;
         this.weeklyClosedIssues = weeklyClosedIssues;
         this.weeklyOpenIssues = weeklyOpenIssues;
         this.weeklyTotalIssues = weeklyTotalIssues;
