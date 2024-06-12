@@ -49,7 +49,6 @@
               <br />
               Updated at: 25.05.2024
             </v-card-text>
-            <v-card-actions class="project-stats">
               <v-carousel hide-delimiters height="300" cycle interval="15000">
                 <v-carousel-item>
                   <v-container class="fill-height" fluid>
@@ -91,13 +90,13 @@
                 </v-carousel-item>
               </v-carousel>
 
-            </v-card-actions>
+
           </v-card>
 
 
           <v-card class="badges-section">
             <v-card-title class="section-title">Badges</v-card-title>
-            <v-card-text class="badges-container">
+            <v-card-text class="badges-container" style="display: flex">
               <v-img
                 :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/196eacaba534187ca530bde1ec70c21657fa163daf5d8f5b7a4d0d2d7bf2439c?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
                 class="badge"

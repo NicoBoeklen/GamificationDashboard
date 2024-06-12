@@ -10,7 +10,7 @@
       <template v-slot:append>
         <v-btn variant="outlined" class="mr-3">Managment View</v-btn>
 
-        <v-btn icon="mdi mdi-theme-light-dark" ></v-btn>
+        <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 
         <v-btn append-icon="mdi-logout" >Logout</v-btn>
       </template>
@@ -20,20 +20,30 @@
 <script>
 import {getUserName, toLogin} from "../objects/login";
 import {onMounted, ref} from "vue";
+import { useTheme } from 'vuetify'
+
+
+
+
 
 export default {
   setup() {
     const userName = ref('');
+    const theme = useTheme()
 
+    function toggleTheme() {
+      theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    }
     onMounted(() => {
       userName.value = getUserName();
       console.log('Username:', userName.value);
     });
 
 
-    return { userName };
+    return { userName, toggleTheme };
   }
 }
+
 </script>
 
 <style scoped>
