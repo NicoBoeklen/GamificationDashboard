@@ -1,5 +1,5 @@
 import router from "../router";
 
-export function redirect(){
+export function redirectInsights(){
   router.push('/insights')
 }
