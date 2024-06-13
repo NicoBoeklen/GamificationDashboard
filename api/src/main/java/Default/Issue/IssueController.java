@@ -32,14 +32,14 @@ public class IssueController {
      * @param repo  GitHub Repository name
      * @return "Issues saved successfully" with 200 or 500 Error if exception is thrown
      */
-    @GetMapping("/issues/{owner}/{repo}")
+    @GetMapping("/api/issues/{owner}/{repo}")
     public Mono<ResponseEntity<String>> getIssues(@PathVariable String owner, @PathVariable String repo) {
         return githubAPIIssueService.getIssues(owner, repo)
             .flatMap(issueService::saveIssue)  // Save each issue
             .then(Mono.just(ResponseEntity.ok("Issues saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
-    @GetMapping("/issuesStats/{userId}")
+    @GetMapping("/api/issueStats/{userId}")
     public IssueStats getIssueInfo(@PathVariable Long userId) {
         return new IssueStats(issueService.getAllIssuesTeam(), issueService.getFixedIssuesTeam(), issueService.getOpenIssuesTeam(), issueService.getTotalClosedIssuesUser(userId),
             issueService.getAverageAgeOfOpenIssues(), issueService.getCountOpenIssuesLessSevenDays(), issueService.getOpenIssuesTeam()- issueService.getCountOpenIssuesLessSevenDays()-issueService.getCountOpenIssuesMoreOneMonth(), issueService.getCountOpenIssuesMoreOneMonth(), issueService.getTeamAverageTimeFixIssue(),issueService.getWeeklyClosedIssues(),
