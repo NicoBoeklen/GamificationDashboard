@@ -39,7 +39,7 @@ public class IssueController {
             .then(Mono.just(ResponseEntity.ok("Issues saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
-    @GetMapping("/issuesStats/{userId}")
+    @GetMapping("/api/issuesStats/{userId}")
     public IssueStats getIssueInfo(@PathVariable Long userId) {
         return new IssueStats(issueService.getAllIssuesTeam(), issueService.getFixedIssuesTeam(), issueService.getOpenIssuesTeam(), issueService.getTotalClosedIssuesUser(userId),
             issueService.getAverageAgeOfOpenIssues(), issueService.getCountOpenIssuesLessSevenDays(), issueService.getOpenIssuesTeam()- issueService.getCountOpenIssuesLessSevenDays()-issueService.getCountOpenIssuesMoreOneMonth(), issueService.getCountOpenIssuesMoreOneMonth(), issueService.getTeamAverageTimeFixIssue(),issueService.getWeeklyClosedIssues(),

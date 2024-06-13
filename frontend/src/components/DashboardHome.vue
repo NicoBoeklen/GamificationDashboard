@@ -26,7 +26,7 @@
             <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span> <span>ment</span>
           </p>
         </v-col>
-        <v-btn @click="redirect()"  class="insights-button" color="grey darken-2">Insights</v-btn>
+        <v-btn @click="redirectInsights()"  class="insights-button" color="grey darken-2">Insights</v-btn>
 
       </v-row>
     </v-container>
@@ -192,12 +192,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Header from "./Header.vue";
-import {redirect} from "../objects/directions";
+import {redirectInsights} from "../objects/directions";
 
 
 export default defineComponent({
   name: 'Leaderboard',
-  methods: {redirect},
+  methods: {redirectInsights},
   components: {Header},
   data() {
     return {
