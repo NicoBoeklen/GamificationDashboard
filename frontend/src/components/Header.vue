@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar :elevation="2" app color="grey darken-3" dark>
+    <v-app-bar :elevation="0" app color="#5D5A5A" dark>
       <v-avatar>
         <img  alt="Avatar" />
       </v-avatar>

@@ -1,21 +1,34 @@
 <template>
   <Header/>
-    <v-container>
-      <v-app-bar app color="primary" dark>
-        <v-toolbar-title>Home</v-toolbar-title>
+  <v-container class="container">
+    <v-app-bar app color="#5D5A5A" dark>
+
+
+          <v-toolbar-title>
+            <v-btn prepend-icon="mdi mdi-home" variant="tonal" @click="redirectDashboardHome()">Home</v-btn>
+          </v-toolbar-title>
+
+
+
+            <v-btn variant="tonal" class="button">Code</v-btn>
+            <v-btn variant="tonal" class="button">Issue Management</v-btn>
+            <v-btn variant="tonal" class="button">Tests</v-btn>
+            <v-btn variant="tonal" class="button">Deployment</v-btn>
+
+
+
         <v-spacer></v-spacer>
-        <v-btn text>Code</v-btn>
-        <v-btn text>Issue Management</v-btn>
-        <v-btn text>Tests</v-btn>
-        <v-btn text>Deployment</v-btn>
-      </v-app-bar>
-    </v-container>
+
+    </v-app-bar>
+  </v-container>
 </template>
 
 <script>
 import Header from "./Header.vue";
-
+import { defineComponent } from 'vue';
+import {redirectDashboardHome} from "../objects/directions";
 export default defineComponent({
+  methods: {redirectDashboardHome},
   components: {Header},
 });
 </script>
@@ -31,5 +44,16 @@ export default defineComponent({
 
 .v-btn {
   font-weight: 700;
+}
+
+.center-buttons{
+  display: flex;
+  justify-content: center;
+}
+.button{
+  display: flex;
+  margin: 0 8px;
+  justify-content: center;
+
 }
 </style>
