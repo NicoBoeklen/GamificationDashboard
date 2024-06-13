@@ -1,5 +1,6 @@
 package Default.Login;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,6 +16,8 @@ public class Login {
     private String ownerName;
 
     private String userName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String apiKey;
 
     
     ///////////////////////////////////////////////
@@ -51,5 +54,13 @@ public class Login {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+    
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }
