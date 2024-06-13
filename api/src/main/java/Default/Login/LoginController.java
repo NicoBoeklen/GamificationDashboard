@@ -1,5 +1,6 @@
 package Default.Login;
 
+import Default.Apikey;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,8 @@ public class LoginController {
         login.setOwnerName(loginRequest.getOwnerName());
         login.setRepoName(loginRequest.getRepoName());
         login.setUserName(loginRequest.getUserName());
+        //@TODO: Noch zu ändern mit API Key
+        login.setApiKey(Apikey.Key.apiKey);
         return loginService.saveLogin(login);
     }
     @GetMapping("/api/loggedUser/{sessionId}")
