@@ -61,54 +61,54 @@ public class CommitController {
      * @param userId
      * @return
      */
-    @GetMapping("/commitCount/{userId}")
-    public Integer getCommitCount(@PathVariable Long userId) {
-        return commitService.getCommitCount(userId);
+    @GetMapping("/commitCount/{userId}/{repoId}")
+    public Integer getCommitCount(@PathVariable Long userId, @PathVariable Long repoId) {
+        return commitService.getCommitCount(userId, repoId);
     }
 
     /**
      * @param userId
      * @return
      */
-    @GetMapping("/deletionCount/{userId}")
-    public Integer getDeletionCount(@PathVariable Long userId) {
-        return commitService.getDeletionCount(userId);
+    @GetMapping("/deletionCount/{userId}/{repoId}")
+    public Integer getDeletionCount(@PathVariable Long userId, @PathVariable Long repoId) {
+        return commitService.getDeletionCount(userId, repoId);
     }
 
     /**
      * @param userId
      * @return
      */
-    @GetMapping("/additionCount/{userId}")
-    public Integer getAdditionCount(@PathVariable Long userId) {
-        return commitService.getAdditionCount(userId);
+    @GetMapping("/additionCount/{userId}/{repoId}")
+    public Integer getAdditionCount(@PathVariable Long userId, @PathVariable Long repoId) {
+        return commitService.getAdditionCount(userId, repoId);
     }
 
     /**
      * @return
      */
-    @GetMapping("/codeGrowth")
-    public List<CodeGrowth> getCodeGrowth() {
-        return commitService.getCodeGrowth();
+    @GetMapping("/codeGrowth/{repoId}")
+    public List<CodeGrowth> getCodeGrowth(@PathVariable Long repoId) {
+        return commitService.getCodeGrowth(repoId);
     }
 
-    @GetMapping("/averageAdditions/{userId}")
-    public Double getAverageAdditions(@PathVariable Long userId) {
-        return commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId);
+    @GetMapping("/averageAdditions/{userId}/{repoId}")
+    public Double getAverageAdditions(@PathVariable Long userId, @PathVariable Long repoId) {
+        return commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId, repoId);
     }
 
-    @GetMapping("/averageDeletions/{userId}")
-    public Double getAverageDeletions(@PathVariable Long userId) {
-        return commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId);
+    @GetMapping("/averageDeletions/{userId}/{repoId}")
+    public Double getAverageDeletions(@PathVariable Long userId, @PathVariable Long repoId) {
+        return commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId, repoId);
     }
 
-    @GetMapping("/commitMetrics/{userId}")
-    public CommitMetric getCommitMetrics(@PathVariable Long userId) {
-        return new CommitMetric(commitService.getCodeGrowth(),
-            commitService.getCommitCount(userId), commitService.getDeletionCount(userId),
-            commitService.getAdditionCount(userId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId),
-            commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId), commitService.getCommitsUser(userId),
-            commitService.getAverageUserProductivity(userId), userService.findAll().size(), commitService.getTotalLoC(),
-            commitService.getTotalCommits());
+    @GetMapping("/commitMetrics/{userId}/{repoId}")
+    public CommitMetric getCommitMetrics(@PathVariable Long userId, @PathVariable Long repoId) {
+        return new CommitMetric(commitService.getCodeGrowth(repoId),
+            commitService.getCommitCount(userId, repoId), commitService.getDeletionCount(userId, repoId),
+            commitService.getAdditionCount(userId, repoId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId, repoId),
+            commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId, repoId), commitService.getCommitsUser(userId, repoId),
+            commitService.getAverageUserProductivity(userId, repoId), userService.findAll().size(), commitService.getTotalLoC(repoId),
+            commitService.getTotalCommits(repoId));
     }
 }

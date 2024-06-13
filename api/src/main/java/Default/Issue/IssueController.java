@@ -39,10 +39,10 @@ public class IssueController {
             .then(Mono.just(ResponseEntity.ok("Issues saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
-    @GetMapping("/api/issuesStats/{userId}")
-    public IssueStats getIssueInfo(@PathVariable Long userId) {
-        return new IssueStats(issueService.getAllIssuesTeam(), issueService.getFixedIssuesTeam(), issueService.getOpenIssuesTeam(), issueService.getTotalClosedIssuesUser(userId),
-            issueService.getAverageAgeOfOpenIssues(), issueService.getCountOpenIssuesLessSevenDays(), issueService.getOpenIssuesTeam()- issueService.getCountOpenIssuesLessSevenDays()-issueService.getCountOpenIssuesMoreOneMonth(), issueService.getCountOpenIssuesMoreOneMonth(), issueService.getTeamAverageTimeFixIssue(),issueService.getWeeklyClosedIssues(),
-            issueService.getWeeklyOpenIssues(),issueService.getWeeklyTotalIssues(),issueService.getIssuesPer1000LoCPerWeek());
+    @GetMapping("/api/issuesStats/{userId}/{repoId}")
+    public IssueStats getIssueInfo(@PathVariable Long userId, @PathVariable Long repoId) {
+        return new IssueStats(issueService.getAllIssuesTeam(repoId), issueService.getFixedIssuesTeam(repoId), issueService.getOpenIssuesTeam(repoId), issueService.getTotalClosedIssuesUser(userId,repoId),
+            issueService.getAverageAgeOfOpenIssues(repoId), issueService.getCountOpenIssuesLessSevenDays(repoId), issueService.getOpenIssuesTeam(repoId)- issueService.getCountOpenIssuesLessSevenDays(repoId)-issueService.getCountOpenIssuesMoreOneMonth(repoId), issueService.getCountOpenIssuesMoreOneMonth(repoId), issueService.getTeamAverageTimeFixIssue(repoId),issueService.getWeeklyClosedIssues(repoId),
+            issueService.getWeeklyOpenIssues(repoId),issueService.getWeeklyTotalIssues(repoId),issueService.getIssuesPer1000LoCPerWeek(repoId));
     }
 }

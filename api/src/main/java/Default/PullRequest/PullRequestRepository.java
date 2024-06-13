@@ -11,21 +11,21 @@ import java.util.List;
  Repository for PullRequests identified by ID (long)
  */
 public interface PullRequestRepository extends JpaRepository<PullRequest, Long> {
-    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.closedBy.id = :userId")
-    Integer getNumberReviews(@Param("userId") Long userId);
+    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.closedBy.userId = :userId AND p.openedBy.repoId = :repoId")
+    Integer getNumberReviews(@Param("userId") Long userId, @Param("repoId") Long repoId);
 
-    @Query("SELECT p FROM PullRequest p WHERE p.closedBy.id = :userId AND p.state= 'closed' ORDER BY p.dateClosed DESC")
-    List<PullRequest> findLastFivePullRequestsByUser(@Param("userId") Long userId, Pageable pageable);
+    @Query("SELECT p FROM PullRequest p WHERE p.closedBy.userId = :userId AND p.state= 'closed' AND p.openedBy.repoId = :repoId ORDER BY p.dateClosed DESC")
+    List<PullRequest> findLastFivePullRequestsByUser(@Param("userId") Long userId, Pageable pageable, @Param("repoId") Long repoId);
 
-    @Query("SELECT p FROM PullRequest p WHERE p.state= 'closed' ORDER BY p.dateClosed DESC")
-    List<PullRequest> findLastFivePullRequests(Pageable pageable);
+    @Query("SELECT p FROM PullRequest p WHERE p.state= 'closed' AND p.openedBy.repoId = :repoId ORDER BY p.dateClosed DESC")
+    List<PullRequest> findLastFivePullRequests(Pageable pageable, @Param("repoId") Long repoId);
 
-    @Query("SELECT p FROM PullRequest p WHERE p.state= 'open' ORDER BY p.dateClosed DESC")
-    List<PullRequest> findLastFiveOpenPullRequests(Pageable pageable);
+    @Query("SELECT p FROM PullRequest p WHERE p.state= 'open' AND p.openedBy.repoId = :repoId ORDER BY p.dateClosed DESC")
+    List<PullRequest> findLastFiveOpenPullRequests(Pageable pageable, @Param("repoId") Long repoId);
 
-    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'open'")
-    Integer getOpenPullRequests();
+    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'open' AND p.openedBy.repoId = :repoId")
+    Integer getOpenPullRequests(@Param("repoId") Long repoId);
 
-    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'closed' AND p.dateClosed >= CURRENT_DATE - 30")
-    Integer getClosedPullRequestsLastMonth();
+    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'closed' AND p.dateClosed >= CURRENT_DATE - 30 AND p.openedBy.repoId = :repoId")
+    Integer getClosedPullRequestsLastMonth(@Param("repoId") Long repoId);
 }

@@ -30,49 +30,49 @@ public class PullRequestService {
         return Mono.fromCallable(() -> pullRequestRepository.save(pullRequest));
     }
 
-    public Integer getNumberReviews(Long userId) {
-        return pullRequestRepository.getNumberReviews(userId);
+    public Integer getNumberReviews(Long userId, Long repoId) {
+        return pullRequestRepository.getNumberReviews(userId, repoId);
     }
     
-    public Double getAverageCommentsOfLastFivePullRequestsByUser(Long userId) {
+    public Double getAverageCommentsOfLastFivePullRequestsByUser(Long userId, Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequestsByUser(userId, pageable);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequestsByUser(userId, pageable, repoId);
         return pullRequests.stream()
             .mapToInt(PullRequest::getCommentNumber)
             .average()
             .orElse(0.0);
     }
 
-    public Double getAverageAdditionsOfLastFivePullRequests() {
+    public Double getAverageAdditionsOfLastFivePullRequests(Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable, repoId);
         return pullRequests.stream()
             .mapToInt(PullRequest::getAdditions)
             .average()
             .orElse(0.0);
     }
 
-    public Double getAverageDeletionsOfLastFivePullRequests() {
+    public Double getAverageDeletionsOfLastFivePullRequests(Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable, repoId);
         return pullRequests.stream()
             .mapToInt(PullRequest::getDeletions)
             .average()
             .orElse(0.0);
     }
     
-    public Double getAverageCommitsOfLastFivePullRequests() {
+    public Double getAverageCommitsOfLastFivePullRequests(Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable, repoId);
         return pullRequests.stream()
             .mapToInt(PullRequest::getCommitNumber)
             .average()
             .orElse(0.0);
     }
     
-    public Double getAverageProcessTimeOfLastFivePullRequests() {
+    public Double getAverageProcessTimeOfLastFivePullRequests(Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable);
+        List<PullRequest> pullRequests = pullRequestRepository.findLastFivePullRequests(pageable, repoId);
         double averageHours =  pullRequests.stream()
             .mapToDouble(pr -> ((double) Duration.between(pr.getDateOpened(), pr.getDateClosed()).toMinutes()) /60)
             .average()
@@ -81,12 +81,12 @@ public class PullRequestService {
         return Math.round(averageHours * 10.0) / 10.0;
     }
     
-    public Integer getOpenPullRequests() {
-        return pullRequestRepository.getOpenPullRequests();
+    public Integer getOpenPullRequests(Long repoId) {
+        return pullRequestRepository.getOpenPullRequests(repoId);
     }
     
-    public Integer getClosedPullRequestsLastMonth() {
-        return pullRequestRepository.getClosedPullRequestsLastMonth();
+    public Integer getClosedPullRequestsLastMonth(Long repoId) {
+        return pullRequestRepository.getClosedPullRequestsLastMonth(repoId);
     }
     
 }

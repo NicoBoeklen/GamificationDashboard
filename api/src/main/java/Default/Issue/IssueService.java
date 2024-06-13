@@ -42,72 +42,64 @@ public class IssueService {
     public void deleteIssueById(Long issueId) {
         issueRepository.deleteById(issueId);
     }
-
-    /**
-     * @param id id of the issue
-     * @return Closed by User or throws exception, can be null
-     */
-    public User findClosedByWithId(Long id) throws ChangeSetPersister.NotFoundException {
-        return issueRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new).getClosedBy();
+    
+    public Integer getOpenIssuesTeam(Long repoId) {
+        return issueRepository.getOpenIssuesTeam(repoId);
     }
 
-    public Integer getOpenIssuesTeam() {
-        return issueRepository.getOpenIssuesTeam();
+    public Integer getFixedIssuesTeam(Long repoId) {
+        return issueRepository.getFixedIssuesTeam(repoId);
     }
 
-    public Integer getFixedIssuesTeam() {
-        return issueRepository.getFixedIssuesTeam();
+    public Integer getAllIssuesTeam(Long repoId) {
+        return issueRepository.getAllIssuesTeam(repoId);
     }
 
-    public Integer getAllIssuesTeam() {
-        return issueRepository.getAllIssuesTeam();
+    public Integer getTotalClosedIssuesUser(Long userId, Long repoId) {
+        return issueRepository.getTotalClosedIssuesUser(userId, repoId);
     }
 
-    public Integer getTotalClosedIssuesUser(Long userId) {
-        return issueRepository.getTotalClosedIssuesUser(userId);
+    public Double getAverageAgeOfOpenIssues(Long repoId) {
+        return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).filter(issue -> issue.getOpenedBy().getRepoId().equals(repoId)).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
 
-    public Double getAverageAgeOfOpenIssues() {
-        return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
-    }
-
-    public Integer getCountOpenIssuesLessSevenDays() {
+    public Integer getCountOpenIssuesLessSevenDays(Long repoId) {
         LocalDateTime dateThreshold = LocalDateTime.now().minusDays(7);
-        List<Issue> recentIssues = issueRepository.findOpenIssuesWithinLastDays(dateThreshold);
+        List<Issue> recentIssues = issueRepository.findOpenIssuesWithinLastDays(dateThreshold, repoId);
         return recentIssues.size();
     }
 
-    public Integer getCountOpenIssuesMoreOneMonth() {
+    public Integer getCountOpenIssuesMoreOneMonth(Long repoId) {
         LocalDateTime dateThreshold = LocalDateTime.now().minusDays(30);
-        List<Issue> recentIssues = issueRepository.findOpenIssuesWithoutLastDays(dateThreshold);
+        List<Issue> recentIssues = issueRepository.findOpenIssuesWithoutLastDays(dateThreshold, repoId);
         return recentIssues.size();
     }
 
     //get the average time to fix an issue for the last 5 closed issues
-    public Double getTeamAverageTimeFixIssue() {
+    public Double getTeamAverageTimeFixIssue(Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        return issueRepository.findLastFiveClosedIssues(pageable).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
+        return issueRepository.findLastFiveClosedIssues(pageable, repoId).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
     }
 
-    public List<IssuesWeekly> getWeeklyClosedIssues() {
-        return issueRepository.findWeeklyClosedIssues();
+    public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
+        return issueRepository.findWeeklyClosedIssues(repoId);
     }
 
-    public List<IssuesWeekly> getWeeklyOpenIssues() {
-        return issueRepository.findWeeklyOpenIssues();
+    public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId) {
+        return issueRepository.findWeeklyOpenIssues(repoId);
     }
 
-    public List<IssuesWeekly> getWeeklyTotalIssues() {
-        return issueRepository.findWeeklyTotalIssues();
+    public List<IssuesWeekly> getWeeklyTotalIssues(Long repoId) {
+        return issueRepository.findWeeklyTotalIssues(repoId);
     }
 
-    public List<IssuesWeeklyDouble> getIssuesPer1000LoCPerWeek() {
-        List<IssuesWeekly> weeklyIssues = issueRepository.findExactDateTotalIssues();
+    public List<IssuesWeeklyDouble> getIssuesPer1000LoCPerWeek(Long repoId) {
+        List<IssuesWeekly> weeklyIssues = issueRepository.findExactDateTotalIssues(repoId);
         List<IssuesWeeklyDouble> issuesPer1000LoC = new ArrayList<>();
-        weeklyIssues.forEach(issuesWeeklyDouble -> System.out.println(issuesWeeklyDouble.getWeek() + " is " + (((double) commitRepository.getLoCTillDate(issuesWeeklyDouble.getWeek()) / 1000))));
+        weeklyIssues.forEach(issuesWeeklyDouble -> System.out.println(issuesWeeklyDouble.getWeek() + " is " + (((double) commitRepository.getLoCTillDate(issuesWeeklyDouble.getWeek(), repoId) / 1000))));
         for (IssuesWeekly issuesWeekly : weeklyIssues) {
             double issues = issuesWeekly.getIssues();
-            double locTillDate = commitRepository.getLoCTillDate(issuesWeekly.getWeek());
+            double locTillDate = commitRepository.getLoCTillDate(issuesWeekly.getWeek(), repoId);
             double issuesPerThousandLoc = issues / (locTillDate / 1000);
             double roundedIssuesPerThousandLoc = Math.round(issuesPerThousandLoc * 100.0) / 100.0;
             IssuesWeeklyDouble newIssuesWeekly = new IssuesWeeklyDouble(issuesWeekly.getWeek(), roundedIssuesPerThousandLoc);

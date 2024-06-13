@@ -38,15 +38,15 @@ public class PullRequestController {
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
 
-    @GetMapping("/pullMetrics/{userId}")
-    public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId) {
-        return new PullRequestMetric(pullRequestService.getNumberReviews(userId),
-            pullRequestService.getAverageCommentsOfLastFivePullRequestsByUser(userId),
-            pullRequestService.getOpenPullRequests(),
-            pullRequestService.getClosedPullRequestsLastMonth(), 
-            pullRequestService.getAverageAdditionsOfLastFivePullRequests(),
-            pullRequestService.getAverageDeletionsOfLastFivePullRequests(),
-            pullRequestService.getAverageCommitsOfLastFivePullRequests(), 
-            pullRequestService.getAverageProcessTimeOfLastFivePullRequests());
+    @GetMapping("/pullMetrics/{userId}/{repoId")
+    public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId, @PathVariable Long repoId) {
+        return new PullRequestMetric(pullRequestService.getNumberReviews(userId, repoId),
+            pullRequestService.getAverageCommentsOfLastFivePullRequestsByUser(userId, repoId),
+            pullRequestService.getOpenPullRequests(repoId),
+            pullRequestService.getClosedPullRequestsLastMonth(repoId), 
+            pullRequestService.getAverageAdditionsOfLastFivePullRequests(repoId),
+            pullRequestService.getAverageDeletionsOfLastFivePullRequests(repoId),
+            pullRequestService.getAverageCommitsOfLastFivePullRequests(repoId), 
+            pullRequestService.getAverageProcessTimeOfLastFivePullRequests(repoId));
     }
 }
