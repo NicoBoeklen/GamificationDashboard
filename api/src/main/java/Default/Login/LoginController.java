@@ -2,11 +2,9 @@ package Default.Login;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoginController {
@@ -23,9 +21,9 @@ public class LoginController {
         login.setUserName(loginRequest.getUserName());
         return loginService.saveLogin(login);
     }
-    @PostMapping("/api/loggedUser")
+    @GetMapping("/api/loggedUser/{sessionId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Login getLoggedUsers(@Valid @RequestBody Long sessionId) {
-        return loginService.getLoggedUsers(sessionId);
+    public Login getLoggedUser(@PathVariable Long sessionId) {
+        return loginService.getLoggedUser(sessionId);
     }
 }
