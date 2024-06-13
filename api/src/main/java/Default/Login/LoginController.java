@@ -13,10 +13,10 @@ public class LoginController {
     @Autowired
     LoginService loginService;
     
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     @ResponseStatus(HttpStatus.CREATED)
     public Login login(@Valid @RequestBody Login loginRequest) {
-        loginService.deleteAll();
+        
         Login login = new Login();
         login.setOwnerName(loginRequest.getOwnerName());
         login.setRepoName(loginRequest.getRepoName());
