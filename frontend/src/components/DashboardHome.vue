@@ -26,7 +26,7 @@
             <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span> <span>ment</span>
           </p>
         </v-col>
-        <v-btn class="insights-button" color="grey darken-2">Insights</v-btn>
+        <v-btn @click="redirect()"  class="insights-button" color="grey darken-2">Insights</v-btn>
 
       </v-row>
     </v-container>
@@ -49,13 +49,54 @@
               <br />
               Updated at: 25.05.2024
             </v-card-text>
-            <v-card-actions class="project-stats"> </v-card-actions>
+              <v-carousel hide-delimiters height="300" cycle interval="15000">
+                <v-carousel-item>
+                  <v-container class="fill-height" fluid>
+                    <v-row align="center" justify="center">
+                      <v-col class="text-center">
+                        <div>
+                          <h2>Erstes Item</h2>
+                          <p>Beschreibung des ersten Items</p>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-carousel-item>
+
+                <v-carousel-item>
+                  <v-container class="fill-height" fluid>
+                    <v-row align="center" justify="center">
+                      <v-col class="text-center">
+                        <div>
+                          <h2>Zweites Item</h2>
+                          <p>Beschreibung des zweiten Items</p>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-carousel-item>
+
+                <v-carousel-item>
+                  <v-container class="fill-height" fluid>
+                    <v-row align="center" justify="center">
+                      <v-col class="text-center">
+                        <div>
+                          <h2>Drittes Item</h2>
+                          <p>Beschreibung des dritten Items</p>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-carousel-item>
+              </v-carousel>
+
+
           </v-card>
 
 
           <v-card class="badges-section">
             <v-card-title class="section-title">Badges</v-card-title>
-            <v-card-text class="badges-container">
+            <v-card-text class="badges-container" style="display: flex">
               <v-img
                 :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/196eacaba534187ca530bde1ec70c21657fa163daf5d8f5b7a4d0d2d7bf2439c?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
                 class="badge"
@@ -151,10 +192,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Header from "./Header.vue";
+import {redirect} from "../objects/directions";
 
 
 export default defineComponent({
   name: 'Leaderboard',
+  methods: {redirect},
   components: {Header},
   data() {
     return {
@@ -186,6 +229,7 @@ export default defineComponent({
       ],
     };
   },
+
 });
 
 </script>

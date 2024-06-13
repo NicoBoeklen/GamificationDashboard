@@ -9,22 +9,28 @@ public class IssueStats {
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
     public Integer amountTotalClosedIssuesUser;
-    public Double averageTimeFixIssueOpenTeam;
-    public Double averageTimeFixIssueTotalTeam;
+    public Double averageAgeOfOpenIssuesInDays;
+    public Integer amountOpenIssuesLessSevenDays;
+    public Integer amountOpenIssuesBetweenWeekAndMonth;
+    public Integer amountOpenIssuesMoreThanAMonth;
+    public Double averageTimeToFixIssueInDaysTeam;
     public List<IssuesWeekly> weeklyClosedIssues;
     public List<IssuesWeekly> weeklyOpenIssues;
     public List<IssuesWeekly> weeklyTotalIssues;
     public List<IssuesWeeklyDouble> issuesPer1000LoC;
     
     public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam, Integer amountOpenIssuesTeam, Integer amountTotalClosedIssuesUser,
-                      Double averageTimeFixIssueOpenTeam, Double averageTimeFixIssueTotalTeam, List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues,
+                       Double averageTimeFixIssueOpenTeam,Integer amountOpenIssuesLessSevenDays, Integer amountOpenIssuesBetweenWeekAndMonth, Integer amountOpenIssuesMoreThanAMonth, Double averageTimeFixIssueTotalTeam, List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues,
                       List<IssuesWeekly> weeklyTotalIssues, List<IssuesWeeklyDouble> issuesPer1000LoC) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
         this.amountTotalClosedIssuesUser = amountTotalClosedIssuesUser;
-        this.averageTimeFixIssueOpenTeam = averageTimeFixIssueOpenTeam;
-        this.averageTimeFixIssueTotalTeam = averageTimeFixIssueTotalTeam;
+        this.averageAgeOfOpenIssuesInDays = averageTimeFixIssueOpenTeam;
+        this.amountOpenIssuesLessSevenDays = amountOpenIssuesLessSevenDays;
+        this.amountOpenIssuesBetweenWeekAndMonth = amountOpenIssuesBetweenWeekAndMonth;
+        this.amountOpenIssuesMoreThanAMonth = amountOpenIssuesMoreThanAMonth;
+        this.averageTimeToFixIssueInDaysTeam = averageTimeFixIssueTotalTeam;
         this.weeklyClosedIssues = weeklyClosedIssues;
         this.weeklyOpenIssues = weeklyOpenIssues;
         this.weeklyTotalIssues = weeklyTotalIssues;
@@ -61,4 +67,5 @@ public class IssueStats {
     public void setIssuesPer1000LoC(List<IssuesWeeklyDouble> issuesPer1000LoC) {
         this.issuesPer1000LoC = issuesPer1000LoC;
     }
+    
 }
