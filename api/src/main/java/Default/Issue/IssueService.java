@@ -39,7 +39,7 @@ public class IssueService {
      * @param issueId Issue to be saved
      * @return The deleted issue
      */
-    public void deleteIssueById(Integer issueId) {
+    public void deleteIssueById(Long issueId) {
         issueRepository.deleteById(issueId);
     }
 
@@ -47,7 +47,7 @@ public class IssueService {
      * @param id id of the issue
      * @return Closed by User or throws exception, can be null
      */
-    public User findClosedByWithId(Integer id) throws ChangeSetPersister.NotFoundException {
+    public User findClosedByWithId(Long id) throws ChangeSetPersister.NotFoundException {
         return issueRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new).getClosedBy();
     }
 

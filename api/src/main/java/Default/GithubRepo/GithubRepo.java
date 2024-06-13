@@ -1,6 +1,7 @@
 package Default.GithubRepo;
 
 import Default.User.User;
+import Default.User.UserRepoId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -24,9 +25,12 @@ public class GithubRepo {
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
-
+    
     @OneToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumns({
+        @JoinColumn(name = "owner_id", referencedColumnName = "user_id"),
+        @JoinColumn(name = "repo_id", referencedColumnName = "repo_id")
+    })    
     @JsonProperty("owner")
     private User owner;
 

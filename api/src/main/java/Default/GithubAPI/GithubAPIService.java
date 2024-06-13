@@ -4,6 +4,8 @@ import Default.Apikey;
 import Default.GithubRepo.GithubRepo;
 import Default.Release.Release;
 import Default.User.User;
+import Default.User.UserRepoId;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -49,6 +51,14 @@ public class GithubAPIService {
             .bodyToMono(GithubRepo.class);
     }
 
+    public Mono<Long> getRepositoryId(String owner, String repo) {
+        return this.webClient.get()
+            .uri("/repos/{owner}/{repo}", owner, repo)
+            .retrieve()
+            .bodyToMono(JsonNode.class)
+            .map(jsonNode -> jsonNode.get("id").asLong());
+    }
+    
     /**
      * This Method is called to get all Releases from a GitHub Repo
      *
@@ -56,7 +66,7 @@ public class GithubAPIService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Flux (Datastream) of Releases
      */
-    public Flux<Release> getReleases(String owner, String repo) {
+    public Flux<Release> getReleases(String owner, String repo, Long repoId) {
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}/releases", owner, repo)
             .retrieve()
@@ -66,13 +76,14 @@ public class GithubAPIService {
     /**
      * This Method is called to get all Contributors (Users) from a GitHub Repo
      *
-     * @param owner Name of the Owner of the GitHub Repository
-     * @param repo  Name of the GitHub Repository
+     * @param owner  Name of the Owner of the GitHub Repository
+     * @param repo   Name of the GitHub Repository
+     * @param repoId
      * @return Returns a Flux (Datastream) of Users
      */
-    public Flux<User> getContributors(String owner, String repo) {
+    public Flux<User> getContributors(String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/contributors", owner, repo);
-        return getContributorsRecursively(url);
+        return getContributorsRecursively(url, repoId);
     }
 
     /**
@@ -83,14 +94,19 @@ public class GithubAPIService {
      * @param url
      * @return Returns a Flux of Contributors
      */
-    private Flux<User> getContributorsRecursively(String url) {
+    private Flux<User> getContributorsRecursively(String url, Long repoId) {
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToFlux(User.class)
+            .map(user -> {
+                // Setze den RepoId-Schlüssel
+                user.setRepoId(repoId);
+                return user;
+            })
             .collectList()
             .flatMapMany(contributors -> getNextPageUrl(url)
-                .flatMapMany(nextUrl -> Flux.fromIterable(contributors).concatWith(getContributorsRecursively(nextUrl)))
+                .flatMapMany(nextUrl -> Flux.fromIterable(contributors).concatWith(getContributorsRecursively(nextUrl, repoId)))
                 .switchIfEmpty(Flux.fromIterable(contributors)));
     }
 

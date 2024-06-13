@@ -25,10 +25,13 @@ public class Commit {
     private Integer deletions;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumns({
+        @JoinColumn(name = "author_id", referencedColumnName = "user_id"),
+        @JoinColumn(name = "repo_id", referencedColumnName = "repo_id")
+    })
     @JsonProperty("author")
     private User author;
-
+    
     ///////////////////////////////////////////////
     // Getter & Setter
     ///////////////////////////////////////////////    

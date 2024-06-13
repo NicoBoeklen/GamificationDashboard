@@ -48,12 +48,12 @@ public class GithubAPIIssueService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Flux (Data-stream) of Issues
      */
-    public Flux<Issue> getIssues(String owner, String repo) {
+    public Flux<Issue> getIssues(String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/issues", owner, repo);
         String url2 = String.format("/repos/%s/%s/issues?state=closed", owner, repo);
-        return Flux.merge(getIssuesRecursively(url), getIssuesRecursively(url2))
+        return Flux.merge(getIssuesRecursively(url, repoId), getIssuesRecursively(url2, repoId))
             .distinct(Issue::getId) // Remove duplicates by Issue ID
-            .flatMap(issue -> fetchIssueDetails(issue, owner, repo));
+            .flatMap(issue -> fetchIssueDetails(issue, owner, repo, repoId));
     }
 
 
@@ -65,14 +65,19 @@ public class GithubAPIIssueService {
      * @param url URL
      * @return Returns a Flux of Issues
      */
-    private Flux<Issue> getIssuesRecursively(String url) {
+    private Flux<Issue> getIssuesRecursively(String url, Long repoId) {
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToFlux(Issue.class)
+            .map(issue -> {
+                // Setze den RepoId-Schlüssel
+                issue.getOpenedBy().setRepoId(repoId);
+                return issue;
+            })
             .collectList()
             .flatMapMany(issues -> getNextPageUrl(url)
-                .flatMapMany(nextUrl -> Flux.fromIterable(issues).concatWith(getIssuesRecursively(nextUrl)))
+                .flatMapMany(nextUrl -> Flux.fromIterable(issues).concatWith(getIssuesRecursively(nextUrl, repoId)))
                 .switchIfEmpty(Flux.fromIterable(issues)));
     }
 
@@ -132,8 +137,8 @@ public class GithubAPIIssueService {
      * @param repo  Name of the GitHub Repository
      * @return Single Issue with als attributes
      */
-    private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo) {
-        String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getId());
+    private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo, Long repoId) {
+        String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getNumber());
             return webClient.get()
                 .uri(url)
                 .retrieve()
@@ -143,14 +148,15 @@ public class GithubAPIIssueService {
                     if (issue.getDateClosed() != null) {
                         try {
                             //It can happen that an issue is closed by a user that is not a contributor
-                            issue.setClosedBy(userService.findById(details.getUser().getId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                            issue.setClosedBy(userService.findById(details.getUser().getId(), issue.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                            issue.getClosedBy().setRepoId(repoId);
                         } catch (ChangeSetPersister.NotFoundException e) {
                             issue.setClosedBy(null);
                         }
                     }
                     try {
                         //It can happen that an issue is opened by a user that is not a contributor
-                        issue.setOpenedBy(userService.findById(issue.getOpenedBy().getId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                        issue.setOpenedBy(userService.findById(issue.getOpenedBy().getUserId(), issue.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
                     } catch (ChangeSetPersister.NotFoundException e) {
                         issue.setOpenedBy(null);
                     }

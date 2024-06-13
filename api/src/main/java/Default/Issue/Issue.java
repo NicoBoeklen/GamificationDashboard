@@ -10,8 +10,11 @@ import java.time.LocalDateTime;
 @Table(name = "\"issue\"")
 public class Issue {
     @Id
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("number")
-    private Integer id;
+    private Integer number;
 
     @JsonProperty("created_at")
     private LocalDateTime dateOpened;
@@ -22,11 +25,17 @@ public class Issue {
     private String state;
 
     @ManyToOne
-    @JoinColumn(name = "closedBy_id")
+    @JoinColumns({
+        @JoinColumn(name = "closedBy_id", referencedColumnName = "user_id"),
+        @JoinColumn(name = "closedBy_repo_id", referencedColumnName = "repo_id")
+    })
     private User closedBy;
 
     @ManyToOne
-    @JoinColumn(name = "openedBy_id")
+    @JoinColumns({
+        @JoinColumn(name = "openedBy_id", referencedColumnName = "user_id"),
+        @JoinColumn(name = "openedBy_repo_id", referencedColumnName = "repo_id")
+    })
     @JsonProperty("user")
     private User openedBy;
 
@@ -34,12 +43,20 @@ public class Issue {
     ///////////////////////////////////////////////
     // Getter & Setter
     ///////////////////////////////////////////////
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public LocalDateTime getDateOpened() {

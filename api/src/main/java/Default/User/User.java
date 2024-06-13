@@ -4,11 +4,19 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
+@IdClass(UserRepoId.class)
 @Table(name = "\"user\"")
 public class User {
-    @Id
-    private Long id;
 
+    @Id
+    @Column(name = "user_id")
+    @JsonProperty("id")
+    private Long userId;
+
+    @Id
+    @Column(name = "repo_id")
+    private Long repoId;
+        
     @JsonProperty("login")
     private String name;
 
@@ -26,13 +34,23 @@ public class User {
     // Getter & Setter
     ///////////////////////////////////////////////
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public Long getId() {
-        return id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
+
+    public Long getRepoId() {
+        return repoId;
+    }
+
+    public void setRepoId(Long repoId) {
+        this.repoId = repoId;
+    }
+
+   
 
     public String getName() {
         return name;

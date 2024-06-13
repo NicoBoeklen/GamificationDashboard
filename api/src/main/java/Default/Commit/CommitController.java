@@ -39,13 +39,14 @@ public class CommitController {
      * @param repo  GitHub Repository name
      * @return "Commits saved successfully" with 200 or 500 Error if exception is thrown
      */
-    @GetMapping("/commits/{owner}/{repo}")
-    public Mono<ResponseEntity<String>> getCommits(@PathVariable String owner, @PathVariable String repo) {
+    @GetMapping("/commits/{owner}/{repo}/{repoId}")
+    public Mono<ResponseEntity<String>> getCommits(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId) {
         return githubAPICommitService.getCommits(owner, repo)
             .flatMap(commit -> {
                 //If author is not a contributor (no User exists in Database)
                 if (commit.getAuthor() != null) {
-                    Optional<User> userOptional = userService.findById(commit.getAuthor().getId());
+                    commit.getAuthor().setRepoId(repoId);
+                    Optional<User> userOptional = userService.findById(commit.getAuthor().getUserId(), commit.getAuthor().getRepoId());
                     if (userOptional.isEmpty()) {
                         commit.setAuthor(null);
                     }

@@ -13,14 +13,14 @@ import java.util.List;
 /**
 Repository for Issues identified by ID (long)
  */
-public interface IssueRepository extends JpaRepository<Issue, Integer>{
+public interface IssueRepository extends JpaRepository<Issue, Long>{
     @Query("SELECT COUNT(i) FROM Issue i WHERE NOT TYPE(i)=PullRequest")
     Integer getAllIssuesTeam();
     @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'open' AND NOT TYPE(i)=PullRequest")
     Integer getOpenIssuesTeam();
     @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'closed' AND NOT TYPE(i)=PullRequest")
     Integer getFixedIssuesTeam();
-    @Query("SELECT COUNT(i) FROM Issue i WHERE i.closedBy.id = :userId AND NOT TYPE(i)=PullRequest")
+    @Query("SELECT COUNT(i) FROM Issue i WHERE i.closedBy.userId = :userId AND NOT TYPE(i)=PullRequest")
     Integer getTotalClosedIssuesUser(@Param("userId") Long userId);
     
     

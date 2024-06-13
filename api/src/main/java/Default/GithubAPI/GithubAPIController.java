@@ -1,5 +1,6 @@
 package Default.GithubAPI;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,9 @@ import reactor.core.publisher.Mono;
 public class GithubAPIController {
 
     private final WebClient webClient;
+    
+    @Autowired
+    GithubAPIService githubAPIService;
 
     public GithubAPIController(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
@@ -31,12 +35,13 @@ public class GithubAPIController {
     @GetMapping("/updateYourData/{owner}/{repo}")
     @Transactional
     public Mono<ResponseEntity<String>> getData(@PathVariable String owner, @PathVariable String repo) {
-        return getDataFromContributors(owner, repo)
-            .then(getDataFromRepository(owner, repo))
-            .then(getDataFromCommits(owner, repo))
-            .then(getDataFromIssues(owner, repo))
-            .then(getDataFromPullRequest(owner, repo))
-            .then(getDataFromReleases(owner, repo))
+        Long repoId = githubAPIService.getRepositoryId(owner, repo).block();
+        return getDataFromContributors(owner, repo, repoId)
+            .then(getDataFromRepository(owner, repo, repoId))
+            .then(getDataFromCommits(owner, repo, repoId))
+            .then(getDataFromIssues(owner, repo, repoId))
+            .then(getDataFromPullRequest(owner, repo, repoId))
+            .then(getDataFromReleases(owner, repo, repoId))
             .then(Mono.just(ResponseEntity.ok("Data saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("Error occurred: " + e.getMessage())));
     }
@@ -50,9 +55,9 @@ public class GithubAPIController {
      *
      * @return String if Successfully or not
      */
-    private Mono<String> getDataFromContributors(String owner, String repo) {
+    private Mono<String> getDataFromContributors(String owner, String repo, Long repoId) {
         return webClient.get()
-            .uri("/contributors/{owner}/{repo}", owner, repo)
+            .uri("/contributors/{owner}/{repo}/{repoId}", owner, repo, repoId)
             .retrieve()
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Contributors Response: " + response))
@@ -64,9 +69,9 @@ public class GithubAPIController {
      *
      * @return String if Successfully or not
      */
-    private Mono<String> getDataFromRepository(String owner, String repo) {
+    private Mono<String> getDataFromRepository(String owner, String repo, Long repoId) {
         return webClient.get()
-            .uri("/repository/{owner}/{repo}", owner, repo)
+            .uri("/repository/{owner}/{repo}/{repoId}", owner, repo, repoId)
             .retrieve()
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Repository Response: " + response))
@@ -78,9 +83,9 @@ public class GithubAPIController {
      *
      * @return String if Successfully or not
      */
-    private Mono<String> getDataFromCommits(String owner, String repo) {
+    private Mono<String> getDataFromCommits(String owner, String repo, Long repoId) {
         return webClient.get()
-            .uri("/commits/{owner}/{repo}", owner, repo)
+            .uri("/commits/{owner}/{repo}/{repoId}", owner, repo, repoId)
             .retrieve()
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Commits Response: " + response))
@@ -92,9 +97,9 @@ public class GithubAPIController {
      *
      * @return String if Successfully or not
      */
-    private Mono<String> getDataFromIssues(String owner, String repo) {
+    private Mono<String> getDataFromIssues(String owner, String repo, Long repoId) {
         return webClient.get()
-            .uri("/issues/{owner}/{repo}", owner, repo)
+            .uri("/issues/{owner}/{repo}/{repoId}", owner, repo, repoId)
             .retrieve()
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Issues Response: " + response))
@@ -107,9 +112,9 @@ public class GithubAPIController {
      *
      * @return String if Successfully or not
      */
-    private Mono<String> getDataFromPullRequest(String owner, String repo) {
+    private Mono<String> getDataFromPullRequest(String owner, String repo, Long repoId) {
         return webClient.get()
-            .uri("/pullRequests/{owner}/{repo}", owner, repo)
+            .uri("/pullRequests/{owner}/{repo}/{repoId}", owner, repo, repoId)
             .retrieve()
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("PullRequest Response: " + response))
@@ -121,9 +126,9 @@ public class GithubAPIController {
      *
      * @return String if Successfully or not
      */
-    private Mono<String> getDataFromReleases(String owner, String repo) {
+    private Mono<String> getDataFromReleases(String owner, String repo, Long repoId) {
         return webClient.get()
-            .uri("/release/{owner}/{repo}", owner, repo)
+            .uri("/release/{owner}/{repo}/{repoId}", owner, repo, repoId)
             .retrieve()
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Release Response: " + response))
