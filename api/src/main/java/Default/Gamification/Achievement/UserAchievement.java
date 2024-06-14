@@ -21,11 +21,10 @@ public class UserAchievement {
 
     private LocalDateTime achievedAt;
 
-    public UserAchievement(Long id, User user, Achievement achievement, LocalDateTime achievedAt) {
-        this.id = id;
+    public UserAchievement(User user, Achievement achievement) {
         this.user = user;
         this.achievement = achievement;
-        this.achievedAt = achievedAt;
+        this.achievedAt = LocalDateTime.now();
     }
 
     public UserAchievement() {
