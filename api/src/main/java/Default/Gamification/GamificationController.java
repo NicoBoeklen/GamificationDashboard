@@ -11,9 +11,9 @@ public class GamificationController {
      @Autowired
     private GamificationService gamificationService;
      
-     @GetMapping("/getLeaderboard/{userId}/{repoId}")
-    public Leaderboard getLeaderboard(@PathVariable Long userId, @PathVariable Long repoId) {
-         return null;
+     @GetMapping("/getLeaderboard/{repoId}")
+    public Leaderboard getLeaderboard(@PathVariable Long repoId) {
+         return gamificationService.getLeaderboard(repoId);
      }
 
     @GetMapping("/getSkills/{userId}/{repoId}")

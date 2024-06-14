@@ -2,10 +2,10 @@ package Default.Gamification;
 
 public class Skill {
 
-    public Double reviewValueUser;
-    public Double fixedIssuesValueUser;
-    public Double productivityValueUser;
-    public Double commitValueUser;
+    private Double reviewValueUser;
+    private Double fixedIssuesValueUser;
+    private Double productivityValueUser;
+    private Double commitValueUser;
 
     public Skill(Double reviewValueUser, Double fixedIssuesValueUser, Double productivityValueUser, Double commitValueUser) {
         this.reviewValueUser = reviewValueUser;

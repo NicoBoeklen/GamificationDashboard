@@ -3,8 +3,17 @@ package Default.Gamification;
 import Default.Commit.CommitService;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequestService;
+import Default.User.User;
+import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
 
 @Service
 public class GamificationService {
@@ -17,6 +26,9 @@ public class GamificationService {
     
     @Autowired
     private PullRequestService pullRequestService;
+    
+    @Autowired
+    UserService userService;
     
     public Skill getSkills(Long userId, Long repoId) {
         Skill skillsUser = new Skill();
@@ -62,5 +74,27 @@ public class GamificationService {
             
         return skillsUser;
     }
-    
+
+    public Leaderboard getLeaderboard(Long repoId) {
+        Leaderboard leaderboard = new Leaderboard();
+        Map<String, Double> leaderboardMap = new HashMap<>();
+        List<User> userList = userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).toList();
+        for (User user: userList) {
+            Skill userSkill = getSkills(user.getUserId(), repoId);
+            Double userValue = userSkill.getCommitValueUser() + userSkill.getProductivityValueUser() + userSkill.getFixedIssuesValueUser()+ userSkill.getReviewValueUser();
+            leaderboardMap.put(user.getName(), userValue);
+        }
+        Map<String, Double> sortedLeaderboardMap = leaderboardMap.entrySet()
+            .stream()
+            .sorted(Map.Entry.<String, Double>comparingByValue(Comparator.reverseOrder()))
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (e1, e2) -> e1,
+                LinkedHashMap::new
+            ));
+
+        leaderboard.setLeaderboardMap(sortedLeaderboardMap);
+        return leaderboard;
+    }
 }
