@@ -63,6 +63,6 @@ public class ReleaseController {
     @GetMapping("/releaseMetrics/{repoId}")
     public ReleaseMetrics getReleaseMetrics(@PathVariable Long repoId) {
         return new ReleaseMetrics(releaseService.getNumberOfReleases(repoId),
-            releaseService.getAverageTimeBetweenReleases(repoId), releaseService.getAllRelease());
+            releaseService.getAverageTimeBetweenReleases(repoId), releaseService.getAllRelease().stream().filter(r -> r.getRepo().getId().equals(repoId)).toList());
     }
 }

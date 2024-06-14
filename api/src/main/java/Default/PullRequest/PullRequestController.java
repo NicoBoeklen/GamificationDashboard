@@ -38,7 +38,7 @@ public class PullRequestController {
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
 
-    @GetMapping("/pullMetrics/{userId}/{repoId")
+    @GetMapping("/pullMetrics/{userId}/{repoId}")
     public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId, @PathVariable Long repoId) {
         return new PullRequestMetric(pullRequestService.getNumberReviews(userId, repoId),
             pullRequestService.getAverageCommentsOfLastFivePullRequestsByUser(userId, repoId),

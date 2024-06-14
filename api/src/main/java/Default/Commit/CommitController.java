@@ -108,7 +108,7 @@ public class CommitController {
             commitService.getCommitCount(userId, repoId), commitService.getDeletionCount(userId, repoId),
             commitService.getAdditionCount(userId, repoId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId, repoId),
             commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId, repoId), commitService.getCommitsUser(userId, repoId),
-            commitService.getAverageUserProductivity(userId, repoId), userService.findAll().size(), commitService.getTotalLoC(repoId),
+            commitService.getAverageUserProductivity(userId, repoId), (int) userService.findAll().stream().filter(user -> user.getRepoId().equals(repoId)).count(), commitService.getTotalLoC(repoId),
             commitService.getTotalCommits(repoId));
     }
 }
