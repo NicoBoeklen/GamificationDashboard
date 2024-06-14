@@ -16,7 +16,7 @@ public class WebClientConfig {
     public WebClient.Builder webClientBuilder() {
         HttpClient httpClient = HttpClient.create()
             .doOnConnected(conn -> conn
-                .addHandlerLast(new HttpRequestDecoder(64*1024*1024, 64*1024*1024, 64*1024*1024)))
+                .addHandlerLast(new HttpRequestDecoder(128*1024*1024, 128*1024*1024, 128*1024*1024)))
             .option(ChannelOption.SO_KEEPALIVE, true);
 
         ExchangeStrategies strategies = ExchangeStrategies.builder()

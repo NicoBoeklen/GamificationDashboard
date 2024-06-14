@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-
     @Autowired
     private UserRepository userRepository;
 
@@ -23,11 +22,14 @@ public class UserService {
         return Mono.fromCallable(() -> userRepository.save(user));
     }
     
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public Optional<User> findById(Long userId, Long repoId) {
+        return userRepository.findById(new UserRepoId(userId, repoId));
     }
     
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+    public String getUserAvatar(String username) {
+        return userRepository.getUserAvatar(username);
     }
 }

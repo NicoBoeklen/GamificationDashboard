@@ -2,6 +2,7 @@ package Default.Commit;
 
 import Default.Commit.Stats.CodeGrowth;
 import Default.Commit.Stats.CommitsUser;
+import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class CommitService {
 
     @Autowired
     private CommitRepository commitRepository;
+    
+    @Autowired
+    private UserService userService;
 
     /**
      * Saves a commit in the repository
@@ -34,8 +38,8 @@ public class CommitService {
      * @param userId
      * @return count of Commits
      */
-    public Integer getCommitCount(Long userId) {
-        return commitRepository.getAllCommitsBy(userId);
+    public Integer getCommitCount(Long userId, Long repoId) {
+        return commitRepository.getAllCommitsBy(userId, repoId);
     }
 
     /**
@@ -44,8 +48,8 @@ public class CommitService {
      * @param userId
      * @return count of deletions
      */
-    public Integer getDeletionCount(Long userId) {
-        return commitRepository.getAllDeletionsBy(userId);
+    public Integer getDeletionCount(Long userId, Long repoId) {
+        return commitRepository.getAllDeletionsBy(userId, repoId);
     }
 
     /**
@@ -54,8 +58,8 @@ public class CommitService {
      * @param userId
      * @return count of additions
      */
-    public Integer getAdditionCount(Long userId) {
-        return commitRepository.getAllAdditionsBy(userId);
+    public Integer getAdditionCount(Long userId, Long repoId) {
+        return commitRepository.getAllAdditionsBy(userId,repoId);
     }
 
     /**
@@ -63,8 +67,8 @@ public class CommitService {
      *
      * @return List of Code Growth Objects
      */
-    public List<CodeGrowth> getCodeGrowth() {
-        return commitRepository.getCodeGrowth();
+    public List<CodeGrowth> getCodeGrowth(Long repoId) {
+        return commitRepository.getCodeGrowth(repoId);
     }
 
     /**
@@ -72,8 +76,8 @@ public class CommitService {
      *
      * @return long TotalLoC
      */
-    public Long getTotalLoC() {
-        return commitRepository.getTotalLoC();
+    public Long getTotalLoC(Long repoId) {
+        return commitRepository.getTotalLoC(repoId);
     }
     
     /**
@@ -81,22 +85,22 @@ public class CommitService {
      *
      * @return total Commits
      */
-    public Integer getTotalCommits() {
-        return commitRepository.getTotalCommitCount();
+    public Integer getTotalCommits(Long repoId) {
+        return commitRepository.getTotalCommitCount(repoId);
     }
 
-    public Double getAverageAdditionsOfLastFiveCommitsByUser(Long userId) {
+    public Double getAverageAdditionsOfLastFiveCommitsByUser(Long userId, Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable);
+        List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable, repoId);
         return commits.stream()
             .mapToInt(Commit::getAdditions)
             .average()
             .orElse(0.0);
     }
 
-    public Double getAverageDeletionsOfLastFiveCommitsByUser(Long userId) {
+    public Double getAverageDeletionsOfLastFiveCommitsByUser(Long userId, Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable);
+        List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable, repoId);
         return commits.stream()
             .mapToInt(Commit::getDeletions)
             .average()
@@ -108,14 +112,17 @@ public class CommitService {
      *
      * @return List of CommitsUser Objects
      */
-    public List<CommitsUser> getCommitsUser(Long userId) {
-        return commitRepository.getCommitsUser(userId);
+    public List<CommitsUser> getCommitsUser(Long userId, Long repoId) {
+        return commitRepository.getCommitsUser(userId,repoId);
     }
 
-    public Double getAverageUserProductivity(Long userId) {
-        List<Object[]> userProductivityList = commitRepository.getUserProductivity(userId);
+    public Double getAverageUserProductivity(Long userId, Long repoId) {
+        List<Object[]> userProductivityList = commitRepository.getUserProductivity(userId, repoId);
 
-        List<Object[]> lastFiveDays = userProductivityList.subList(0, 5);
+        // Verwenden Sie die gesamte Liste, wenn sie weniger als fünf Elemente enthält
+        List<Object[]> lastFiveDays = userProductivityList.size() < 5 ?
+            userProductivityList :
+            userProductivityList.subList(0, 5);
 
         // Berechne die Summe der Produktivitätswerte der letzten 5 Arbeitstage.
         long sumProductivity = lastFiveDays.stream()
@@ -125,7 +132,16 @@ public class CommitService {
         // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
         return lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
     }
-    public Long getLoCTillDate(LocalDateTime date) {
-        return commitRepository.getLoCTillDate(date);
+    
+    public Long getLoCTillDate(LocalDateTime date, Long repoId) {
+        return commitRepository.getLoCTillDate(date, repoId);
+    }
+    
+    public Integer getMaxCommitsSingleUser(Long repoId) {
+        return commitRepository.getMaxCommitsSingleUser(repoId);
+    }
+
+    public Double getMaxProductivitySingleUser(Long repoId) {
+        return userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).mapToDouble(u -> getAverageUserProductivity(u.getUserId(), repoId)).max().orElse(0.001);
     }
 }

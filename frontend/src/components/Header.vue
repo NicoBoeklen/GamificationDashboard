@@ -1,82 +1,54 @@
 <template>
-  <div class="div">
-    <div class="div-2">
-      <img
-        loading="lazy"
-        srcSet="..."
-        class="img"
-      />
-      <div class="div-3">toLogin.userName</div>
-    </div>
-    <div class="div-4">GitHub Dashboard</div>
-    <div class="div-5">
-      <div class="div-6">Managment View</div>
-      <div class="div-7">
-        <div class="div-8">Dark mode</div>
-        <div class="div-9">Logout</div>
-      </div>
-    </div>
-  </div>
+    <v-app-bar :elevation="0" app color="#5D5A5A" dark>
+      <v-avatar>
+        <img  alt="Avatar" />
+      </v-avatar>
+      <v-toolbar-title class="mx-5">{{ userName }}</v-toolbar-title>
+
+      <v-app-bar-title>GitHub Dashboard</v-app-bar-title>
+
+      <template v-slot:append>
+        <v-btn variant="outlined" class="mr-3">Managment View</v-btn>
+
+        <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
+
+        <v-btn append-icon="mdi-logout" >Logout</v-btn>
+      </template>
+    </v-app-bar>
 </template>
 
-<style scoped>
-.div {
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--1st, #5d5a5a);
-  display: flex;
-  gap: 20px;
-  font-size: 15px;
-  color: #fff;
-  font-weight: 400;
-  padding: 10px 25px;
-}
-@media (max-width: 991px) {
-  .div {
-    flex-wrap: wrap;
-    padding: 0 20px;
+<script>
+import {getUserName, toLogin} from "../objects/login";
+import {onMounted, ref} from "vue";
+import { useTheme } from 'vuetify'
+
+
+
+
+
+export default {
+  setup() {
+    const userName = ref('');
+    const theme = useTheme()
+
+    function toggleTheme() {
+      theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    }
+    onMounted(() => {
+      userName.value = getUserName();
+      console.log('Username:', userName.value);
+    });
+
+
+    return { userName, toggleTheme };
   }
 }
-.div-2 {
-  justify-content: space-between;
-  align-self: stretch;
-  display: flex;
-  gap: 14px;
-}
-.img {
-  aspect-ratio: 1;
-  object-fit: auto;
+
+</script>
+
+<style scoped>
+.v-avatar img {
+  object-fit: cover;
   object-position: center;
-  width: 44px;
-}
-.div-3 {
-  font-family: Inter, sans-serif;
-  margin: auto 0;
-}
-.div-4 {
-  align-self: stretch;
-  margin: auto 0;
-  font: 24px Inter, sans-serif;
-}
-.div-5 {
-  align-self: stretch;
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  margin: auto 0;
-  padding: 8px 0;
-}
-.div-6 {
-  font-family: Inter, sans-serif;
-}
-.div-7 {
-  display: flex;
-  gap: 20px;
-}
-.div-8 {
-  font-family: Inter, sans-serif;
-}
-.div-9 {
-  font-family: Inter, sans-serif;
 }
 </style>

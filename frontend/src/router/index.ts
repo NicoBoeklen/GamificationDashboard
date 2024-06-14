@@ -8,6 +8,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from "../components/Home.vue";
 import DashboardHome from "../components/DashboardHome.vue"
+import Insights from "../components/Insights.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardHome
+    },
+    {
+      path: '/insights',
+      name: 'insights',
+      component: Insights
     }
   ]
 })

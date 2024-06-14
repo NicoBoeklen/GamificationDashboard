@@ -1,9 +1,8 @@
 package Default.Release;
 
+import Default.GithubRepo.GithubRepo;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +18,10 @@ public class Release {
     
     @JsonProperty("published_at")
     private LocalDateTime publishedAt;
+    
+    @ManyToOne
+    @JoinColumn(name="repoId")
+    private GithubRepo repo;
 
     ///////////////////////////////////////////////
     // Getter & Setter
@@ -46,5 +49,13 @@ public class Release {
 
     public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public GithubRepo getRepo() {
+        return repo;
+    }
+
+    public void setRepo(GithubRepo repo) {
+        this.repo = repo;
     }
 }

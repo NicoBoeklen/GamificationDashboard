@@ -30,23 +30,23 @@ public class PullRequestController {
      * @param repo  GitHub Repository name
      * @return "Pull Requests saved successfully" with 200 or 500 Error if exception is thrown
      */
-    @GetMapping("/pullRequests/{owner}/{repo}")
-    public Mono<ResponseEntity<String>> getPullRequest(@PathVariable String owner, @PathVariable String repo) {
-        return githubAPIPullRequestService.getPullRequests(owner, repo)
+    @GetMapping("/pullRequests/{owner}/{repo}/{repoId}")
+    public Mono<ResponseEntity<String>> getPullRequest(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId) {
+        return githubAPIPullRequestService.getPullRequests(owner, repo, repoId)
             .flatMap(pullRequestService::savePullRequest)  // Save each Pull Request
             .then(Mono.just(ResponseEntity.ok("PullRequests saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
 
-    @GetMapping("/pullMetrics/{userId}")
-    public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId) {
-        return new PullRequestMetric(pullRequestService.getNumberReviews(userId),
-            pullRequestService.getAverageCommentsOfLastFivePullRequestsByUser(userId),
-            pullRequestService.getOpenPullRequests(),
-            pullRequestService.getClosedPullRequestsLastMonth(), 
-            pullRequestService.getAverageAdditionsOfLastFivePullRequests(),
-            pullRequestService.getAverageDeletionsOfLastFivePullRequests(),
-            pullRequestService.getAverageCommitsOfLastFivePullRequests(), 
-            pullRequestService.getAverageProcessTimeOfLastFivePullRequests());
+    @GetMapping("/pullMetrics/{userId}/{repoId}")
+    public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId, @PathVariable Long repoId) {
+        return new PullRequestMetric(pullRequestService.getNumberReviews(userId, repoId),
+            pullRequestService.getAverageCommentsOfLastFivePullRequestsByUser(userId, repoId),
+            pullRequestService.getOpenPullRequests(repoId),
+            pullRequestService.getClosedPullRequestsLastMonth(repoId), 
+            pullRequestService.getAverageAdditionsOfLastFivePullRequests(repoId),
+            pullRequestService.getAverageDeletionsOfLastFivePullRequests(repoId),
+            pullRequestService.getAverageCommitsOfLastFivePullRequests(repoId), 
+            pullRequestService.getAverageProcessTimeOfLastFivePullRequests(repoId));
     }
 }

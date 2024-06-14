@@ -37,13 +37,14 @@ public class GithubRepoController {
      * @param repo  GitHub Repository name
      * @return "Repository saved successfully" with 200 or 500 Error if exception is thrown
      */
-    @GetMapping("/repository/{owner}/{repo}")
-    public ResponseEntity<?> getRepository(@PathVariable String owner, @PathVariable String repo) {
+    @GetMapping("/repository/{owner}/{repo}/{repoId}")
+    public ResponseEntity<?> getRepository(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId) {
         try {
             //If owner is not a contributor (no User exists in Database)
             Mono<GithubRepo> repoMono = githubAPIService.getRepository(owner, repo)
                 .flatMap(repos -> {
-                    Optional<User> userOptional = userService.findById(repos.getOwner().getId());
+                    repos.getOwner().setRepoId(repoId);
+                    Optional<User> userOptional = userService.findById(repos.getOwner().getUserId(), repos.getOwner().getRepoId());
                     if (userOptional.isEmpty()) {
                         repos.setOwner(null);
                     }

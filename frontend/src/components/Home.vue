@@ -23,7 +23,7 @@
           <v-card class="pa-5">
             <v-card-title class="headline">Login</v-card-title>
             <v-card-text>
-              <v-form @submit.prevent="login" ref="form">
+              <v-form  ref="form">
                 <v-text-field
                   label="Username"
                   :rules="[rules.required]"
@@ -60,7 +60,7 @@
                   dense
                   class="mb-4"
                 ></v-text-field>
-                <v-btn color="primary" type="submit" block class="mt-4" @click="login()">Login</v-btn>
+                <v-btn color="primary" type="button" block class="mt-4" @click="login()">Login</v-btn>
               </v-form>
             </v-card-text>
           </v-card>
@@ -72,51 +72,11 @@
 
 
 <script setup lang="ts">
-
-import config from "../config";
-import {ref, Ref} from "vue";
-import {showToast, Toast} from "../ts/toasts";
-import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {useRouter} from "vue-router";
-interface Login {
-  userName: string;
-  repoName: string;
-  ownerName: string;
-}
-const toLogin: Ref<Login> = ref<Login>({
-  userName: '',
-  repoName: '',
-  ownerName: ''
-});
+import {toLogin} from "../objects/login";
+import {login} from "../objects/login";
 const rules = {
   required: (value: string) => !!value || 'Required!'
 };
-const router = useRouter()
-
-function login(){
-  console.log("login ist durchgeführt");
-  fetch(`${config.fetchBaseUrl}/login`,
-    {method: "POST", headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(toLogin.value)})
-
-    .then(response => response.json())
-    .then(data => data as Login[])
-    .then(data => {
-      console.log(data);
-      showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
-      router.push('/dashboard')
-    })
-    .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
-
-}
-
-
-
-
-
-
-
-
 
 </script>
 <style scoped>

@@ -55,12 +55,12 @@ public class GithubAPIPullRequestService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Flux (Datastream) of PullRequests
      */
-    public Flux<PullRequest> getPullRequests(String owner, String repo) {
+    public Flux<PullRequest> getPullRequests(String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/pulls?state=closed", owner, repo);
         String url2 = String.format("/repos/%s/%s/pulls?state=open", owner, repo);
         return Flux.merge(getPullsRecursively(url), getPullsRecursively(url2))
             .distinct(PullRequest::getId) // Remove duplicates by ID
-            .flatMap(pull -> fetchPullDetails(pull, owner, repo));
+            .flatMap(pull -> fetchPullDetails(pull, owner, repo, repoId));
     }
 
 
@@ -130,7 +130,7 @@ public class GithubAPIPullRequestService {
     }
 
     /**
-     * Gets the details of the pullRequest: closedBy
+     * Gets the details of the pullRequest: closedBy (mergedBy)
      * Requests every single pullRequest with own URL
      *
      * @param pullRequest pullRequest to be requested
@@ -138,19 +138,20 @@ public class GithubAPIPullRequestService {
      * @param repo        Name of the GitHub Repository
      * @return Single pullRequest with als attributes
      */
-    private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo) {
+    private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo, Long repoId) {
 
-        String url = String.format("/repos/%s/%s/pulls/%s", owner, repo, pullRequest.getId());
+        String url = String.format("/repos/%s/%s/pulls/%s", owner, repo, pullRequest.getNumber());
         //Only if Pull Request search for details
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {
-                try {
-                    pullRequest.setClosedBy(issueService.findClosedByWithId(pullRequest.getId()));
-                } catch (ChangeSetPersister.NotFoundException e) {
-                    pullRequest.setClosedBy(null);
+                if (details.getUser() != null) {
+                    try {
+                        pullRequest.setClosedBy(userService.findById(details.getUser().getId(), repoId).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                    } catch (ChangeSetPersister.NotFoundException e) {
+                        pullRequest.setClosedBy(null);                    }
                 }
                 pullRequest.setAdditions(details.additions);
                 pullRequest.setDeletions(details.deletions);
@@ -158,7 +159,8 @@ public class GithubAPIPullRequestService {
                 pullRequest.setCommitNumber(details.commitNumber);
                 try {
                     //It can happen that an issue is opened by a user that is not a contributor
-                    pullRequest.setOpenedBy(userService.findById(pullRequest.getOpenedBy().getId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                    pullRequest.getOpenedBy().setRepoId(repoId);
+                    pullRequest.setOpenedBy(userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
                 } catch (ChangeSetPersister.NotFoundException e) {
                     pullRequest.setOpenedBy(null);
                 }

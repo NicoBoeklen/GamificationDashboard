@@ -24,17 +24,17 @@ public class ReleaseService {
         return releaseRepository.save(release);
     }
 
-    public Integer getNumberOfReleases() {
-        return releaseRepository.getNumberOfRelease();
+    public Integer getNumberOfReleases(Long repoId) {
+        return releaseRepository.getNumberOfRelease(repoId);
     }
 
     public List<Release> getAllRelease() {
         return releaseRepository.findAll();
     }
 
-    public Double getAverageTimeBetweenReleases() {
+    public Double getAverageTimeBetweenReleases(Long repoId) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<Release> releases = releaseRepository.findLastFiveReleases(pageable);
+        List<Release> releases = releaseRepository.findLastFiveReleases(pageable, repoId);
         if (releases.size() < 2) {
             // Not enough releases to calculate the average time between them
             return 0.0;

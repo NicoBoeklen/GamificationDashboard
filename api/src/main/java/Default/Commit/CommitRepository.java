@@ -16,47 +16,50 @@ Repository for Commits identified by ID/Sha (long)
  */
 public interface CommitRepository extends JpaRepository<Commit, Long>{
 
-    @Query("SELECT COUNT(c) FROM Commit c WHERE c.author.id = :userId AND c.isMerge = false")
-    Integer getAllCommitsBy(@Param("userId") Long userId);
+    @Query("SELECT COUNT(c) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
+    Integer getAllCommitsBy(@Param("userId") Long userId, @Param("repoId") Long repoId);
 
-    @Query("SELECT SUM(c.deletions) FROM Commit c WHERE c.author.id = :userId AND c.isMerge = false")
-    Integer getAllDeletionsBy(@Param("userId") Long userId);
+    @Query("SELECT SUM(c.deletions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
+    Integer getAllDeletionsBy(@Param("userId") Long userId, @Param("repoId") Long repoId);
 
-    @Query("SELECT SUM(c.additions) FROM Commit c WHERE c.author.id = :userId AND c.isMerge = false")
-    Integer getAllAdditionsBy(@Param("userId") Long userId);
+    @Query("SELECT SUM(c.additions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
+    Integer getAllAdditionsBy(@Param("userId") Long userId, @Param("repoId") Long repoId);
     
     @Query("SELECT new Default.Commit.Stats.CodeGrowth(DATE_TRUNC('week', c.date), (SUM(c.additions) - SUM(c.deletions))) " +
         "FROM Commit c " +
-        "WHERE c.isMerge = false " +
+        "WHERE c.isMerge = false AND c.author.repoId = :repoId " +
         "GROUP BY DATE_TRUNC('week', c.date) " +
         "ORDER BY DATE_TRUNC('week', c.date) ")
-    List<CodeGrowth> getCodeGrowth();
+    List<CodeGrowth> getCodeGrowth(@Param("repoId") Long repoId);
     
     @Query("SELECT SUM(c.additions - c.deletions) " +
         "FROM Commit c " +
-        "WHERE c.isMerge = false AND c.date<= :date ")
-    Long getLoCTillDate(@Param("date") LocalDateTime date);
+        "WHERE c.isMerge = false AND c.date<= :date AND c.author.repoId = :repoId ")
+    Long getLoCTillDate(@Param("date") LocalDateTime date, @Param("repoId") Long repoId);
     
-    @Query("SELECT SUM(c.additions) - SUM(c.deletions) FROM Commit c WHERE c.isMerge = false")
-    Long getTotalLoC();
+    @Query("SELECT SUM(c.additions) - SUM(c.deletions) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
+    Long getTotalLoC(@Param("repoId") Long repoId);
 
-    @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false")
-    Integer getTotalCommitCount();
+    @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
+    Integer getTotalCommitCount(@Param("repoId") Long repoId);
 
-    @Query("SELECT c FROM Commit c WHERE c.author.id = :userId AND c.isMerge = false ORDER BY c.date DESC")
-    List<Commit> findLastFiveCommitsByUser(@Param("userId") Long userId, Pageable pageable);
+    @Query("SELECT c FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId ORDER BY c.date DESC")
+    List<Commit> findLastFiveCommitsByUser(@Param("userId") Long userId, Pageable pageable, @Param("repoId") Long repoId);
 
     @Query("SELECT new Default.Commit.Stats.CommitsUser(DATE_TRUNC('week', c.date), COUNT(c)) " +
         "FROM Commit c " +
-        "WHERE c.isMerge = false AND c.author.id = :userId " +
+        "WHERE c.isMerge = false AND c.author.userId = :userId AND c.author.repoId = :repoId " +
         "GROUP BY DATE_TRUNC('week', c.date) " +
         "ORDER BY DATE_TRUNC('week', c.date) ")
-    List<CommitsUser> getCommitsUser(@Param("userId") Long userId);
+    List<CommitsUser> getCommitsUser(@Param("userId") Long userId, @Param("repoId") Long repoId);
 
     @Query("SELECT DATE_TRUNC('day', c.date) AS day, (SUM(c.additions) + SUM(c.deletions)) AS productivity " +
         "FROM Commit c " +
-        "WHERE c.author.id = :userId " +
+        "WHERE c.author.userId = :userId AND c.author.repoId = :repoId " +
         "GROUP BY DATE_TRUNC('day', c.date) " +
         "ORDER BY DATE_TRUNC('day', c.date) desc")
-    List<Object[]> getUserProductivity(@Param("userId") Long userId);
+    List<Object[]> getUserProductivity(@Param("userId") Long userId, @Param("repoId") Long repoId);
+
+    @Query("SELECT MAX(c.count) FROM (SELECT COUNT(c) AS count FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId GROUP BY c.author.userId) c")
+    Integer getMaxCommitsSingleUser(@Param("repoId") Long repoId);
 }
