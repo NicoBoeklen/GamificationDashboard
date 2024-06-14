@@ -88,5 +88,8 @@ public class PullRequestService {
     public Integer getClosedPullRequestsLastMonth(Long repoId) {
         return pullRequestRepository.getClosedPullRequestsLastMonth(repoId);
     }
-    
+
+    public Double getMaxReviewsSingleUser(Long repoId) {
+        return pullRequestRepository.getMaxReviewsSingleUser(repoId);
+    }
 }

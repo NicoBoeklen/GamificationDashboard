@@ -107,4 +107,8 @@ public class IssueService {
         }
         return issuesPer1000LoC;
     }
+
+    public Integer getMaxFixedIssuesSingleUser(Long repoId) {
+        return issueRepository.getMaxFixedIssuesSingleUser(repoId);
+    }
 }

@@ -2,6 +2,7 @@ package Default.Commit;
 
 import Default.Commit.Stats.CodeGrowth;
 import Default.Commit.Stats.CommitsUser;
+import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class CommitService {
 
     @Autowired
     private CommitRepository commitRepository;
+    
+    @Autowired
+    private UserService userService;
 
     /**
      * Saves a commit in the repository
@@ -115,7 +119,10 @@ public class CommitService {
     public Double getAverageUserProductivity(Long userId, Long repoId) {
         List<Object[]> userProductivityList = commitRepository.getUserProductivity(userId, repoId);
 
-        List<Object[]> lastFiveDays = userProductivityList.subList(0, 5);
+        // Verwenden Sie die gesamte Liste, wenn sie weniger als fünf Elemente enthält
+        List<Object[]> lastFiveDays = userProductivityList.size() < 5 ?
+            userProductivityList :
+            userProductivityList.subList(0, 5);
 
         // Berechne die Summe der Produktivitätswerte der letzten 5 Arbeitstage.
         long sumProductivity = lastFiveDays.stream()
@@ -125,7 +132,16 @@ public class CommitService {
         // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
         return lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
     }
+    
     public Long getLoCTillDate(LocalDateTime date, Long repoId) {
         return commitRepository.getLoCTillDate(date, repoId);
+    }
+    
+    public Integer getMaxCommitsSingleUser(Long repoId) {
+        return commitRepository.getMaxCommitsSingleUser(repoId);
+    }
+
+    public Double getMaxProductivitySingleUser(Long repoId) {
+        return userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).mapToDouble(u -> getAverageUserProductivity(u.getUserId(), repoId)).max().orElse(0.001);
     }
 }
