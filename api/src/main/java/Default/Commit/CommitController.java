@@ -3,17 +3,13 @@ package Default.Commit;
 import Default.Commit.Stats.CodeGrowth;
 import Default.Commit.Stats.CommitMetric;
 import Default.GithubAPI.GithubAPICommitService;
-import Default.Issue.Stats.IssueStats;
 import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -44,27 +40,20 @@ public class CommitController {
      * @return "Commits saved successfully" with 200 or 500 Error if exception is thrown
      */
     @GetMapping("/commits/{owner}/{repo}")
-    public ResponseEntity<?> getCommits(@PathVariable String owner, @PathVariable String repo) {
-        try {
-            //Call Request-Method in githubCommitService
-            Flux<Commit> commitsFlux = githubAPICommitService.getCommits(owner, repo)
+    public Mono<ResponseEntity<String>> getCommits(@PathVariable String owner, @PathVariable String repo) {
+        return githubAPICommitService.getCommits(owner, repo)
+            .flatMap(commit -> {
                 //If author is not a contributor (no User exists in Database)
-                .flatMap(commits -> {
-                    if (commits.getAuthor() != null) {
-                        Optional<User> userOptional = userService.findById(commits.getAuthor().getId());
-                        if (userOptional.isEmpty()) {
-                            commits.setAuthor(null);
-                        }
+                if (commit.getAuthor() != null) {
+                    Optional<User> userOptional = userService.findById(commit.getAuthor().getId());
+                    if (userOptional.isEmpty()) {
+                        commit.setAuthor(null);
                     }
-                    return Mono.just(commits);
-                });
-            //Save Commits in JpaRepository
-            commitsFlux.subscribe(commitService::saveCommit);
-
-            return ResponseEntity.ok("Commits saved successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
-        }
+                }
+                return commitService.saveCommit(commit);
+            })
+            .then(Mono.just(ResponseEntity.ok("Commits saved successfully")))
+            .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
 
     /**
@@ -114,6 +103,11 @@ public class CommitController {
 
     @GetMapping("/commitMetrics/{userId}")
     public CommitMetric getCommitMetrics(@PathVariable Long userId) {
-        return new CommitMetric(commitService.getCodeGrowth(), commitService.getCommitCount(userId), commitService.getDeletionCount(userId), commitService.getAdditionCount(userId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId), commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId), commitService.getCommitsUser(userId), commitService.getAverageUserProductivity(userId));
+        return new CommitMetric(commitService.getCodeGrowth(),
+            commitService.getCommitCount(userId), commitService.getDeletionCount(userId),
+            commitService.getAdditionCount(userId), commitService.getAverageAdditionsOfLastFiveCommitsByUser(userId),
+            commitService.getAverageDeletionsOfLastFiveCommitsByUser(userId), commitService.getCommitsUser(userId),
+            commitService.getAverageUserProductivity(userId), userService.findAll().size(), commitService.getTotalLoC(),
+            commitService.getTotalCommits());
     }
 }

@@ -1,19 +1,27 @@
 package Default.Issue;
 
+import Default.Issue.Stats.IssuesWeekly;
+import Default.Issue.Stats.IssuesWeeklyDouble;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import Default.User.User;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class IssueService {
 
     @Autowired
     private IssueRepository issueRepository;
+    @Autowired
+    private Default.Commit.CommitRepository commitRepository;
 
     /**
      * Saves an issue in the repository
@@ -55,8 +63,35 @@ public class IssueService {
     public Integer getTotalClosedIssuesUser(Long userId) {
         return issueRepository.getTotalClosedIssuesUser(userId);
     }
-    public Double getAverageAgeOfOpenIssuesTeam() {
+    public Double getAverageAgeOfOpenIssues() {
         return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
-    
+    //get the average time to fix an issue for the last 5 closed issues
+    public Double getTeamAverageTimeFixIssue() {
+        Pageable pageable = PageRequest.of(0, 5);
+        return issueRepository.findLastFiveClosedIssues(pageable).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
+    }
+    public List<IssuesWeekly> getWeeklyClosedIssues() {
+        return issueRepository.findWeeklyClosedIssues();
+    }
+    public List<IssuesWeekly> getWeeklyOpenIssues() {
+        return issueRepository.findWeeklyOpenIssues();
+    }
+    public List<IssuesWeekly> getWeeklyTotalIssues() {
+        return issueRepository.findWeeklyTotalIssues();
+    }
+    public List<IssuesWeeklyDouble> getIssuesPer1000LoCPerWeek() {
+        List<IssuesWeekly> weeklyIssues = issueRepository.findExactDateTotalIssues();
+        List<IssuesWeeklyDouble> issuesPer1000LoC = new ArrayList<>();
+        weeklyIssues.forEach(issuesWeeklyDouble -> System.out.println(issuesWeeklyDouble.getWeek()+" is "+(((double)commitRepository.getLoCTillDate(issuesWeeklyDouble.getWeek())/1000))));
+        for (IssuesWeekly issuesWeekly : weeklyIssues) {
+            double issues = issuesWeekly.getIssues();
+            double locTillDate = commitRepository.getLoCTillDate(issuesWeekly.getWeek());
+            double issuesPerThousandLoc = issues / (locTillDate / 1000);
+            double roundedIssuesPerThousandLoc = Math.round(issuesPerThousandLoc * 100.0) / 100.0;
+            IssuesWeeklyDouble newIssuesWeekly = new IssuesWeeklyDouble(issuesWeekly.getWeek(),roundedIssuesPerThousandLoc);
+            issuesPer1000LoC.add(newIssuesWeekly);
+        }
+        return issuesPer1000LoC;
+    }
 }

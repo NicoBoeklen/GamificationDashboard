@@ -2,13 +2,14 @@ package Default.Commit;
 
 import Default.Commit.Stats.CodeGrowth;
 import Default.Commit.Stats.CommitsUser;
-import Default.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,8 +24,8 @@ public class CommitService {
      * @param commit Commit to be saved
      * @return The saved commit
      */
-    public Commit saveCommit(Commit commit) {
-        return commitRepository.save(commit);
+    public Mono<Commit> saveCommit(Commit commit) {
+        return Mono.fromCallable(() -> commitRepository.save(commit));
     }
 
     /**
@@ -66,6 +67,24 @@ public class CommitService {
         return commitRepository.getCodeGrowth();
     }
 
+    /**
+     * Gives back all Lines of code (additions -  deletions excluding mergeCommits)
+     *
+     * @return long TotalLoC
+     */
+    public Long getTotalLoC() {
+        return commitRepository.getTotalLoC();
+    }
+    
+    /**
+     * Gives back all commits (excluding mergeCommits)
+     *
+     * @return total Commits
+     */
+    public Integer getTotalCommits() {
+        return commitRepository.getTotalCommitCount();
+    }
+
     public Double getAverageAdditionsOfLastFiveCommitsByUser(Long userId) {
         Pageable pageable = PageRequest.of(0, 5);
         List<Commit> commits = commitRepository.findLastFiveCommitsByUser(userId, pageable);
@@ -104,7 +123,9 @@ public class CommitService {
             .sum();
 
         // Berechne den Durchschnitt der Produktivitätswerte der letzten 5 Arbeitstage.
-        double averageProductivity = lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
-        return averageProductivity;
+        return lastFiveDays.isEmpty() ? 0.0 : (double) sumProductivity / lastFiveDays.size();
+    }
+    public Long getLoCTillDate(LocalDateTime date) {
+        return commitRepository.getLoCTillDate(date);
     }
 }

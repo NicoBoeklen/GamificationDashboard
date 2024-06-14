@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,6 +14,7 @@ public class Release {
     @Id
     private Long id;
 
+    @JsonProperty("tag_name")
     private String name;
     
     @JsonProperty("published_at")
