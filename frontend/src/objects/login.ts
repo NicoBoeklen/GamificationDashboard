@@ -12,11 +12,17 @@ interface Login {
   userName: string;
   repoName: string;
   ownerName: string;
+  apiKey: string;
+  repoId: number;
+  userId: number;
 }
 export const toLogin: Ref<Login> = ref<Login>({
   userName: '',
   repoName: '',
-  ownerName: ''
+  ownerName: '',
+  apiKey: '',
+  repoId: '',
+  userId: '',
 });
 
 
@@ -35,12 +41,17 @@ export function login(){
     .then(data => {
       console.log(data);
       showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
-      userNameSave = toLogin.value.userName
+      toLogin.value = data;
+      console.log(toLogin.value.userName)
+      localStorage.setItem('userName', toLogin.value.userName)
+      localStorage.setItem('repoId', toLogin.value.repoId)
+      localStorage.setItem('ownerId', toLogin.value.userId)
       router.push('/dashboard');
     })
     .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
 
 }
+
 export function getUserName(): string {
 
   return userNameSave;

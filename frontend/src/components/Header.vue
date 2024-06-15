@@ -21,11 +21,6 @@
 import {getUserName, toLogin} from "../objects/login";
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
-
-
-
-
-
 export default {
   setup() {
     const userName = ref('');
@@ -35,8 +30,8 @@ export default {
       theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
     }
     onMounted(() => {
-      userName.value = getUserName();
-      console.log('Username:', userName.value);
+      userName.value = localStorage.getItem('userName');
+      console.log('Username:', userName);
     });
 
 
