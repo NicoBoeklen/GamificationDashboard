@@ -11,6 +11,7 @@ declare module 'vue' {
     DashboardHome: typeof import('./src/components/DashboardHome.vue')['default']
     DeploymentInsights: typeof import('./src/components/DeploymentInsights.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
+    HeaderInsights: typeof import('./src/components/HeaderInsights.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     Insights: typeof import('./src/components/Insights.vue')['default']
     IssueManagmentInsights: typeof import('./src/components/IssueManagmentInsights.vue')['default']
