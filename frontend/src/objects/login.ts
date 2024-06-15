@@ -21,12 +21,16 @@ export const toLogin: Ref<Login> = ref<Login>({
 
 
 export function login(){
-  console.log("login ist durchgeführt");
-  fetch(`${config.fetchBaseUrl}/login`,
+  console.log("login wird durchgeführt");
+  console.log(toLogin.value.userName+toLogin.value.ownerName+toLogin.value.repoName);
+  fetch(`${config.fetchBaseUrl}/api/login`,
     {method: "POST", headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify(toLogin.value)})
-
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();})
     .then(data => data as Login[])
     .then(data => {
       console.log(data);
