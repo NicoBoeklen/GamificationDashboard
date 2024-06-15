@@ -1,5 +1,6 @@
-package Default.Gamification.Achievement;
+package Default.Gamification.Quest;
 
+import Default.Gamification.Achievement.UserAchievement;
 import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,30 +13,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class AchievementController {
-
+public class QuestController {
+    
     @Autowired
     private UserService userService;
-
+    
     @Autowired
-    private AchievementService achievementService;
+    private QuestService questService;
 
-    @GetMapping("/achievements/{userId}/{repoId}")
-    public List<UserAchievement> getUserAchievements(@PathVariable Long userId, @PathVariable Long repoId) {
+    @GetMapping("/quest/{userId}/{repoId}")
+    public List<UserQuest> getUserQuests(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
-            setAchievements();
+            setQuests();
             User user = userService.findById(userId, repoId).orElseThrow();
-            achievementService.checkAndAwardAchievements(user);
-            return achievementService.getAchievements(user);
+            questService.checkAndAwardQuests(user);
+            return questService.getQuests(user);
         } catch (Error e) {
             return new ArrayList<>();
         }
     }
-    
-    private ResponseEntity<?> setAchievements() {
-        achievementService.setAchievements();
-        return ResponseEntity.ok("Achievements created");
+
+    private ResponseEntity<?> setQuests() {
+        questService.setQuests();
+        return ResponseEntity.ok("Quests created");
     }
-
-
 }
