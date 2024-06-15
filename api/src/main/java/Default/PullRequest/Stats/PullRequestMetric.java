@@ -85,7 +85,7 @@ public class PullRequestMetric {
         this.averageCommitsPerPRTeam = averageCommitsPerPRTeam;
     }
 
-    public Double getAverageProcessTime() {
+    public Double getAverageProcessTimeInHours() {
         return averageProcessTimeInHours;
     }
 
