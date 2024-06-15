@@ -3,8 +3,6 @@ package Default.Gamification.Achievement;
 import Default.User.User;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 public class UserAchievement {
     @Id
@@ -18,13 +16,10 @@ public class UserAchievement {
     @ManyToOne
     @JoinColumn(name = "achievement_id")
     private Achievement achievement;
-
-    private LocalDateTime achievedAt;
-
+    
     public UserAchievement(User user, Achievement achievement) {
         this.user = user;
         this.achievement = achievement;
-        this.achievedAt = LocalDateTime.now();
     }
 
     public UserAchievement() {
@@ -53,12 +48,5 @@ public class UserAchievement {
     public void setAchievement(Achievement achievement) {
         this.achievement = achievement;
     }
-
-    public LocalDateTime getAchievedAt() {
-        return achievedAt;
-    }
-
-    public void setAchievedAt(LocalDateTime achievedAt) {
-        this.achievedAt = achievedAt;
-    }
+    
 }

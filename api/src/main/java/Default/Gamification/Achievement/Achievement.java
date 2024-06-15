@@ -1,6 +1,5 @@
 package Default.Gamification.Achievement;
 
-import Default.GithubRepo.GithubRepo;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,18 +14,13 @@ public class Achievement {
     private String type;
     private int condition;
 
-    @ManyToOne
-    @JoinColumn(name = "repo_id")
-    private GithubRepo githubRepo;
 
-    public Achievement(Long id, String name, String description, int xp, String type, int condition, GithubRepo githubRepo) {
-        this.id = id;
+    public Achievement(String name, String description, int xp, String type, int condition) {
         this.name = name;
         this.description = description;
         this.xp = xp;
         this.type = type;
         this.condition = condition;
-        this.githubRepo = githubRepo;
     }
     
     public Achievement() {
@@ -79,13 +73,5 @@ public class Achievement {
 
     public void setCondition(int condition) {
         this.condition = condition;
-    }
-
-    public GithubRepo getGithubRepo() {
-        return githubRepo;
-    }
-
-    public void setGithubRepo(GithubRepo githubRepo) {
-        this.githubRepo = githubRepo;
     }
 }
