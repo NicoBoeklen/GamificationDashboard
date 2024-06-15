@@ -140,7 +140,6 @@ public class IssueService {
     public List<IssuesWeeklyDouble> getIssuesPer1000LoCPerWeek(Long repoId) {
         List<IssuesWeekly> weeklyIssues = issueRepository.findExactDateTotalIssues(repoId);
         List<IssuesWeeklyDouble> issuesPer1000LoC = new ArrayList<>();
-        weeklyIssues.forEach(issuesWeeklyDouble -> System.out.println(issuesWeeklyDouble.getWeek() + " is " + (((double) commitRepository.getLoCTillDate(issuesWeeklyDouble.getWeek(), repoId) / 1000))));
         for (IssuesWeekly issuesWeekly : weeklyIssues) {
             double issues = issuesWeekly.getIssues();
             double locTillDate = commitRepository.getLoCTillDate(issuesWeekly.getWeek(), repoId);
