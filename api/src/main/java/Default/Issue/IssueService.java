@@ -44,6 +44,10 @@ public class IssueService {
         issueRepository.deleteById(issueId);
     }
     
+    public List<Issue> findIssuesByNumber(Integer number) {
+        return issueRepository.findIssuesByNumber(number);
+    }
+    
     public Integer getOpenIssuesTeam(Long repoId) {
         return issueRepository.getOpenIssuesTeam(repoId);
     }

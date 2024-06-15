@@ -14,6 +14,9 @@ import java.util.List;
 Repository for Issues identified by ID (long)
  */
 public interface IssueRepository extends JpaRepository<Issue, Long>{
+    
+    List<Issue> findIssuesByNumber(Integer number);
+    
     @Query("SELECT i FROM Issue i WHERE NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId")
     List<Issue> getAllIssues(@Param("repoId") Long repoId);
     

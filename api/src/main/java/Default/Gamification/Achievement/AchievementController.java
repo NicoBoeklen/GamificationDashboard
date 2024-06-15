@@ -23,6 +23,7 @@ public class AchievementController {
     @GetMapping("/achievements/{userId}/{repoId}")
     public List<UserAchievement> getUserAchievements(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
+            setAchievements();
             User user = userService.findById(userId, repoId).orElseThrow();
             achievementService.checkAndAwardAchievements(user);
             return achievementService.getAchievements(user);
