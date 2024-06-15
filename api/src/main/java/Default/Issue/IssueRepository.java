@@ -35,12 +35,6 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
         "GROUP BY DATE_TRUNC('WEEK', i.dateOpened) ")
     List<IssuesWeekly> findWeeklyClosedIssues(@Param("repoId") Long repoId);
     
-    @Query("SELECT new Default.Issue.Stats.IssuesWeekly(DATE_TRUNC('WEEK', i.dateOpened), COUNT(i)) " +
-        "FROM Issue i " +
-        "WHERE (i.state = 'open' AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId)"+
-        "GROUP BY DATE_TRUNC('WEEK', i.dateOpened) ")
-    List<IssuesWeekly> findWeeklyOpenIssues(@Param("repoId") Long repoId);
-    
     //@TODO besprechen ob bei Total opened oder closed Date sein soll
     @Query("SELECT new Default.Issue.Stats.IssuesWeekly(DATE_TRUNC('WEEK', i.dateOpened), COUNT(i))" +
         "FROM Issue i " +
