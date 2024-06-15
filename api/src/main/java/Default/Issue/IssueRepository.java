@@ -32,16 +32,16 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
     @Query("SELECT COUNT(i) FROM Issue i WHERE i.closedBy.userId = :userId AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId")
     Integer getTotalClosedIssuesUser(@Param("userId") Long userId, @Param("repoId") Long repoId);
     
-    @Query("SELECT new Default.Issue.Stats.IssuesWeekly(DATE_TRUNC('WEEK', i.dateOpened), COUNT(i)) " +
+    @Query("SELECT new Default.Issue.Stats.IssuesWeekly(DATE_TRUNC('WEEK', i.dateOpened), SUM(COUNT(i)) OVER (ORDER BY date_trunc('week', i.dateClosed))) " +
         "FROM Issue i " +
         "WHERE (i.state = 'closed' AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId)"+
-        "GROUP BY DATE_TRUNC('WEEK', i.dateOpened) ")
+        "GROUP BY DATE_TRUNC('WEEK', i.dateClosed) ")
     List<IssuesWeekly> findWeeklyClosedIssues(@Param("repoId") Long repoId);
     
     //@TODO besprechen ob bei Total opened oder closed Date sein soll
-    @Query("SELECT new Default.Issue.Stats.IssuesWeekly(DATE_TRUNC('WEEK', i.dateOpened), COUNT(i))" +
+    @Query("SELECT new Default.Issue.Stats.IssuesWeekly(DATE_TRUNC('WEEK', i.dateOpened), SUM(COUNT(i)) OVER (ORDER BY date_trunc('week', i.dateOpened))) " +
         "FROM Issue i " +
-        "WHERE (i.openedBy.repoId = :repoId AND NOT TYPE(i) = PullRequest)" +
+        "WHERE (i.openedBy.repoId = :repoId AND NOT TYPE(i)=PullRequest)"+
         "GROUP BY DATE_TRUNC('WEEK', i.dateOpened) ")
     List<IssuesWeekly> findWeeklyTotalIssues(@Param("repoId") Long repoId);
     
