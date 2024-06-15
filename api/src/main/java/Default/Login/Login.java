@@ -20,7 +20,8 @@ public class Login {
     private String userName;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String apiKey;
-
+    private Long repoId; // new field
+    private Long userId;
     
     ///////////////////////////////////////////////
     // Getter & Setter
@@ -64,5 +65,20 @@ public class Login {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+    public Long getRepoId() {
+        return repoId;
+    }
+
+    public void setRepoId(Long repoId) {
+        this.repoId = repoId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
