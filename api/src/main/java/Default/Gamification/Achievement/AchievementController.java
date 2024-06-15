@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class AchievementController {
 
@@ -18,13 +21,13 @@ public class AchievementController {
     private AchievementService achievementService;
 
     @GetMapping("/achievements/{userId}/{repoId}")
-    public ResponseEntity<?> getUserAchievements(@PathVariable Long userId, @PathVariable Long repoId) {
+    public List<UserAchievement> getUserAchievements(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
             User user = userService.findById(userId, repoId).orElseThrow();
             achievementService.checkAndAwardAchievements(user);
-            return ResponseEntity.ok("Achievements saved" + achievementService.getAchievements(user));
+            return achievementService.getAchievements(user);
         } catch (Error e) {
-            return ResponseEntity.status(404).body("Error occurred: " + e.getMessage());
+            return new ArrayList<>();
         }
     }
 

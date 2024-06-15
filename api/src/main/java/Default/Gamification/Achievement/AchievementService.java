@@ -86,7 +86,7 @@ public class AchievementService {
     }
 
     public void setAchievements() {
-        if (achievementRepository.findAll().size() != 0) {
+        if (achievementRepository.findAll().size() == 0) {
             List<Achievement> achievements = new ArrayList<>();
             //Commits
             achievements.add(new Achievement("First Commit", "Get 1 Commit.", 10, "commits", 1));

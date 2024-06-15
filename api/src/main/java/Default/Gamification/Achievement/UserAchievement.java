@@ -4,13 +4,17 @@ import Default.User.User;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "\"userAchievements\"")
 public class UserAchievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumns({
+        @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+        @JoinColumn(name = "repo_id", referencedColumnName = "repo_id")
+    })
     private User user;
 
     @ManyToOne

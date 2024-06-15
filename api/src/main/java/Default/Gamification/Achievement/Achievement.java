@@ -3,6 +3,7 @@ package Default.Gamification.Achievement;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "\"achievement\"")
 public class Achievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
