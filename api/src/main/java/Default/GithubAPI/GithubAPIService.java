@@ -10,7 +10,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,7 +37,6 @@ public class GithubAPIService {
 
     @Autowired
     UserService userService;
-
     /**
      * Defines Header and webClient with API-Key
      */
@@ -43,7 +46,9 @@ public class GithubAPIService {
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
-
+    Mono<Long> getUserId(String user, Long repoId) {
+        return Mono.fromCallable(() -> getUserIdByNameAndRepo(user, repoId));
+    }
     /**
      * This Method is called to get the Repository from a GitHub Repo
      *
@@ -159,5 +164,6 @@ public class GithubAPIService {
     public Long getUserIdByNameAndRepo(String user, Long repoId) {
         return userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).filter(u -> u.getName().equals(user)).findFirst().orElseThrow(() -> new NoSuchElementException()).getUserId();
     }
+    
 }
 

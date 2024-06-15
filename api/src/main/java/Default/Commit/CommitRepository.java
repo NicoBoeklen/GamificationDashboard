@@ -40,6 +40,12 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     @Query("SELECT SUM(c.additions) - SUM(c.deletions) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
     Long getTotalLoC(@Param("repoId") Long repoId);
 
+    @Query("SELECT SUM(c.additions)FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
+    Long getTotalLoCAdded(@Param("repoId") Long repoId);
+
+    @Query("SELECT SUM(c.deletions) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
+    Long getTotalLoCDeleted(@Param("repoId") Long repoId);
+
     @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
     Integer getTotalCommitCount(@Param("repoId") Long repoId);
 

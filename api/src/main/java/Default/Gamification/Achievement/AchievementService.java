@@ -67,7 +67,37 @@ public class AchievementService {
                     if (userReviews >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
-                    break;  
+                    break;
+                case "pullRequestsTeam":
+                    int teamReviews = pullRequestService.getTeamReviews(user.getRepoId());
+                    if (teamReviews >= achievement.getCondition()) {
+                        awardAchievement(user, achievement);
+                    }
+                    break;
+                case "commitsTeam":
+                    int teamCommits = commitService.getTotalCommits(user.getRepoId());
+                    if (teamCommits >= achievement.getCondition()) {
+                        awardAchievement(user, achievement);
+                    }
+                    break;
+                case "issuesTeam":
+                    int teamIssues = issueService.getFixedIssuesTeam(user.getRepoId());
+                    if (teamIssues >= achievement.getCondition()) {
+                        awardAchievement(user, achievement);
+                    }
+                    break;
+                case "linesOfCodeAddedTeam":
+                    Long teamLoC = commitService.getTotalLoCAdded(user.getRepoId());
+                    if (teamLoC >= achievement.getCondition()) {
+                        awardAchievement(user, achievement);
+                    }
+                    break;
+                case "linesOfCodeDeletedTeam":
+                    Long teamLoCDeleted = commitService.getTotalLoCDeleted(user.getRepoId());
+                    if (teamLoCDeleted >= achievement.getCondition()) {
+                        awardAchievement(user, achievement);
+                    }
+                    break;
             }
         }
     }
@@ -107,6 +137,23 @@ public class AchievementService {
             achievements.add(new Achievement("Code Marathoner Bronze", "Write 100 Lines of Code.", 100, "linesOfCodeAdded", 100));
             achievements.add(new Achievement("Code Marathoner Silver", "Write 500 Lines of Code.", 300, "linesOfCodeAdded", 500));
             achievements.add(new Achievement("Code Marathoner Gold", "Write 1000 Lines of Code.", 1000, "linesOfCodeAdded", 1000));
+
+            //Team-Achievements
+            //Commits
+            achievements.add(new Achievement("1000 Team Commits", "Get 1000 Commit in your team.", 500, "commitsTeam", 1000));
+            achievements.add(new Achievement("5000 Team Commits", "Get 5000 Commit in your team.", 1000, "commitsTeam", 5000));
+            //Issues
+            achievements.add(new Achievement("Debugging Team Amateur", "Fix 50 Issues in team.", 200, "issuesTeam", 50));
+            achievements.add(new Achievement("Debugging Team Apprentice", "Fix 100 Issues in team.", 400, "issuesTeam", 100));
+            achievements.add(new Achievement("Debugging Team Master", "Fix 200 Issues in team.", 800, "issuesTeam", 200));
+            //Reviews
+            achievements.add(new Achievement("Peer Review Experts", "Review 100 Pull Requests in team.", 1000, "pullRequestsTeam", 100));
+            //LoC Deleted
+            achievements.add(new Achievement("Refactoring Team Hero", "Delete 2000 Lines of Code in team.", 300, "linesOfCodeDeletedTeam", 2000));
+            //LoC Added
+            achievements.add(new Achievement("Team Code Marathoners Bronze", "Write 100 Lines of Code in team.", 300, "linesOfCodeAddedTeam", 1000));
+            achievements.add(new Achievement("Team Code Marathoners Silver", "Write 500 Lines of Code in team.", 600, "linesOfCodeAddedTeam", 500));
+            achievements.add(new Achievement("Team Code Marathoners Gold", "Write 1000 Lines of Code in team.", 1500, "linesOfCodeAddedTeam", 10000));
 
             achievementRepository.saveAll(achievements);
         }
