@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 import Default.User.User;
 import reactor.core.publisher.Mono;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 
 @Service
 public class IssueService {
@@ -84,13 +85,39 @@ public class IssueService {
     public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
         return issueRepository.findWeeklyClosedIssues(repoId);
     }
-
+/*
     public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId) {
         return issueRepository.findWeeklyOpenIssues(repoId);
     }
-
+*/
     public List<IssuesWeekly> getWeeklyTotalIssues(Long repoId) {
         return issueRepository.findWeeklyTotalIssues(repoId);
+    }
+    public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId){
+        List<Issue> issues= issueRepository.getAllIssues(repoId);
+        Set<LocalDateTime> weekList = new TreeSet<>();
+        List<IssuesWeekly> weeklyOpenIssues = new ArrayList<>();
+        for (Issue issue: issues){
+            weekList.add(issue.getDateOpened().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS));
+            if (issue.getDateClosed() != null) {
+                weekList.add(issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS));
+            }
+        }
+        for (LocalDateTime week : weekList) {
+            long openIssuesCount = 0;
+            for (Issue issue : issues) {
+                LocalDateTime truncatedOpenDate = issue.getDateOpened().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS);
+                LocalDateTime truncatedClosedDate = null;
+                if (issue.getDateClosed() != null) {
+                    truncatedClosedDate = issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS);
+                }
+                if ((truncatedOpenDate.isBefore(week)|| truncatedOpenDate.isEqual(week)) && (truncatedClosedDate == null || truncatedClosedDate.isAfter(week))) {
+                    openIssuesCount++;
+                }
+            }
+            weeklyOpenIssues.add(new IssuesWeekly(week, openIssuesCount));
+        }
+        return weeklyOpenIssues;
     }
 
     public List<IssuesWeeklyDouble> getIssuesPer1000LoCPerWeek(Long repoId) {
