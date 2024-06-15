@@ -1,6 +1,8 @@
 package Default.Login;
 
 import Default.Apikey;
+import Default.GithubAPI.GithubAPIController;
+import Default.GithubAPI.GithubAPIService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
     @Autowired
     LoginService loginService;
-    
+    @Autowired
+    GithubAPIService githubAPIService;
+    @Autowired
+    private GithubAPIController githubAPIController;
+
     @PostMapping("/api/login")
     @ResponseStatus(HttpStatus.CREATED)
     public Login login(@Valid @RequestBody Login loginRequest) {
@@ -20,7 +26,14 @@ public class LoginController {
         login.setOwnerName(loginRequest.getOwnerName());
         login.setRepoName(loginRequest.getRepoName());
         login.setUserName(loginRequest.getUserName());
-        //@TODO: Noch zu ändern mit API Key
+        Long repoId = githubAPIService.getRepositoryId(login.getOwnerName(), login.getRepoName()).block();
+        System.out.println("RepoIdsdaada" + repoId);
+        login.setRepoId(repoId);
+        githubAPIController.getData(login.getOwnerName(), login.getRepoName(), login.getUserName()).block();
+        Long userId = githubAPIService.getUserIdByNameAndRepo(login.getUserName(), repoId);
+        System.out.println("UserId: " + userId);
+        login.setUserId(userId);
+        login.setRepoId(repoId);
         login.setApiKey(Apikey.Key.apiKey);
         return loginService.saveLogin(login);
     }
