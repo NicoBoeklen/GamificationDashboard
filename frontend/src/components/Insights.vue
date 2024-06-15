@@ -10,10 +10,10 @@
 
 
 
-            <v-btn variant="tonal" class="button">Code</v-btn>
-            <v-btn variant="tonal" class="button">Issue Management</v-btn>
+            <v-btn variant="tonal" class="button" @click="redirectCodeInsights()">Code</v-btn>
+            <v-btn variant="tonal" class="button" @click="redirectIssueManagment()">Issue Management</v-btn>
       <!-- <v-btn variant="tonal" class="button">Tests</v-btn>-->
-      <v-btn variant="tonal" class="button">Deployment</v-btn>
+      <v-btn variant="tonal" class="button" @click="redirectDeployment()">Deployment</v-btn>
 
 
 
@@ -26,9 +26,14 @@
 <script>
 import Header from "./Header.vue";
 import { defineComponent } from 'vue';
-import {redirectDashboardHome} from "../objects/directions";
+import {
+  redirectCodeInsights,
+  redirectDashboardHome,
+  redirectDeployment,
+  redirectIssueManagment
+} from "../objects/directions";
 export default defineComponent({
-methods: {redirectDashboardHome},
+methods: {redirectDeployment, redirectIssueManagment, redirectCodeInsights, redirectDashboardHome},
 components: {Header},
 });
 </script>
