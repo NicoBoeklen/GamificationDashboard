@@ -98,4 +98,8 @@ public class PullRequestService {
     public Double getMaxReviewsSingleUser(Long repoId) {
         return pullRequestRepository.getMaxReviewsSingleUser(repoId);
     }
+
+    public int getTeamReviews(Long repoId) {
+        return (int) pullRequestRepository.findAll().stream().filter(pr -> pr.getState().equals(("closed"))).filter(pr -> pr.getOpenedBy().getRepoId().equals(repoId)).count();
+    }
 }

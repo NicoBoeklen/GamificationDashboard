@@ -79,6 +79,14 @@ public class CommitService {
     public Long getTotalLoC(Long repoId) {
         return commitRepository.getTotalLoC(repoId);
     }
+
+    public Long getTotalLoCAdded(Long repoId) {
+        return commitRepository.getTotalLoCAdded(repoId);
+    }
+
+    public Long getTotalLoCDeleted(Long repoId) {
+        return commitRepository.getTotalLoCDeleted(repoId);
+    }
     
     /**
      * Gives back all commits (excluding mergeCommits)
