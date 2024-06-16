@@ -51,3 +51,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+#openIssuesChart {
+  min-height: 100px;
+}
+</style>

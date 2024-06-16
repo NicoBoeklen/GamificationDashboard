@@ -22,12 +22,10 @@
     </v-app-bar>
   </v-container>
   <v-container>
-    <v-card ><OpenIssuesChart/></v-card>
-
+    <CardGrid/>
   </v-container>
 </template>
 <script setup lang="ts">
-import OpenIssuesChart from "../diagrams/issue/openIssues.vue";
 import HeaderInsights from "./HeaderInsights.vue";
 import {
   redirectCodeInsights,
@@ -37,6 +35,7 @@ import {
 } from "../objects/directions";
 import {onMounted, ref, type Ref} from "vue";
 import {fetchIssues} from "../objects/issues";
+import CardGrid from "./Grid.vue";
 onMounted(async () => {
   const issues = await fetchIssues();
   console.log("Amount Total Closed Issues" + issues.amountFixedIssuesTeam);
