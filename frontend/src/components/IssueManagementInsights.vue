@@ -22,7 +22,8 @@
     </v-app-bar>
   </v-container>
   <v-container>
-    <OpenIssuesChart/>
+    <v-card ><OpenIssuesChart/></v-card>
+
   </v-container>
 </template>
 <script setup lang="ts">

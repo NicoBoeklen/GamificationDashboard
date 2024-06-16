@@ -93,9 +93,27 @@ public class IssueService {
         Pageable pageable = PageRequest.of(0, 5);
         return issueRepository.findLastFiveClosedIssues(pageable, repoId).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
     }
-
+/*
     public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
         return issueRepository.findWeeklyClosedIssues(repoId);
+    }
+    */
+    public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
+        Set<LocalDateTime> weekList = getIssueWeeksClosed(issueRepository.getAllClosedIssues(repoId));
+        List<IssuesWeekly> weeklyTotalIssues = new ArrayList<>();
+        for (LocalDateTime week : weekList) {
+            long openIssuesCount = 0;
+            for (Issue issue : issueRepository.getAllClosedIssues(repoId)) {
+                LocalDateTime truncatedClosedDate= truncateDate(issue.getDateClosed());
+                if(truncatedClosedDate.isBefore(week)||truncatedClosedDate.isEqual(week)){
+                    System.out.println(issue.getDateClosed() + " " + week);
+                    openIssuesCount++;
+                }
+            }
+            System.out.println("new week");
+            weeklyTotalIssues.add(new IssuesWeekly(week, openIssuesCount));
+        }
+        return weeklyTotalIssues;
     }
     public List<IssuesWeekly> getWeeklyTotalIssues(Long repoId) {
         Set<LocalDateTime> weekList = getIssueWeeks(issueRepository.getAllIssues(repoId));
@@ -123,6 +141,15 @@ public class IssueService {
         Set<LocalDateTime> weekList = new TreeSet<>();
         for (Issue issue: issues){
             weekList.add(issue.getDateOpened().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
+            if (issue.getDateClosed() != null) {
+                weekList.add(issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
+            }
+        }
+        return weekList;
+    }
+    private Set<LocalDateTime> getIssueWeeksClosed(List<Issue> issues) {
+        Set<LocalDateTime> weekList = new TreeSet<>();
+        for (Issue issue: issues){
             if (issue.getDateClosed() != null) {
                 weekList.add(issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
             }
