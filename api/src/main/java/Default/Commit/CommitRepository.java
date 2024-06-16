@@ -21,13 +21,13 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     @Query("SELECT COUNT(c) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
     Integer getAllCommitsBy(@Param("userId") Long userId, @Param("repoId") Long repoId);
 
-    @Query("SELECT SUM(c.deletions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
+    @Query("SELECT COALESCE(SUM(c.deletions),0) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
     Integer getAllDeletionsBy(@Param("userId") Long userId, @Param("repoId") Long repoId);
 
-    @Query("SELECT SUM(c.additions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
+    @Query("SELECT COALESCE(SUM(c.additions),0) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
     Integer getAllAdditionsBy(@Param("userId") Long userId, @Param("repoId") Long repoId);
     
-    @Query("SELECT SUM(c.additions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
+    @Query("SELECT COALESCE(SUM(c.additions), 0) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
     Integer getAllAdditionsByUserByDay(@Param("userId") Long userId, @Param("repoId") Long repoId, @Param("day") LocalDate day);
     
     @Query("SELECT new Default.Commit.Stats.CodeGrowth(DATE_TRUNC('week', c.date), (SUM(c.additions) - SUM(c.deletions))) " +
@@ -37,21 +37,21 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
         "ORDER BY DATE_TRUNC('week', c.date) ")
     List<CodeGrowth> getCodeGrowth(@Param("repoId") Long repoId);
     
-    @Query("SELECT SUM(c.additions - c.deletions) " +
+    @Query("SELECT COALESCE(SUM(c.additions - c.deletions),0) " +
         "FROM Commit c " +
         "WHERE c.isMerge = false AND c.date<= :date AND c.author.repoId = :repoId ")
     Long getLoCTillDate(@Param("date") LocalDateTime date, @Param("repoId") Long repoId);
     
-    @Query("SELECT SUM(c.additions) - SUM(c.deletions) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
+    @Query("SELECT COALESCE(SUM(c.additions) - SUM(c.deletions),0) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
     Long getTotalLoC(@Param("repoId") Long repoId);
 
-    @Query("SELECT SUM(c.additions)FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
+    @Query("SELECT COALESCE(SUM(c.additions), 0) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
     Long getTotalLoCAdded(@Param("repoId") Long repoId);
     
-    @Query("SELECT SUM(c.additions)FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
+    @Query("SELECT COALESCE(SUM(c.additions), 0) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
     Long getTotalLoCAddedByDay(@Param("repoId") Long repoId, @Param("day") LocalDate day);
 
-    @Query("SELECT SUM(c.deletions) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
+    @Query("SELECT COALESCE(SUM(c.deletions), 0) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
     Long getTotalLoCDeleted(@Param("repoId") Long repoId);
 
     @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
