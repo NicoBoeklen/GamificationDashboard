@@ -33,7 +33,7 @@ public interface PullRequestRepository extends JpaRepository<PullRequest, Long> 
     @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'closed' AND p.dateClosed >= CURRENT_DATE - 30 AND p.openedBy.repoId = :repoId")
     Integer getClosedPullRequestsLastMonth(@Param("repoId") Long repoId);
 
-    @Query("SELECT MAX(p.count) FROM (SELECT COUNT(p) AS count FROM PullRequest p WHERE p.state= 'closed' AND p.closedBy.repoId = :repoId GROUP BY p.closedBy.userId) p")
+    @Query("SELECT COALESCE(MAX(p.count),0) FROM (SELECT COUNT(p) AS count FROM PullRequest p WHERE p.state= 'closed' AND p.closedBy.repoId = :repoId GROUP BY p.closedBy.userId) p")
     Double getMaxReviewsSingleUser(@Param("repoId") Long repoId);
 
     @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.closedBy.repoId = :repoId AND CAST(p.dateClosed AS DATE) = :day")

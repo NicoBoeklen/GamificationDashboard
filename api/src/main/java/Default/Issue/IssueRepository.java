@@ -67,7 +67,7 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
     @Query("SELECT i FROM Issue i WHERE i.state = 'open' AND i.dateOpened <= :dateThreshold AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId")
     List<Issue> findOpenIssuesWithoutLastDays(LocalDateTime dateThreshold, @Param("repoId") Long repoId);
 
-    @Query("SELECT MAX(i.count) FROM (SELECT COUNT(i) AS count FROM Issue i WHERE i.state= 'closed' AND NOT TYPE(i)=PullRequest AND i.closedBy.repoId = :repoId GROUP BY i.closedBy.userId) i")
+    @Query("SELECT COALESCE(MAX(i.count),0) FROM (SELECT COUNT(i) AS count FROM Issue i WHERE i.state= 'closed' AND NOT TYPE(i)=PullRequest AND i.closedBy.repoId = :repoId GROUP BY i.closedBy.userId) i")
     Integer getMaxFixedIssuesSingleUser(@Param("repoId") Long repoId);
     
 }

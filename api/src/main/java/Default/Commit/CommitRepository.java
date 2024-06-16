@@ -82,6 +82,6 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
         "ORDER BY DATE_TRUNC('day', c.date) desc")
     List<Object[]> getUserProductivity(@Param("userId") Long userId, @Param("repoId") Long repoId);
 
-    @Query("SELECT MAX(c.count) FROM (SELECT COUNT(c) AS count FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId GROUP BY c.author.userId) c")
+    @Query("SELECT COALESCE(MAX(c.count),0) FROM (SELECT COUNT(c) AS count FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId GROUP BY c.author.userId) c")
     Integer getMaxCommitsSingleUser(@Param("repoId") Long repoId);
 }
