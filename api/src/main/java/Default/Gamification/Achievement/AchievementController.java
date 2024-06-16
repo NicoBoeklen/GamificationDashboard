@@ -20,6 +20,18 @@ public class AchievementController {
     @Autowired
     private AchievementService achievementService;
 
+    @GetMapping("/milestones/{userId}/{repoId}")
+    public List<UserMilestone> getUserMilestones(@PathVariable Long userId, @PathVariable Long repoId) {
+        try {
+            setAchievements();
+            User user = userService.findById(userId, repoId).orElseThrow();
+            List<UserMilestone> milestoneAchievement = achievementService.checkAndAwardAchievements(user);
+            return milestoneAchievement;
+        } catch (Error e) {
+            return new ArrayList<>();
+        }
+    }
+
     @GetMapping("/achievements/{userId}/{repoId}")
     public List<UserAchievement> getUserAchievements(@PathVariable Long userId, @PathVariable Long repoId) {
         try {

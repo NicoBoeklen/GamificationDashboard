@@ -32,10 +32,11 @@ public class AchievementService {
     @Autowired
     private PullRequestService pullRequestService;
     
-    public void checkAndAwardAchievements(User user) {
+    public List<UserMilestone> checkAndAwardAchievements(User user) {
         // Hier alle Achievements durchgehen und prüfen, ob der User die Bedingungen erfüllt
         List<Achievement> achievements = achievementRepository.findAll();
-
+        List<UserMilestone> milestones = new ArrayList<>();
+        
         for (Achievement achievement : achievements) {
             switch (achievement.getType()) {
                 case "commits":
@@ -43,63 +44,74 @@ public class AchievementService {
                     if (userCommits >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, userCommits));
                     break;
                 case "issues":
                     int userIssues = issueService.getTotalClosedIssuesUser(user.getUserId(), user.getRepoId());
                     if (userIssues >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, (long) userIssues));
                     break;
                 case "linesOfCodeAdded":
                     int userLoC = commitService.getAdditionCount(user.getUserId(), user.getRepoId());
                     if (userLoC >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, (long) userLoC));
                     break;
                 case "linesOfCodeDeleted":
                     int userLoCDeleted = commitService.getDeletionCount(user.getUserId(), user.getRepoId());
                     if (userLoCDeleted >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, (long) userLoCDeleted));
                     break;
                 case "pullRequests":
                     int userReviews = pullRequestService.getNumberReviews(user.getUserId(), user.getRepoId());
                     if (userReviews >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, (long) userReviews));
                     break;
                 case "pullRequestsTeam":
                     int teamReviews = pullRequestService.getTeamReviews(user.getRepoId());
                     if (teamReviews >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, (long) teamReviews));
                     break;
                 case "commitsTeam":
                     int teamCommits = commitService.getTotalCommits(user.getRepoId());
                     if (teamCommits >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, (long) teamCommits));
                     break;
                 case "issuesTeam":
                     int teamIssues = issueService.getFixedIssuesTeam(user.getRepoId());
                     if (teamIssues >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, (long) teamIssues));
                     break;
                 case "linesOfCodeAddedTeam":
                     Long teamLoC = commitService.getTotalLoCAdded(user.getRepoId());
                     if (teamLoC >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, teamLoC));
                     break;
                 case "linesOfCodeDeletedTeam":
                     Long teamLoCDeleted = commitService.getTotalLoCDeleted(user.getRepoId());
                     if (teamLoCDeleted >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }
+                    milestones.add(new UserMilestone(user, achievement, teamLoCDeleted));
                     break;
             }
         }
+        return milestones;
     }
 
     private void awardAchievement(User user, Achievement achievement) {
