@@ -46,6 +46,7 @@ export function login(){
       localStorage.setItem('userName', toLogin.value.userName)
       localStorage.setItem('repoId', toLogin.value.repoId)
       localStorage.setItem('ownerId', toLogin.value.userId)
+      localStorage.setItem('repoName', toLogin.value.repoName)
       router.push('/dashboard');
     })
     .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));

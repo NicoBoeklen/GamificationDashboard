@@ -10,7 +10,7 @@ import Home from "../components/Home.vue";
 import DashboardHome from "../components/DashboardHome.vue"
 import Insights from "../components/Insights.vue";
 import CodeInsights from "../components/CodeInsights.vue";
-import IssueManagmentInsights from "../components/IssueManagmentInsights.vue";
+import IssueManagmentInsights from "../components/IssueManagementInsights.vue";
 import DeploymentInsights from "../components/DeploymentInsights.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

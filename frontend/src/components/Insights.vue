@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <HeaderInsights/>
   <v-container class="container">
     <v-app-bar app color="#5D5A5A" dark>
 

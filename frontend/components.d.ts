@@ -14,7 +14,7 @@ declare module 'vue' {
     HeaderInsights: typeof import('./src/components/HeaderInsights.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     Insights: typeof import('./src/components/Insights.vue')['default']
-    IssueManagmentInsights: typeof import('./src/components/IssueManagmentInsights.vue')['default']
+    IssueManagementInsights: typeof import('./src/components/IssueManagementInsights.vue')['default']
     ManagementView: typeof import('./src/components/ManagementView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

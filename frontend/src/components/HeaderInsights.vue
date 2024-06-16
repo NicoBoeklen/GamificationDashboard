@@ -5,7 +5,7 @@
     </v-avatar>
     <v-toolbar-title class="mx-5">{{ userName }}</v-toolbar-title>
 
-    <v-app-bar-title><strong>Insights</strong>: Projektname</v-app-bar-title>
+    <v-app-bar-title><strong>Insights</strong>: {{ repoName }}</v-app-bar-title>
 
     <template v-slot:append>
       <v-btn variant="outlined" class="mr-3">Management View</v-btn>
@@ -30,17 +30,19 @@ export default {
   setup() {
     const userName = ref('');
     const theme = useTheme()
+    const repoName = ref('');
 
     function toggleTheme() {
       theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
     }
     onMounted(() => {
-      userName.value = getUserName();
-      console.log('Username:', userName.value);
+      userName.value = localStorage.getItem('userName');
+      console.log('Username:', userName);
+      repoName.value = localStorage.getItem('repoName');
+      console.log('Reponame:', repoName);
     });
 
-
-    return { userName, toggleTheme };
+    return { userName, toggleTheme, repoName };
   }
 }
 
