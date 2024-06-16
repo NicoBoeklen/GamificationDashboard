@@ -22,10 +22,11 @@
     </v-app-bar>
   </v-container>
   <v-container>
-
+    <OpenIssuesChart/>
   </v-container>
 </template>
 <script setup lang="ts">
+import OpenIssuesChart from "../diagrams/issue/openIssues.vue";
 import HeaderInsights from "./HeaderInsights.vue";
 import {
   redirectCodeInsights,

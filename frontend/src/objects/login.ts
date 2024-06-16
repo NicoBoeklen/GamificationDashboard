@@ -45,7 +45,7 @@ export function login(){
       console.log(toLogin.value.userName)
       localStorage.setItem('userName', toLogin.value.userName)
       localStorage.setItem('repoId', toLogin.value.repoId)
-      localStorage.setItem('ownerId', toLogin.value.userId)
+      localStorage.setItem('userId', toLogin.value.userId)
       localStorage.setItem('repoName', toLogin.value.repoName)
       router.push('/dashboard');
     })

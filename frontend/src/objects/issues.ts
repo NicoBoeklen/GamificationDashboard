@@ -39,9 +39,9 @@ let issue: Issue = {
 };
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-
+console.log("UserId lautet"+userId);
 export async function fetchIssues(): Promise<Issue> {
-  const response = await fetch(`${config.fetchBaseUrl}/${userId}/${repoId}`,  {
+  const response = await fetch(`${config.fetchBaseUrl}/api/issuesStats/${userId}/${repoId}`,  {
     method: "GET",
     headers: {
       'Accept': 'application/json',
