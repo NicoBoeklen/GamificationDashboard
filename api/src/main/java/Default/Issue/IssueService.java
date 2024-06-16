@@ -106,11 +106,9 @@ public class IssueService {
             for (Issue issue : issueRepository.getAllClosedIssues(repoId)) {
                 LocalDateTime truncatedClosedDate= truncateDate(issue.getDateClosed());
                 if(truncatedClosedDate.isBefore(week)||truncatedClosedDate.isEqual(week)){
-                    System.out.println(issue.getDateClosed() + " " + week);
                     openIssuesCount++;
                 }
             }
-            System.out.println("new week");
             weeklyTotalIssues.add(new IssuesWeekly(week, openIssuesCount));
         }
         return weeklyTotalIssues;
