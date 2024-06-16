@@ -12,31 +12,47 @@ interface Login {
   userName: string;
   repoName: string;
   ownerName: string;
+  apiKey: string;
+  repoId: number;
+  userId: number;
 }
 export const toLogin: Ref<Login> = ref<Login>({
   userName: '',
   repoName: '',
-  ownerName: ''
+  ownerName: '',
+  apiKey: '',
+  repoId: '',
+  userId: '',
 });
 
 
 export function login(){
-  console.log("login ist durchgeführt");
-  fetch(`${config.fetchBaseUrl}/login`,
+  console.log("login wird durchgeführt");
+  console.log(toLogin.value.userName+toLogin.value.ownerName+toLogin.value.repoName);
+  fetch(`${config.fetchBaseUrl}/api/login`,
     {method: "POST", headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify(toLogin.value)})
-
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();})
     .then(data => data as Login[])
     .then(data => {
       console.log(data);
       showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
-      userNameSave = toLogin.value.userName
+      toLogin.value = data;
+      console.log(toLogin.value.userName)
+      localStorage.setItem('userName', toLogin.value.userName)
+      localStorage.setItem('repoId', toLogin.value.repoId)
+      localStorage.setItem('userId', toLogin.value.userId)
+      localStorage.setItem('repoName', toLogin.value.repoName)
       router.push('/dashboard');
     })
     .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
 
 }
+
 export function getUserName(): string {
 
   return userNameSave;

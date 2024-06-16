@@ -13,7 +13,7 @@ interface issuesPer1000LoC{
 interface WeeklyClosedIssues extends WeeklyIssues{}
 interface weeklyOpenIssues extends WeeklyIssues{}
 interface weeklyTotalIssues extends WeeklyIssues{}
-interface Issue {
+export interface Issue {
   amountTotalIssuesTeam: number;
   amountFixedIssuesTeam: number;
   amountOpenIssuesTeam: number;
@@ -37,26 +37,24 @@ let issue: Issue = {
   weeklyTotalIssues: [],
   issuesPer1000LoC: [],
 };
+const repoId = localStorage.getItem('repoId');
+const userId = localStorage.getItem('userId');
+console.log("UserId lautet"+userId);
+export async function fetchIssues(): Promise<Issue> {
+  const response = await fetch(`${config.fetchBaseUrl}/api/issuesStats/${userId}/${repoId}`,  {
+    method: "GET",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch issues");
+  }
+  const issue: Issue = await response.json();
+  showToast(new Toast("Success", `Issues fetched successfully!`, "success", faCheck, 5));
+  return issue;
+}
 
-function fetchIssues()  {
-  fetch(`${config.fetchBaseUrl}/issuesStats/133352623`,  {
-  method: "GET",
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(issue),
-})
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Failed to update todo status");
-    }
-    showToast(new Toast("Success", `Todo status updated successfully!`, "success", faCheck, 5));
-  })
-  .catch(error => showToast(new Toast("Error", error.message, "error", faXmark, 10)))
-}
-export function getIssues(): Ref<Issue>{
-  fetchIssues();
-  return ref(issue);
-}
+
 

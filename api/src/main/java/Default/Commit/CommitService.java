@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -62,6 +64,10 @@ public class CommitService {
         return commitRepository.getAllAdditionsBy(userId,repoId);
     }
 
+    public Integer getAdditionCountByDay(Long userId, Long repoId, LocalDate day) {
+        return commitRepository.getAllAdditionsByUserByDay(userId, repoId, day);
+    }
+
     /**
      * Gives back a List of weeks with total Changes in the code (additions -  deletions)
      *
@@ -79,6 +85,18 @@ public class CommitService {
     public Long getTotalLoC(Long repoId) {
         return commitRepository.getTotalLoC(repoId);
     }
+
+    public Long getTotalLoCAdded(Long repoId) {
+        return commitRepository.getTotalLoCAdded(repoId);
+    }
+
+    public Long getTotalLoCAddedByDay(Long repoId, LocalDate day) {
+        return commitRepository.getTotalLoCAddedByDay(repoId, day);
+    }
+
+    public Long getTotalLoCDeleted(Long repoId) {
+        return commitRepository.getTotalLoCDeleted(repoId);
+    }
     
     /**
      * Gives back all commits (excluding mergeCommits)
@@ -87,6 +105,10 @@ public class CommitService {
      */
     public Integer getTotalCommits(Long repoId) {
         return commitRepository.getTotalCommitCount(repoId);
+    }
+
+    public int getTotalCommitsByDay(Long repoId, LocalDate day) {
+        return commitRepository.getTotalCommitCountByDay(repoId, day);
     }
 
     public Double getAverageAdditionsOfLastFiveCommitsByUser(Long userId, Long repoId) {
@@ -116,6 +138,10 @@ public class CommitService {
         return commitRepository.getCommitsUser(userId,repoId);
     }
 
+    public Long getCommitsUserByDay(Long userId, Long repoId, LocalDate day) {
+        return commitRepository.getCommitsUserByDay(userId, repoId, day);
+    }
+    
     public Double getAverageUserProductivity(Long userId, Long repoId) {
         List<Object[]> userProductivityList = commitRepository.getUserProductivity(userId, repoId);
 
@@ -144,4 +170,5 @@ public class CommitService {
     public Double getMaxProductivitySingleUser(Long repoId) {
         return userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).mapToDouble(u -> getAverageUserProductivity(u.getUserId(), repoId)).max().orElse(0.001);
     }
+
 }

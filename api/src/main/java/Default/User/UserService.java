@@ -22,6 +22,8 @@ public class UserService {
         return Mono.fromCallable(() -> userRepository.save(user));
     }
     
+    public User saveUser2(User user) {return userRepository.save(user);}
+    
     public Optional<User> findById(Long userId, Long repoId) {
         return userRepository.findById(new UserRepoId(userId, repoId));
     }

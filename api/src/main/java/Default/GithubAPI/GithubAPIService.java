@@ -5,15 +5,23 @@ import Default.GithubRepo.GithubRepo;
 import Default.Release.Release;
 import Default.User.User;
 import Default.User.UserRepoId;
+import Default.User.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +35,8 @@ public class GithubAPIService {
 
     private final WebClient webClient;
 
+    @Autowired
+    UserService userService;
     /**
      * Defines Header and webClient with API-Key
      */
@@ -36,7 +46,9 @@ public class GithubAPIService {
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
-
+    Mono<Long> getUserId(String user, Long repoId) {
+        return Mono.fromCallable(() -> getUserIdByNameAndRepo(user, repoId));
+    }
     /**
      * This Method is called to get the Repository from a GitHub Repo
      *
@@ -58,7 +70,7 @@ public class GithubAPIService {
             .bodyToMono(JsonNode.class)
             .map(jsonNode -> jsonNode.get("id").asLong());
     }
-    
+
     /**
      * This Method is called to get all Releases from a GitHub Repo
      *
@@ -148,5 +160,10 @@ public class GithubAPIService {
                 return Mono.empty();
             });
     }
+
+    public Long getUserIdByNameAndRepo(String user, Long repoId) {
+        return userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).filter(u -> u.getName().equals(user)).findFirst().orElseThrow(() -> new NoSuchElementException()).getUserId();
+    }
+    
 }
 

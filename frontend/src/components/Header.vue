@@ -8,7 +8,7 @@
       <v-app-bar-title>GitHub Dashboard</v-app-bar-title>
 
       <template v-slot:append>
-        <v-btn variant="outlined" class="mr-3">Managment View</v-btn>
+        <v-btn variant="outlined" class="mr-3">Management View</v-btn>
 
         <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 
@@ -21,11 +21,6 @@
 import {getUserName, toLogin} from "../objects/login";
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
-
-
-
-
-
 export default {
   setup() {
     const userName = ref('');
@@ -35,8 +30,8 @@ export default {
       theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
     }
     onMounted(() => {
-      userName.value = getUserName();
-      console.log('Username:', userName.value);
+      userName.value = localStorage.getItem('userName');
+      console.log('Username:', userName);
     });
 
 

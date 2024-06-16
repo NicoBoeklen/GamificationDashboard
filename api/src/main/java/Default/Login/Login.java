@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "\"login\"")
 public class Login {
     @Id
     @GeneratedValue
@@ -18,7 +20,8 @@ public class Login {
     private String userName;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String apiKey;
-
+    private Long repoId; // new field
+    private Long userId;
     
     ///////////////////////////////////////////////
     // Getter & Setter
@@ -62,5 +65,20 @@ public class Login {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+    public Long getRepoId() {
+        return repoId;
+    }
+
+    public void setRepoId(Long repoId) {
+        this.repoId = repoId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

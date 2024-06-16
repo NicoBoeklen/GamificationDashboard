@@ -3,17 +3,18 @@ package Default.Issue;
 import Default.Issue.Stats.IssuesWeekly;
 import Default.Issue.Stats.IssuesWeeklyDouble;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import Default.User.User;
 import reactor.core.publisher.Mono;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 
 @Service
 public class IssueService {
@@ -43,12 +44,20 @@ public class IssueService {
         issueRepository.deleteById(issueId);
     }
     
+    public List<Issue> findIssuesByNumber(Integer number) {
+        return issueRepository.findIssuesByNumber(number);
+    }
+    
     public Integer getOpenIssuesTeam(Long repoId) {
         return issueRepository.getOpenIssuesTeam(repoId);
     }
 
     public Integer getFixedIssuesTeam(Long repoId) {
         return issueRepository.getFixedIssuesTeam(repoId);
+    }
+    
+    public Integer getFixedIssuesTeamByDay(Long repoId, LocalDate day) {
+        return issueRepository.getFixedIssuesTeamByDay(repoId, day);
     }
 
     public Integer getAllIssuesTeam(Long repoId) {
@@ -57,6 +66,10 @@ public class IssueService {
 
     public Integer getTotalClosedIssuesUser(Long userId, Long repoId) {
         return issueRepository.getTotalClosedIssuesUser(userId, repoId);
+    }
+
+    public int getTotalClosedIssuesUserByDay(Long userId, Long repoId, LocalDate day) {
+        return issueRepository.getTotalClosedIssuesUserByDay(userId, repoId, day);
     }
 
     public Double getAverageAgeOfOpenIssues(Long repoId) {
@@ -84,19 +97,61 @@ public class IssueService {
     public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
         return issueRepository.findWeeklyClosedIssues(repoId);
     }
-
-    public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId) {
-        return issueRepository.findWeeklyOpenIssues(repoId);
-    }
-
     public List<IssuesWeekly> getWeeklyTotalIssues(Long repoId) {
-        return issueRepository.findWeeklyTotalIssues(repoId);
+        Set<LocalDateTime> weekList = getIssueWeeks(issueRepository.getAllIssues(repoId));
+        List<IssuesWeekly> weeklyTotalIssues = new ArrayList<>();
+        for (LocalDateTime week : weekList) {
+            long openIssuesCount = 0;
+            for (Issue issue : issueRepository.getAllIssues(repoId)) {
+                LocalDateTime truncatedOpenDate= truncateDate(issue.getDateOpened());
+                LocalDateTime truncatedClosedDate = null;
+                if (issue.getDateClosed() != null) {
+                    truncatedClosedDate = truncateDate(issue.getDateOpened());
+                }
+                if (truncatedOpenDate.isBefore((week))||truncatedOpenDate.isEqual(week)) {
+                    openIssuesCount++;
+                }
+            }
+            weeklyTotalIssues.add(new IssuesWeekly(week, openIssuesCount));
+        }
+        return weeklyTotalIssues;
     }
-
+    private LocalDateTime truncateDate(LocalDateTime date) {
+        return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS);
+    }
+    private Set<LocalDateTime> getIssueWeeks(List<Issue> issues) {
+        Set<LocalDateTime> weekList = new TreeSet<>();
+        for (Issue issue: issues){
+            weekList.add(issue.getDateOpened().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
+            if (issue.getDateClosed() != null) {
+                weekList.add(issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
+            }
+        }
+        return weekList;
+    }
+    public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId){
+        List<Issue> issues= issueRepository.getAllIssues(repoId);
+        List<IssuesWeekly> weeklyOpenIssues = new ArrayList<>();
+        Set<LocalDateTime> weekList = getIssueWeeks(issues);
+        for (LocalDateTime week : weekList) {
+            long openIssuesCount = 0;
+            for (Issue issue : issues) {
+                LocalDateTime truncatedOpenDate = truncateDate(issue.getDateOpened());
+                LocalDateTime truncatedClosedDate = null;
+                if (issue.getDateClosed() != null) {
+                    truncatedClosedDate = truncateDate(issue.getDateClosed());
+                }
+                if ((truncatedOpenDate.isBefore(week)|| truncatedOpenDate.isEqual(week)) && (truncatedClosedDate == null || truncatedClosedDate.isAfter(week))) {
+                    openIssuesCount++;
+                }
+            }
+            weeklyOpenIssues.add(new IssuesWeekly(week, openIssuesCount));
+        }
+        return weeklyOpenIssues;
+    }
     public List<IssuesWeeklyDouble> getIssuesPer1000LoCPerWeek(Long repoId) {
         List<IssuesWeekly> weeklyIssues = issueRepository.findExactDateTotalIssues(repoId);
         List<IssuesWeeklyDouble> issuesPer1000LoC = new ArrayList<>();
-        weeklyIssues.forEach(issuesWeeklyDouble -> System.out.println(issuesWeeklyDouble.getWeek() + " is " + (((double) commitRepository.getLoCTillDate(issuesWeeklyDouble.getWeek(), repoId) / 1000))));
         for (IssuesWeekly issuesWeekly : weeklyIssues) {
             double issues = issuesWeekly.getIssues();
             double locTillDate = commitRepository.getLoCTillDate(issuesWeekly.getWeek(), repoId);
@@ -111,4 +166,5 @@ public class IssueService {
     public Integer getMaxFixedIssuesSingleUser(Long repoId) {
         return issueRepository.getMaxFixedIssuesSingleUser(repoId);
     }
+
 }
