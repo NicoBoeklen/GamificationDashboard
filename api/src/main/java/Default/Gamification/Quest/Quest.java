@@ -2,7 +2,7 @@ package Default.Gamification.Quest;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "\"quest\"")
@@ -18,12 +18,12 @@ public class Quest {
     private String type;
 
     private int condition;
-    private LocalDateTime tag;
+    private LocalDate tag;
 
     public Quest() {
     }
 
-    public Quest(String name, String description, int xp, String type, int condition, LocalDateTime tag) {
+    public Quest(String name, String description, int xp, String type, int condition, LocalDate tag) {
         this.name = name;
         this.description = description;
         this.xp = xp;
@@ -80,11 +80,11 @@ public class Quest {
         this.condition = condition;
     }
 
-    public LocalDateTime getDay() {
+    public LocalDate getDay() {
         return tag;
     }
 
-    public void setDay(LocalDateTime day) {
+    public void setDay(LocalDate day) {
         this.tag = day;
     }
 }

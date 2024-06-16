@@ -39,7 +39,7 @@ public class AchievementService {
         for (Achievement achievement : achievements) {
             switch (achievement.getType()) {
                 case "commits":
-                    int userCommits = commitService.getCommitsUser(user.getUserId(), user.getRepoId()).size();
+                    Long userCommits = commitService.getCommitsUser(user.getUserId(), user.getRepoId()).stream().mapToLong(u -> u.getTotalCommits()).sum();
                     if (userCommits >= achievement.getCondition()) {
                         awardAchievement(user, achievement);
                     }

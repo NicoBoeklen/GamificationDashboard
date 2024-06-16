@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -38,6 +39,10 @@ public class PullRequestService {
 
     public Integer getNumberReviews(Long userId, Long repoId) {
         return pullRequestRepository.getNumberReviews(userId, repoId);
+    }
+
+    public Integer getNumberReviewsByDay(Long userId, Long repoId, LocalDate day) {
+        return pullRequestRepository.getNumberReviewsByDay(userId, repoId, day);
     }
 
     public Double getAverageCommentsOfLastFivePullRequestsByUser(Long userId, Long repoId) {
@@ -101,5 +106,9 @@ public class PullRequestService {
 
     public int getTeamReviews(Long repoId) {
         return (int) pullRequestRepository.findAll().stream().filter(pr -> pr.getState().equals(("closed"))).filter(pr -> pr.getOpenedBy().getRepoId().equals(repoId)).count();
+    }
+
+    public Integer getTeamReviewsByDay(Long repoId, LocalDate day) {
+        return pullRequestRepository.getTeamReviewsByDay(repoId, day);
     }
 }

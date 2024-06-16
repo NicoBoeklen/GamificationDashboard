@@ -55,6 +55,10 @@ public class IssueService {
     public Integer getFixedIssuesTeam(Long repoId) {
         return issueRepository.getFixedIssuesTeam(repoId);
     }
+    
+    public Integer getFixedIssuesTeamByDay(Long repoId, LocalDate day) {
+        return issueRepository.getFixedIssuesTeamByDay(repoId, day);
+    }
 
     public Integer getAllIssuesTeam(Long repoId) {
         return issueRepository.getAllIssuesTeam(repoId);
@@ -62,6 +66,10 @@ public class IssueService {
 
     public Integer getTotalClosedIssuesUser(Long userId, Long repoId) {
         return issueRepository.getTotalClosedIssuesUser(userId, repoId);
+    }
+
+    public int getTotalClosedIssuesUserByDay(Long userId, Long repoId, LocalDate day) {
+        return issueRepository.getTotalClosedIssuesUserByDay(userId, repoId, day);
     }
 
     public Double getAverageAgeOfOpenIssues(Long repoId) {
@@ -158,4 +166,5 @@ public class IssueService {
     public Integer getMaxFixedIssuesSingleUser(Long repoId) {
         return issueRepository.getMaxFixedIssuesSingleUser(repoId);
     }
+
 }

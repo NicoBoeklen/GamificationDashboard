@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import Default.Issue.Stats.IssuesWeekly;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,9 +29,15 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
     
     @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'closed' AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId")
     Integer getFixedIssuesTeam(@Param("repoId") Long repoId);
+
+    @Query("SELECT COUNT(i) FROM Issue i WHERE i.state= 'closed' AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId AND FUNCTION('DATE', i.dateClosed) = :day")
+    Integer getFixedIssuesTeamByDay(@Param("repoId")Long repoId, @Param("day") LocalDate day);
     
     @Query("SELECT COUNT(i) FROM Issue i WHERE i.closedBy.userId = :userId AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId")
     Integer getTotalClosedIssuesUser(@Param("userId") Long userId, @Param("repoId") Long repoId);
+
+    @Query("SELECT COUNT(i) FROM Issue i WHERE i.closedBy.userId = :userId AND NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId AND FUNCTION('DATE', i.dateClosed) = :day")
+    Integer getTotalClosedIssuesUserByDay(@Param("userId") Long userId, @Param("repoId") Long repoId, @Param("day") LocalDate day);
     
     @Query("SELECT new Default.Issue.Stats.IssuesWeekly(DATE_TRUNC('WEEK', i.dateOpened), SUM(COUNT(i)) OVER (ORDER BY date_trunc('week', i.dateClosed))) " +
         "FROM Issue i " +
@@ -61,5 +68,6 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
     List<Issue> findOpenIssuesWithoutLastDays(LocalDateTime dateThreshold, @Param("repoId") Long repoId);
 
     @Query("SELECT MAX(i.count) FROM (SELECT COUNT(i) AS count FROM Issue i WHERE i.state= 'closed' AND NOT TYPE(i)=PullRequest AND i.closedBy.repoId = :repoId GROUP BY i.closedBy.userId) i")
-    Integer getMaxFixedIssuesSingleUser(Long repoId);
+    Integer getMaxFixedIssuesSingleUser(@Param("repoId") Long repoId);
+    
 }
