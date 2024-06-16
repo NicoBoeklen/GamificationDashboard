@@ -36,7 +36,7 @@ public class QuestService {
 
     public void checkAndAwardQuests(User user) {
         // Hier alle Achievements durchgehen und prüfen, ob der User die Bedingungen erfüllt
-        List<Quest> quests = questRepository.findAll();
+        List<Quest> quests = questRepository.findAll().stream().filter(q -> q.getDay().equals(LocalDate.now())).toList();
 
         for (Quest quest : quests) {
             switch (quest.getType()) {
@@ -135,8 +135,8 @@ public class QuestService {
             quests.add(new Quest("100 LoC", "Write 100 Lines of Code.", 10, "linesOfCodeAdded", 100, LocalDate.now()));
 
             Random random = new Random();
-            questRepository.save(quests.get(random.nextInt(8) + 1));
-            questRepository.save(teamQuests.get(random.nextInt(12) + 1));
+            questRepository.save(quests.get(random.nextInt(8)));
+            questRepository.save(teamQuests.get(random.nextInt(12)));
         }
     }
 }

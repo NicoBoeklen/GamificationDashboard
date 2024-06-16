@@ -27,7 +27,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     @Query("SELECT SUM(c.additions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId")
     Integer getAllAdditionsBy(@Param("userId") Long userId, @Param("repoId") Long repoId);
     
-    @Query("SELECT SUM(c.additions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId AND FUNCTION('DATE', c.date) = :day")
+    @Query("SELECT SUM(c.additions) FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
     Integer getAllAdditionsByUserByDay(@Param("userId") Long userId, @Param("repoId") Long repoId, @Param("day") LocalDate day);
     
     @Query("SELECT new Default.Commit.Stats.CodeGrowth(DATE_TRUNC('week', c.date), (SUM(c.additions) - SUM(c.deletions))) " +
@@ -48,7 +48,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     @Query("SELECT SUM(c.additions)FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
     Long getTotalLoCAdded(@Param("repoId") Long repoId);
     
-    @Query("SELECT SUM(c.additions)FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId AND FUNCTION('DATE', c.date) = :day")
+    @Query("SELECT SUM(c.additions)FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
     Long getTotalLoCAddedByDay(@Param("repoId") Long repoId, @Param("day") LocalDate day);
 
     @Query("SELECT SUM(c.deletions) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
@@ -57,7 +57,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId")
     Integer getTotalCommitCount(@Param("repoId") Long repoId);
 
-    @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId AND FUNCTION('DATE', c.date) = :day")
+    @Query("SELECT count(c) FROM Commit c WHERE c.isMerge = false AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
     Integer getTotalCommitCountByDay(@Param("repoId") Long repoId, @Param("day") LocalDate day);
 
     @Query("SELECT c FROM Commit c WHERE c.author.userId = :userId AND c.isMerge = false AND c.author.repoId = :repoId ORDER BY c.date DESC")
@@ -72,7 +72,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
 
     @Query("SELECT COUNT(c) " +
         "FROM Commit c " +
-        "WHERE c.isMerge = false AND c.author.userId = :userId AND c.author.repoId = :repoId AND FUNCTION('DATE', c.date) = :day")
+        "WHERE c.isMerge = false AND c.author.userId = :userId AND c.author.repoId = :repoId AND CAST(c.date AS DATE) = :day")
     Long getCommitsUserByDay(@Param("userId")Long userId, @Param("repoId")Long repoId, @Param("day") LocalDate day);
     
     @Query("SELECT DATE_TRUNC('day', c.date) AS day, (SUM(c.additions) + SUM(c.deletions)) AS productivity " +
