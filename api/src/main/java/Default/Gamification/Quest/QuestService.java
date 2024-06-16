@@ -34,9 +34,10 @@ public class QuestService {
     @Autowired
     private PullRequestService pullRequestService;
 
-    public void checkAndAwardQuests(User user) {
+    public List<UserQuestToday> checkAndAwardQuests(User user) {
         // Hier alle Achievements durchgehen und prüfen, ob der User die Bedingungen erfüllt
-        List<Quest> quests = questRepository.findAll().stream().filter(q -> q.getDay().equals(LocalDate.now())).toList();
+        List<Quest> quests = questRepository.findAll();
+        List<UserQuestToday> todaysQuests = new ArrayList<>();
 
         for (Quest quest : quests) {
             switch (quest.getType()) {
@@ -44,52 +45,77 @@ public class QuestService {
                     Long userCommits = commitService.getCommitsUserByDay(user.getUserId(), user.getRepoId(), quest.getDay());
                     if (userCommits >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    } 
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, userCommits));
                     }
                     break;
                 case "issues":
                     int userIssues = issueService.getTotalClosedIssuesUserByDay(user.getUserId(), user.getRepoId(), quest.getDay());
                     if (userIssues >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    } 
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, (long) userIssues));
                     }
                     break;
                 case "linesOfCodeAdded":
                     int userLoC = commitService.getAdditionCountByDay(user.getUserId(), user.getRepoId(), quest.getDay());
                     if (userLoC >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    } 
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, (long) userLoC));
                     }
                     break;
                 case "pullRequests":
                     int userReviews = pullRequestService.getNumberReviewsByDay(user.getUserId(), user.getRepoId(), quest.getDay());
                     if (userReviews >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    }  
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, (long) userReviews));
                     }
                     break;
                 case "pullRequestsTeam":
                     int teamReviews = pullRequestService.getTeamReviewsByDay(user.getRepoId(), quest.getDay());
                     if (teamReviews >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    }  
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, (long) teamReviews));
                     }
                     break;
                 case "commitsTeam":
                     int teamCommits = commitService.getTotalCommitsByDay(user.getRepoId(), quest.getDay());
                     if (teamCommits >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    }  
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, (long) teamCommits));
                     }
                     break;
                 case "issuesTeam":
                     int teamIssues = issueService.getFixedIssuesTeamByDay(user.getRepoId(), quest.getDay());
                     if (teamIssues >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    }  
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, (long) teamIssues));
                     }
                     break;
                 case "linesOfCodeAddedTeam":
                     Long teamLoC = commitService.getTotalLoCAddedByDay(user.getRepoId(), quest.getDay());
                     if (teamLoC >= quest.getCondition()) {
                         awardQuests(user, quest);
+                    }  
+                    if (quest.getDay().equals(LocalDate.now())) {
+                        todaysQuests.add(new UserQuestToday(quest, user, teamLoC));
                     }
                     break;
             }
         }
+        return todaysQuests;
     }
 
     private void awardQuests(User user, Quest quest) {

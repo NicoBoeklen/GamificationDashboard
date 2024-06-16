@@ -22,12 +22,12 @@ public class QuestController {
     private QuestService questService;
 
     @GetMapping("/quest/{userId}/{repoId}")
-    public List<UserQuest> getUserQuests(@PathVariable Long userId, @PathVariable Long repoId) {
+    public List<UserQuestToday> getUserQuests(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
             setQuests();
             User user = userService.findById(userId, repoId).orElseThrow();
-            questService.checkAndAwardQuests(user);
-            return questService.getQuests(user);
+            return questService.checkAndAwardQuests(user);
+            //return questService.getQuests(user);
         } catch (Error e) {
             return new ArrayList<>();
         }
