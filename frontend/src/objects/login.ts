@@ -21,8 +21,8 @@ export const toLogin: Ref<Login> = ref<Login>({
   repoName: '',
   ownerName: '',
   apiKey: '',
-  repoId: '',
-  userId: '',
+  repoId: 0,
+  userId: 0,
 });
 
 
@@ -37,15 +37,15 @@ export function login(){
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();})
-    .then(data => data as Login[])
+    .then(data => data as Login)
     .then(data => {
       console.log(data);
       showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
       toLogin.value = data;
       console.log(toLogin.value.userName)
       localStorage.setItem('userName', toLogin.value.userName)
-      localStorage.setItem('repoId', toLogin.value.repoId)
-      localStorage.setItem('userId', toLogin.value.userId)
+      localStorage.setItem('repoId', String(toLogin.value.repoId))
+      localStorage.setItem('userId', String(toLogin.value.userId))
       localStorage.setItem('repoName', toLogin.value.repoName)
       router.push('/dashboard');
     })
