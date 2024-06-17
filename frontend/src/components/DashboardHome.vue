@@ -39,7 +39,7 @@
             <v-card-title class="project-header">
               <div>
                 <h1 class="project-title">Your Project</h1>
-                <p class="project-subtitle">Softwarepraktikum</p>
+                <p class="project-subtitle">{{ repoName }}</p>
               </div>
             </v-card-title>
             <v-card-text class="project-description">
@@ -190,45 +190,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import {defineComponent, onMounted, ref} from 'vue';
 import Header from "./Header.vue";
 import {redirectInsights} from "../objects/directions";
 
+const repoName = ref('');
 
 export default defineComponent({
   name: 'Leaderboard',
   methods: {redirectInsights},
   components: {Header},
-  data() {
-    return {
-      leaders: [
-        {
-          rank: 1,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/f77b48eb9d16d39e1c7ad7b5f8e2bc3847fd652604f32c03cdf04e486257dab6?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Klaus Mustermann',
-          badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1e8399cb57e88e5e9092227495545dfb63d59951c400cd17ae5479e6e0306f1b?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-        },
-        {
-          rank: 2,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/06d69d3f6c7276984cf4cf171b587ee1241dc88c0392aa0cd06cf87d09a74ceb?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Irene Mustermann',
-          badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e372f5bef41dc732160069bbfdec8c6db632f36f961f734593352180524e99ba?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-        },
-        {
-          rank: 3,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Jeff Bezos',
-          badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-        },
-        {
-          rank: 4,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Jeff Joe',
-          badge: '',
-        },
-      ],
-    };
-  },
+  setup(){
+    onMounted(() => {
+      repoName.value = localStorage.getItem('repoName') || '';
+      console.log('Repo Name:', repoName.value);
+    });
+    return {repoName};
+  }
 
 });
 
