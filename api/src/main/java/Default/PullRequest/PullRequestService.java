@@ -29,7 +29,7 @@ public class PullRequestService {
      */
     public Mono<PullRequest> savePullRequest(PullRequest pullRequest) {
         try {
-            Issue issue = issueService.findIssuesByNumber(pullRequest.getNumber()).stream().filter(i -> i.getOpenedBy().getRepoId().equals(pullRequest.getOpenedBy().getRepoId())).findFirst().orElseThrow();
+            Issue issue = issueService.findIssuesByNumber(pullRequest.getNumber()).stream().filter(i -> i.getOpenedBy()!=null).filter(i -> i.getOpenedBy().getRepoId().equals(pullRequest.getOpenedBy().getRepoId())).findFirst().orElseThrow();
             issueService.deleteIssueById(issue.getId());
             return Mono.fromCallable(() -> pullRequestRepository.save(pullRequest));
         } catch (Error e) {
