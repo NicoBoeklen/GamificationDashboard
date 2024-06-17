@@ -12,7 +12,7 @@ export default {
   async mounted() {
     const commits = (await fetchCommits());
     const labels = commits.codeGrowthList.map(commit => commit.week);
-    const data = commits.codeGrowthList.map(commit => commit.totalCodeChanges);
+    const data = commits.codeGrowthList.map(commit => commit.totalChanges);
 
     new Chart(document.getElementById('codeGrowthChart'), {
       type: 'line',
