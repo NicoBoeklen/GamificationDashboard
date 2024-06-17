@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -165,8 +166,43 @@ public class CommitService {
      *
      * @return List of CommitsUser Objects
      */
-    public List<CommitsUser> getCommitsUser(Long userId, Long repoId) {
+    /*public List<CommitsUser> getCommitsUser(Long userId, Long repoId) {
         return commitRepository.getCommitsUser(userId,repoId);
+    }*/
+
+    public List<CommitsUser> getCommitsUser(Long userId, Long repoId) {
+        List<CommitsUser> commitsUserList = commitRepository.getCommitsUser(userId, repoId);
+        List<CommitsUser> completeCommitsUserList = new ArrayList<>();
+
+        if (commitsUserList.isEmpty()) {
+            return completeCommitsUserList;
+        }
+
+        LocalDate currentWeek = commitsUserList.get(0).getWeek();
+        int index = 0;
+
+        while (index < commitsUserList.size()) {
+            CommitsUser commitsUser = commitsUserList.get(index);
+
+            // Add missing weeks
+            while (currentWeek.isBefore(commitsUser.getWeek())) {
+                completeCommitsUserList.add(new CommitsUser(currentWeek, 0L));
+                currentWeek = currentWeek.plusWeeks(1);
+            }
+
+            // Add current week's commits
+            completeCommitsUserList.add(new CommitsUser(commitsUser.getWeek(), commitsUser.getTotalCommits()));
+            currentWeek = currentWeek.plusWeeks(1);
+            index++;
+        }
+
+        // Add any remaining weeks up to the current week
+        while (currentWeek.isBefore(commitsUserList.get(commitsUserList.size()).getWeek())) {
+            completeCommitsUserList.add(new CommitsUser(currentWeek, 0L));
+            currentWeek = currentWeek.plusWeeks(1);
+        }
+
+        return completeCommitsUserList;
     }
 
     public Long getCommitsUserByDay(Long userId, Long repoId, LocalDate day) {
