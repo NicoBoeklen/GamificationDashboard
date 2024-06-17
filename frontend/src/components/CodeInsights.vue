@@ -33,7 +33,7 @@ import {
   redirectDeployment,
   redirectIssueManagment
 } from "../objects/directions";
-import CardGrid from "./IssueGrid.vue";
+import CardGrid from "./CodeGrid.vue";
 </script>
 <style>
 .button{
