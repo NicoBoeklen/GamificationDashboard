@@ -197,7 +197,7 @@ public class CommitService {
         }
 
         // Add any remaining weeks up to the current week
-        while (currentWeek.isBefore(commitsUserList.get(commitsUserList.size()).getWeek())) {
+        while (currentWeek.isBefore(commitsUserList.get(commitsUserList.size()-1).getWeek())) {
             completeCommitsUserList.add(new CommitsUser(currentWeek, 0L));
             currentWeek = currentWeek.plusWeeks(1);
         }
