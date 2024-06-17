@@ -21,8 +21,6 @@
 
     </v-app-bar>
   </v-container>
-  <v-container>
-  </v-container>
 </template>
 <script setup lang="ts">
 import HeaderInsights from "./HeaderInsights.vue";
