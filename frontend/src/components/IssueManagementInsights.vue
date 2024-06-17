@@ -22,11 +22,13 @@
     </v-app-bar>
   </v-container>
   <v-container >
-
+ <OpenIssues/>
+    <ClosedAndTotalIssues/>
   </v-container>
 </template>
 <script setup lang="ts">
 import HeaderInsights from "./HeaderInsights.vue";
+import IssueGrid from "../components/IssueGrid.vue";
 import {
   redirectCodeInsights,
   redirectDashboardHome,
@@ -35,6 +37,8 @@ import {
 } from "../objects/directions";
 import {onMounted, ref, type Ref} from "vue";
 import {fetchIssues} from "../objects/issues";
+import ClosedAndTotalIssues from "../diagrams/issue/ClosedAndTotalIssues.vue";
+import OpenIssues from "../diagrams/issue/openIssues.vue";
 
 onMounted(async () => {
   const issues = await fetchIssues();

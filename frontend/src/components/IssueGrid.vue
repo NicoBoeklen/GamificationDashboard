@@ -6,7 +6,6 @@
           <v-card-title>
             Test
           </v-card-title>
-            <OpenIssues/>
         </v-card>
       </v-col>
     </v-row>
