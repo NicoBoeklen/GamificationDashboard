@@ -21,7 +21,7 @@
 
     </v-app-bar>
   </v-container>
-  <v-container>
+  <v-container >
     <CardGrid/>
   </v-container>
 </template>
@@ -35,7 +35,7 @@ import {
 } from "../objects/directions";
 import {onMounted, ref, type Ref} from "vue";
 import {fetchIssues} from "../objects/issues";
-import CardGrid from "./Grid.vue";
+import CardGrid from "./IssueGrid.vue";
 onMounted(async () => {
   const issues = await fetchIssues();
   console.log("Amount Total Closed Issues" + issues.amountFixedIssuesTeam);
