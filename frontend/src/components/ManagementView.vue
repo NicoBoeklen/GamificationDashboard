@@ -113,7 +113,8 @@
 <script lang="ts">
 import HeaderManagement from "./HeaderManagement.vue";
 import {defineComponent, onMounted, ref} from "vue";
-import {fetchRepository, Repository} from "../objects/repository";
+import {fetchRepository} from "../objects/repository";
+import type {Repository} from "../objects/repository";
 const repoName = ref('');
 let repository = ref({} as Repository);
 export default defineComponent({
