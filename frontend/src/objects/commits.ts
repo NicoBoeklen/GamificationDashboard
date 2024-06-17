@@ -4,7 +4,7 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface CodeGrowth {
   week: string;
-  totalCodeChanges: number;
+  totalChanges: number;
 }
 
 interface CommitsUser {

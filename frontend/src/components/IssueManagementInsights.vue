@@ -22,7 +22,7 @@
     </v-app-bar>
   </v-container>
   <v-container >
-    <IssueGrid/>
+
   </v-container>
 </template>
 <script setup lang="ts">
@@ -35,7 +35,7 @@ import {
 } from "../objects/directions";
 import {onMounted, ref, type Ref} from "vue";
 import {fetchIssues} from "../objects/issues";
-import IssueGrid from "./IssueGrid.vue";
+
 onMounted(async () => {
   const issues = await fetchIssues();
   console.log("Amount Total Closed Issues" + issues.amountFixedIssuesTeam);
