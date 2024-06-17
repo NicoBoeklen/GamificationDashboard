@@ -21,8 +21,8 @@ export const toLogin: Ref<Login> = ref<Login>({
   repoName: '',
   ownerName: '',
   apiKey: '',
-  repoId: '',
-  userId: '',
+  repoId: 0,
+  userId: 0,
 });
 
 
@@ -44,8 +44,8 @@ export function login(){
       toLogin.value = data;
       console.log(toLogin.value.userName)
       localStorage.setItem('userName', toLogin.value.userName)
-      localStorage.setItem('repoId', toLogin.value.repoId)
-      localStorage.setItem('userId', toLogin.value.userId)
+      localStorage.setItem('repoId', String(toLogin.value.repoId))
+      localStorage.setItem('userId', String(toLogin.value.userId))
       localStorage.setItem('repoName', toLogin.value.repoName)
       router.push('/dashboard');
     })
