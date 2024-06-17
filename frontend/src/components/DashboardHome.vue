@@ -43,7 +43,7 @@
               </div>
             </v-card-title>
             <v-card-text class="project-description">
-              Description: {{ repository.description }}
+
               <br />
               Created at: {{ repository.created_at }}
               <br />
