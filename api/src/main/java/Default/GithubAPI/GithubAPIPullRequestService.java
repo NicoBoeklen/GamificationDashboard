@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * Functionality to request issues via GitHub API
  * Uses API Key to avoid rate-limit
  * With API-Key 5000 Requests per Hour are possible
- * 
+ * <p>
  * ToDo: Check if mergedBy is good for closedBy (=Who reviewed). Whats with auto merge?
  */
 @Service
@@ -82,7 +82,7 @@ public class GithubAPIPullRequestService {
                 .flatMapMany(nextUrl -> Flux.fromIterable(pullRequest).concatWith(getPullsRecursively(nextUrl)))
                 .switchIfEmpty(Flux.fromIterable(pullRequest)));
     }
-    
+
     /**
      * Method to Avoid Pagination of GitHub
      *
@@ -151,7 +151,8 @@ public class GithubAPIPullRequestService {
                     try {
                         pullRequest.setClosedBy(userService.findById(details.getUser().getId(), repoId).orElseThrow(ChangeSetPersister.NotFoundException::new));
                     } catch (ChangeSetPersister.NotFoundException e) {
-                        pullRequest.setClosedBy(null);                    }
+                        pullRequest.setClosedBy(null);
+                    }
                 }
                 pullRequest.setAdditions(details.additions);
                 pullRequest.setDeletions(details.deletions);
@@ -159,22 +160,24 @@ public class GithubAPIPullRequestService {
                 pullRequest.setCommitNumber(details.commitNumber);
                 try {
                     //It can happen that an issue is opened by a user that is not a contributor
-                    pullRequest.getOpenedBy().setRepoId(repoId);
-                    pullRequest.setOpenedBy(userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                    if (pullRequest.getOpenedBy() != null) {
+                        pullRequest.getOpenedBy().setRepoId(repoId);
+                        pullRequest.setOpenedBy(userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                    }
                 } catch (ChangeSetPersister.NotFoundException e) {
                     pullRequest.setOpenedBy(null);
                 }
                 return pullRequest;
             });
     }
-        
+
 
     /**
      * Anonym Class for Requesting Issue Details
      * Represents the structure of the response of the GitHub API
      */
     private static class PullRequestDetails {
-        
+
         @JsonProperty("additions")
         private Integer additions;
 

@@ -29,7 +29,7 @@ public class GithubAPIIssueService {
 
     @Autowired
     private UserService userService;
-    
+
     /**
      * Defines Header and webClient with API-Key
      */
@@ -139,31 +139,35 @@ public class GithubAPIIssueService {
      */
     private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getNumber());
-            return webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(IssueDetails.class)
-                .map(details -> {
-                    //Get closedBy User if getDateClosed is not null
-                    if (issue.getDateClosed() != null) {
-                        try {
-                            //It can happen that an issue is closed by a user that is not a contributor
+        return webClient.get()
+            .uri(url)
+            .retrieve()
+            .bodyToMono(IssueDetails.class)
+            .map(details -> {
+                //Get closedBy User if getDateClosed is not null
+                if (issue.getDateClosed() != null) {
+                    try {
+                        //It can happen that an issue is closed by a user that is not a contributor
+                        if (issue.getOpenedBy() != null) {
                             issue.setClosedBy(userService.findById(details.getUser().getId(), issue.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
                             issue.getClosedBy().setRepoId(repoId);
-                        } catch (ChangeSetPersister.NotFoundException e) {
-                            issue.setClosedBy(null);
                         }
-                    }
-                    try {
-                        //It can happen that an issue is opened by a user that is not a contributor
-                        issue.setOpenedBy(userService.findById(issue.getOpenedBy().getUserId(), issue.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
                     } catch (ChangeSetPersister.NotFoundException e) {
-                        issue.setOpenedBy(null);
+                        issue.setClosedBy(null);
                     }
-                    return issue;
-                });
-        }
-    
+                }
+                try {
+                    //It can happen that an issue is opened by a user that is not a contributor
+                    if (issue.getOpenedBy() != null) {
+                        issue.setOpenedBy(userService.findById(issue.getOpenedBy().getUserId(), issue.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                    }
+                } catch (ChangeSetPersister.NotFoundException e) {
+                    issue.setOpenedBy(null);
+                }
+                return issue;
+            });
+    }
+
 
     /**
      * Anonym Class for Requesting Issue Details
