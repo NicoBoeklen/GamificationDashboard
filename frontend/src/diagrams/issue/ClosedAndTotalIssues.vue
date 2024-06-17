@@ -1,0 +1,68 @@
+<template>
+  <div>
+    <canvas id="ClosedTotalIssuesChart"></canvas>
+  </div>
+</template>
+
+<script>
+import Chart from 'chart.js/auto';
+import { fetchIssues } from '../../objects/issues';
+
+export default {
+  async mounted() {
+    const issues = await fetchIssues();
+
+    const closedWeeks = issues.weeklyClosedIssues.map(issue => issue.week);
+    const totalWeeks = issues.weeklyClosedIssues.map(issue => issue.week);
+    const closedData = issues.weeklyClosedIssues.map(issue => issue.issues);
+    const totalData = issues.weeklyTotalIssues.map(issue => issue.issues);
+    const labels = Array.from(new Set([...closedWeeks, ...totalWeeks]));
+    new Chart(document.getElementById('ClosedTotalIssuesChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Closed Issues',
+            data: closedData,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+          },
+          {
+            label: 'Total Issues',
+            data: totalData,
+            fill: false,
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Week'
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Issues'
+            }
+          }
+        }
+      }
+    });
+  }
+}
+</script>
+<style scoped>
+#openIssuesChart {
+  min-height: 100px;
+}
+</style>
