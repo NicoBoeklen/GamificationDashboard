@@ -17,9 +17,12 @@ Repository for Issues identified by ID (long)
 public interface IssueRepository extends JpaRepository<Issue, Long>{
     
     List<Issue> findIssuesByNumber(Integer number);
-    
+    @Query("SELECT MIN(DATE_TRUNC('WEEK', i.dateOpened)) FROM Issue i WHERE i.openedBy.repoId = :repoId AND NOT TYPE(i)=PullRequest")
+    LocalDateTime findWeekFirstIssue(@Param("repoId") Long repoId);
+        
     @Query("SELECT i FROM Issue i WHERE NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId")
     List<Issue> getAllIssues(@Param("repoId") Long repoId);
+    
     @Query("SELECT i FROM Issue i WHERE NOT TYPE(i)=PullRequest AND i.openedBy.repoId = :repoId AND i.state= 'closed'")
     List<Issue> getAllClosedIssues(@Param("repoId") Long repoId);
     

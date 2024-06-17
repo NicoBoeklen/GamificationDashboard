@@ -93,13 +93,9 @@ public class IssueService {
         Pageable pageable = PageRequest.of(0, 5);
         return issueRepository.findLastFiveClosedIssues(pageable, repoId).stream().mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), issue.getDateClosed())).average().orElse(0.0);
     }
-/*
+
     public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
-        return issueRepository.findWeeklyClosedIssues(repoId);
-    }
-    */
-    public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
-        Set<LocalDateTime> weekList = getIssueWeeksClosed(issueRepository.getAllClosedIssues(repoId));
+        Set<LocalDateTime> weekList = getWeeksBetweenDates(issueRepository.findWeekFirstIssue(repoId));
         List<IssuesWeekly> weeklyTotalIssues = new ArrayList<>();
         for (LocalDateTime week : weekList) {
             long openIssuesCount = 0;
@@ -114,7 +110,7 @@ public class IssueService {
         return weeklyTotalIssues;
     }
     public List<IssuesWeekly> getWeeklyTotalIssues(Long repoId) {
-        Set<LocalDateTime> weekList = getIssueWeeks(issueRepository.getAllIssues(repoId));
+        Set<LocalDateTime> weekList = getWeeksBetweenDates(issueRepository.findWeekFirstIssue(repoId));
         List<IssuesWeekly> weeklyTotalIssues = new ArrayList<>();
         for (LocalDateTime week : weekList) {
             long openIssuesCount = 0;
@@ -131,6 +127,16 @@ public class IssueService {
             weeklyTotalIssues.add(new IssuesWeekly(week, openIssuesCount));
         }
         return weeklyTotalIssues;
+    }
+    private Set<LocalDateTime> getWeeksBetweenDates(LocalDateTime startDate) {
+        LocalDateTime endDate = LocalDateTime.now();
+        System.out.println(startDate);
+        Set<LocalDateTime> weeks = new TreeSet<>();
+        while (!startDate.isAfter(endDate)) {
+            weeks.add(startDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
+            startDate = startDate.plusWeeks(1);
+        }
+        return weeks;
     }
     private LocalDateTime truncateDate(LocalDateTime date) {
         return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS);
@@ -157,7 +163,7 @@ public class IssueService {
     public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId){
         List<Issue> issues= issueRepository.getAllIssues(repoId);
         List<IssuesWeekly> weeklyOpenIssues = new ArrayList<>();
-        Set<LocalDateTime> weekList = getIssueWeeks(issues);
+        Set<LocalDateTime> weekList = getWeeksBetweenDates(issueRepository.findWeekFirstIssue(repoId));
         for (LocalDateTime week : weekList) {
             long openIssuesCount = 0;
             for (Issue issue : issues) {
