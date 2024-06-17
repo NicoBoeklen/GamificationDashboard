@@ -2,15 +2,15 @@ import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 import type {Ref} from "vue";
-interface Repository {
+export interface Repository {
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 
 const repoId = localStorage.getItem('repoId');
-export async function fetchRepository(): Ref<Repository> {
+export async function fetchRepository(): Promise<Repository> {
   const response = await fetch(`${config.fetchBaseUrl}/api/repositoryData/${repoId}`,  {
     method: "GET",
     headers: {

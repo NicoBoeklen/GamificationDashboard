@@ -43,11 +43,11 @@
               </div>
             </v-card-title>
             <v-card-text class="project-description">
-              Description:
+
               <br />
-              Created at:
+              Created at: {{ repository.created_at }}
               <br />
-              Updated at:
+              Updated at: {{ repository.updated_at }}
             </v-card-text>
               <v-carousel hide-delimiters height="300" cycle interval="15000">
                 <v-carousel-item>
@@ -194,18 +194,19 @@ import {defineComponent, onMounted, ref} from 'vue';
 import Header from "./Header.vue";
 import {redirectInsights} from "../objects/directions";
 import {fetchRepository} from "../objects/repository";
-
+import type {Repository} from "../objects/repository";
+let repository = ref({} as Repository);
 const repoName = ref('');
-let repository = ref();
 export default defineComponent({
   name: 'Leaderboard',
   methods: {redirectInsights},
   components: {Header},
   setup(){
-    onMounted(() => {
+    onMounted(async () => {
       repoName.value = localStorage.getItem('repoName') || '';
       console.log('Repo Name:', repoName.value);
-      repository.value =  fetchRepository();
+      repository.value =  await fetchRepository();
+
     });
 
 
