@@ -45,9 +45,9 @@
             <v-card-text class="project-description">
               Description: {{ repository.description }}
               <br />
-              Created at: {{ repository.createdAt }}
+              Created at: {{ repository.created_at }}
               <br />
-              Updated at: {{ repository.updatedAt }}
+              Updated at: {{ repository.updated_at }}
             </v-card-text>
               <v-carousel hide-delimiters height="300" cycle interval="15000">
                 <v-carousel-item>
