@@ -1,6 +1,6 @@
 <template>
   <HeaderInsights/>
-  <v-container class="container">
+  <v-container class="container" style="margin: 0; padding:0">
     <v-app-bar app color="#5D5A5A" dark>
 
 
@@ -21,7 +21,7 @@
 
     </v-app-bar>
   </v-container>
-  <v-container>
+  <v-container fluid style="margin: 0">
     <CardGrid/>
   </v-container>
 </template>
