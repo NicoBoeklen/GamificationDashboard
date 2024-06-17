@@ -12,6 +12,7 @@ import Insights from "../components/Insights.vue";
 import CodeInsights from "../components/CodeInsights.vue";
 import IssueManagementInsights from "../components/IssueManagementInsights.vue";
 import DeploymentInsights from "../components/DeploymentInsights.vue";
+import ManagementView from "../components/ManagementView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/deployment',
       name: 'deployment',
       component: DeploymentInsights
+    },
+    {
+      path: '/management',
+      name: 'management',
+      component: ManagementView
     }
   ]
 })

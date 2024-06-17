@@ -8,7 +8,7 @@
       <v-app-bar-title>GitHub Dashboard</v-app-bar-title>
 
       <template v-slot:append>
-        <v-btn variant="outlined" class="mr-3">Management View</v-btn>
+        <v-btn @click="redirectManagementView()" variant="outlined" class="mr-3">Management View</v-btn>
 
         <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 
@@ -21,7 +21,9 @@
 import {getUserName, toLogin} from "../objects/login";
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
+import {redirectManagementView} from "../objects/directions";
 export default {
+  methods: {redirectManagementView},
   setup() {
     const userName = ref('');
     const theme = useTheme()

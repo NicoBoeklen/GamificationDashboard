@@ -43,7 +43,7 @@
               </div>
             </v-card-title>
             <v-card-text class="project-description">
-              Description: 
+              Description:
               <br />
               Created at:
               <br />

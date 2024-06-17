@@ -5,10 +5,10 @@
     </v-avatar>
     <v-toolbar-title class="mx-5">{{ userName }}</v-toolbar-title>
 
-    <v-app-bar-title><strong>Insights</strong>: {{ repoName }}</v-app-bar-title>
+    <v-app-bar-title><strong>Management View:</strong>: {{ repoName }}</v-app-bar-title>
 
     <template v-slot:append>
-      <v-btn @click="redirectManagementView()" variant="outlined" class="mr-3">Management View</v-btn>
+      <v-btn @click="redirectDashboardHome()" variant="outlined" class="mr-3">User View</v-btn>
 
       <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 
@@ -21,14 +21,14 @@
 import {getUserName, toLogin} from "../objects/login";
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
-import {redirectManagementView} from "../objects/directions";
+import {redirectDashboardHome} from "../objects/directions";
 
 
 
 
 
 export default {
-  methods: {redirectManagementView},
+  methods: {redirectDashboardHome},
   setup() {
     const userName = ref('');
     const theme = useTheme()
