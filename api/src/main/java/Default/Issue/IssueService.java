@@ -130,8 +130,10 @@ public class IssueService {
     }
     private Set<LocalDateTime> getWeeksBetweenDates(LocalDateTime startDate) {
         LocalDateTime endDate = LocalDateTime.now();
-        System.out.println(startDate);
         Set<LocalDateTime> weeks = new TreeSet<>();
+        if (startDate==null){
+            return weeks;
+        }
         while (!startDate.isAfter(endDate)) {
             weeks.add(startDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
             startDate = startDate.plusWeeks(1);
@@ -140,25 +142,6 @@ public class IssueService {
     }
     private LocalDateTime truncateDate(LocalDateTime date) {
         return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS);
-    }
-    private Set<LocalDateTime> getIssueWeeks(List<Issue> issues) {
-        Set<LocalDateTime> weekList = new TreeSet<>();
-        for (Issue issue: issues){
-            weekList.add(issue.getDateOpened().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
-            if (issue.getDateClosed() != null) {
-                weekList.add(issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
-            }
-        }
-        return weekList;
-    }
-    private Set<LocalDateTime> getIssueWeeksClosed(List<Issue> issues) {
-        Set<LocalDateTime> weekList = new TreeSet<>();
-        for (Issue issue: issues){
-            if (issue.getDateClosed() != null) {
-                weekList.add(issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
-            }
-        }
-        return weekList;
     }
     public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId){
         List<Issue> issues= issueRepository.getAllIssues(repoId);
