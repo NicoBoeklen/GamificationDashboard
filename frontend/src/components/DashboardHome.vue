@@ -26,7 +26,7 @@
             <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span> <span>ment</span>
           </p>
         </v-col>
-        <v-btn @click="redirectInsights()"  class="insights-button" color="grey darken-2">Insights</v-btn>
+        <v-btn @click="redirectCodeInsights()"  class="insights-button" color="grey darken-2">Insights</v-btn>
 
       </v-row>
     </v-container>
@@ -192,14 +192,14 @@
 <script lang="ts">
 import {defineComponent, onMounted, ref} from 'vue';
 import Header from "./Header.vue";
-import {redirectInsights} from "../objects/directions";
+import {redirectCodeInsights, redirectInsights} from "../objects/directions";
 import {fetchRepository} from "../objects/repository";
 import type {Repository} from "../objects/repository";
 let repository = ref({} as Repository);
 const repoName = ref('');
 export default defineComponent({
   name: 'Leaderboard',
-  methods: {redirectInsights},
+  methods: {redirectCodeInsights, redirectInsights},
   components: {Header},
   setup(){
     onMounted(async () => {
