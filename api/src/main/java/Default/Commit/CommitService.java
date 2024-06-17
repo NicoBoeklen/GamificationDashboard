@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -73,8 +73,39 @@ public class CommitService {
      *
      * @return List of Code Growth Objects
      */
-    public List<CodeGrowth> getCodeGrowth(Long repoId) {
+    /*public List<CodeGrowth> getCodeGrowth(Long repoId) {
         return commitRepository.getCodeGrowth(repoId);
+    }*/
+
+    public List<CodeGrowth> getCodeGrowth(Long repoId) {
+        List<CodeGrowth> codeGrowthList = commitRepository.getCodeGrowth(repoId);
+        List<CodeGrowth> cumulativeCodeGrowthList = new ArrayList<>();
+
+        if (codeGrowthList.isEmpty()) {
+            return cumulativeCodeGrowthList;
+        }
+
+        LocalDate currentWeek = codeGrowthList.get(0).getWeek();
+        Long cumulativeTotalChanges = 0L;
+        int index = 0;
+
+        while (index < codeGrowthList.size()) {
+            CodeGrowth codeGrowth = codeGrowthList.get(index);
+
+            // Add missing weeks
+            while (currentWeek.isBefore(codeGrowth.getWeek())) {
+                cumulativeCodeGrowthList.add(new CodeGrowth(currentWeek, cumulativeTotalChanges));
+                currentWeek = currentWeek.plusWeeks(1);
+            }
+
+            // Add current week's changes
+            cumulativeTotalChanges += codeGrowth.getTotalChanges();
+            cumulativeCodeGrowthList.add(new CodeGrowth(currentWeek, cumulativeTotalChanges));
+            currentWeek = currentWeek.plusWeeks(1);
+            index++;
+        }
+
+        return cumulativeCodeGrowthList;
     }
 
     /**

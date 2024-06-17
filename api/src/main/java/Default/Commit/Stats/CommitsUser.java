@@ -1,21 +1,21 @@
 package Default.Commit.Stats;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class CommitsUser {
-    private LocalDateTime week;
+    private LocalDate week;
     private Long totalCommits;
 
-    public CommitsUser(LocalDateTime week, Long totalCommits) {
+    public CommitsUser(LocalDate week, Long totalCommits) {
         this.week = week;
         this.totalCommits = totalCommits;
     }
 
-    public LocalDateTime getWeek() {
+    public LocalDate getWeek() {
         return week;
     }
 
-    public void setWeek(LocalDateTime week) {
+    public void setWeek(LocalDate week) {
         this.week = week;
     }
 
