@@ -1,9 +1,11 @@
 package Default.GithubRepo;
 
+import Default.Gamification.Skill;
 import Default.GithubAPI.GithubAPIService;
 import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,8 @@ public class GithubRepoController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private GithubRepoRepository githubRepoRepository;
 
     /**
      * Important: First Users must be in the database or method will fail
@@ -59,5 +63,9 @@ public class GithubRepoController {
             Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
+    }
+    @GetMapping("/api/repositoryData/{userId}/{repoId}")
+    public GithubRepo getRepo(@PathVariable Long userId, @PathVariable Long repoId) {
+        return githubRepoRepository.findByRepoIdUserId(userId,repoId);
     }
 }

@@ -22,7 +22,6 @@
     </v-app-bar>
   </v-container>
   <v-container>
-    <CardGrid/>
   </v-container>
 </template>
 <script setup lang="ts">
@@ -33,7 +32,6 @@ import {
   redirectDeployment,
   redirectIssueManagment
 } from "../objects/directions";
-import CardGrid from "./Grid.vue";
 </script>
 <style>
 .button{
