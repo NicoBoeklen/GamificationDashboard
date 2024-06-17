@@ -37,7 +37,7 @@ export function login(){
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();})
-    .then(data => data as Login[])
+    .then(data => data as Login)
     .then(data => {
       console.log(data);
       showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
