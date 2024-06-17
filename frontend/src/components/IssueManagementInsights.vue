@@ -22,8 +22,7 @@
     </v-app-bar>
   </v-container>
   <v-container >
- <OpenIssues/>
-    <ClosedAndTotalIssues/>
+ <IssueGrid/>
   </v-container>
 </template>
 <script setup lang="ts">
@@ -37,8 +36,6 @@ import {
 } from "../objects/directions";
 import {onMounted, ref, type Ref} from "vue";
 import {fetchIssues} from "../objects/issues";
-import ClosedAndTotalIssues from "../diagrams/issue/ClosedAndTotalIssues.vue";
-import OpenIssues from "../diagrams/issue/openIssues.vue";
 
 onMounted(async () => {
   const issues = await fetchIssues();
