@@ -153,13 +153,14 @@
 
           <v-card class="skills-section">
             <v-card-title class="section-title">Your Skill</v-card-title>
-            <v-card-text>
+            <!-- <v-card-text>
               <v-img
                 :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/81eabb22cac08b2287addddfd799f21f73a1d93835cc2bc7583fe1f65abe5281?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
                 class="skill"
                 alt="Your skill representation"
               />
-            </v-card-text>
+            </v-card-text> -->
+            <skill-diagramm-component></skill-diagramm-component>
           </v-card>
 
         </v-col>
@@ -168,13 +169,14 @@
         <v-col cols="12" md="4" class="Leaderboard">
           <v-card class="leaderboard-section">
             <v-card-title>Leaderboard</v-card-title>
-              <v-list lines="one" v-for="leader in leaders" :key="leader.rank">
+            <leaderboard-diagramm-component></leaderboard-diagramm-component>
+             <!-- <v-list lines="one" v-for="leader in leaders" :key="leader.rank">
                 <v-list-item
                   :key="leader.rank"
                   :title="leader.rank +'  '+ leader.name  "
                 >
                 </v-list-item>
-              </v-list>
+              </v-list>-->
           </v-card>
         </v-col>
       </v-row>
@@ -192,6 +194,8 @@
 <script lang="ts">
 import {defineComponent, onMounted, ref} from 'vue';
 import Header from "./Header.vue";
+import SkillDiagrammComponent from "../diagrams/skill/skillDiagramm.vue";
+import LeaderboardDiagrammComponent from "../diagrams/leaderboard/leaderboardDiagramm.vue";
 import {redirectCodeInsights, redirectInsights} from "../objects/directions";
 import {fetchRepository} from "../objects/repository";
 import type {Repository} from "../objects/repository";
@@ -200,7 +204,7 @@ const repoName = ref('');
 export default defineComponent({
   name: 'Leaderboard',
   methods: {redirectCodeInsights, redirectInsights},
-  components: {Header},
+  components: {Header, SkillDiagrammComponent, LeaderboardDiagrammComponent},
   setup(){
     onMounted(async () => {
       repoName.value = localStorage.getItem('repoName') || '';

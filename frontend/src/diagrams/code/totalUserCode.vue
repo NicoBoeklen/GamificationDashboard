@@ -1,10 +1,10 @@
 <template>
   <div style="padding: 1em">
     <div>
-      <strong style="color: green;">+</strong> <span >Additions: {{ additionCount }}</span>
+      <strong style="color: green;">+</strong> <span >Additions: <span style="font-size: 1.5em">{{ additionCount }} </span></span>
     </div>
     <div>
-      <strong style="color: red; position: relative; top: -0.3em;" >_</strong> <span > Deletions: {{ deletionCount }} </span>
+      <strong style="color: red; position: relative; top: -0.3em;" >_</strong> <span > Deletions: <span style="font-size: 1.5em">{{ deletionCount }} </span></span>
     </div>
   </div>
 </template>
