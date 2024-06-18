@@ -6,13 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
  * Controller to provide get URL for User (localhost)
  * Uses the GithubAPIService
  */
-@Controller
+@RestController
 public class UserController {
 
     @Autowired
@@ -35,8 +36,13 @@ public class UserController {
             .then(Mono.just(ResponseEntity.ok("Contributors saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
     }
-    @GetMapping("/avatar/user/{username}")
-    public String getAvatar(@PathVariable String username) {
-        return userService.getUserAvatar(username);
+    
+    @GetMapping("/avatar/user/{userId}/{repoId}")
+    public String getAvatar(@PathVariable Long userId, @PathVariable Long repoId) {
+        try {
+            return userService.getUserAvatar(userId, repoId);
+        } catch (Error e) {
+            return "";
+        }
     }
 }
