@@ -2,8 +2,6 @@ import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {type Ref, ref} from "vue";
-import {useRouter} from "vue-router";
-import {da} from "vuetify/locale";
 import router from "../router";
 
 let userNameSave: string;

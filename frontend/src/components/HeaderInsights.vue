@@ -1,8 +1,7 @@
 <template>
   <v-app-bar :elevation="0" app color="#5D5A5A" dark>
-    <v-avatar>
-      <img  alt="Avatar" />
-    </v-avatar>
+    <avatar-component></avatar-component>
+
     <v-toolbar-title class="mx-5">{{ userName }}</v-toolbar-title>
 
     <v-app-bar-title><strong>Insights</strong>: {{ repoName }}</v-app-bar-title>
@@ -22,12 +21,10 @@ import {getUserName, toLogin} from "../objects/login";
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
 import {redirectManagementView} from "../objects/directions";
-
-
-
-
+import AvatarComponent from "../diagrams/avatarHeader.vue";
 
 export default {
+  components: {AvatarComponent},
   methods: {redirectManagementView},
   setup() {
     const userName = ref('');

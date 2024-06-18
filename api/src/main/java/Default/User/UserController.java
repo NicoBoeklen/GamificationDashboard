@@ -38,11 +38,11 @@ public class UserController {
     }
     
     @GetMapping("/avatar/user/{userId}/{repoId}")
-    public String getAvatar(@PathVariable Long userId, @PathVariable Long repoId) {
+    public User getUser(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
-            return userService.getUserAvatar(userId, repoId);
+            return userService.findById(userId, repoId).orElseThrow();
         } catch (Error e) {
-            return "";
+            return null;
         }
     }
 }

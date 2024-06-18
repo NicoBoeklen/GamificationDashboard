@@ -4,7 +4,8 @@
       <v-col cols="6" v-for="n in 4" :key="n">
         <v-card>
           <template v-if="n != 3">
-            <v-card-title>
+            <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em">
+              <avatar-component></avatar-component>
               {{ diagrams[n-1].title }}
             </v-card-title>
             <component :is="diagrams[n-1].component"></component>
@@ -12,13 +13,15 @@
           <template v-else>
             <v-row>
               <v-col>
-                <v-card-title>
+                <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em">
+                  <avatar-component></avatar-component>
                   {{ diagrams[2].title1 }}
                 </v-card-title>
                 <component :is="diagrams[2].component1"></component>
               </v-col>
               <v-col>
-                <v-card-title>
+                <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em">
+                  <avatar-component></avatar-component>
                   {{ diagrams[2].title2 }}
                 </v-card-title>
                 <component :is="diagrams[2].component2"></component>
@@ -37,9 +40,11 @@ import UserCommits from '../diagrams/code/userCommits.vue';
 import Productivity from '../diagrams/code/productivity.vue';
 import TotalUserCode from "../diagrams/code/totalUserCode.vue";
 import AverageCommitSize from "../diagrams/code/averageCommitSize.vue";
+import AvatarComponent from "../diagrams/avatar.vue"
 
 export default {
   name: 'CardGrid',
+  components: {AvatarComponent},
   data() {
     return {
       diagrams: [

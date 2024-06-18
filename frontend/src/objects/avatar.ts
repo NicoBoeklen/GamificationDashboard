@@ -5,7 +5,10 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
 
-export async function fetchAvatar(): Promise<String> {
+export interface User {
+  avatarURL: String
+}
+export async function fetchAvatar(): Promise<User> {
   const response = await fetch(`${config.fetchBaseUrl}/avatar/user/${userId}/${repoId}`,  {
     method: "GET",
     headers: {
@@ -13,10 +16,11 @@ export async function fetchAvatar(): Promise<String> {
       'Content-Type': 'application/json',
     },
   });
+  console.log(response);
   if (!response.ok) {
-    throw new Error("Failed to fetch avatar");
+    throw new Error("Failed to fetch User");
   }
-  const avatar: String = await response.json();
-  showToast(new Toast("Success", `avatar fetched successfully!`, "success", faCheck, 5));
-  return avatar;
+  const user: User = await response.json();
+  showToast(new Toast("Success", `User fetched successfully!`, "success", faCheck, 5));
+  return user;
 }

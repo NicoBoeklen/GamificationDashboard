@@ -1,8 +1,6 @@
 <template>
     <v-app-bar :elevation="0" app color="#5D5A5A" dark>
-      <v-avatar>
-        <img  alt="Avatar" />
-      </v-avatar>
+      <avatar-component></avatar-component>
       <v-toolbar-title class="mx-5">{{ userName }}</v-toolbar-title>
 
       <v-app-bar-title>GitHub Dashboard</v-app-bar-title>
@@ -19,10 +17,12 @@
 
 <script>
 import {getUserName, toLogin} from "../objects/login";
+import AvatarComponent from "../diagrams/avatarHeader.vue"
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
 import {redirectManagementView} from "../objects/directions";
 export default {
+  components: {AvatarComponent},
   methods: {redirectManagementView},
   setup() {
     const userName = ref('');
