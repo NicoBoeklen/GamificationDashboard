@@ -129,9 +129,10 @@ public class GithubAPICommitService {
                 commit.setDeletions(details.getStats().getDeletions());
                 commit.setDate(details.getCommitInfo().getAuthor().getDate());
                 commit.setMessage(details.getCommitInfo().getMessage());
+                commit.setMerge(details.getParents().size()>1);
                 return commit;
-            })
-            .map(commits -> setCommitMerge(commit));
+            });
+            //.map(commits -> setCommitMerge(commit));
     }
 
     /**
@@ -159,7 +160,10 @@ public class GithubAPICommitService {
 
         @JsonProperty("stats")
         private Stats stats;
-
+        
+        @JsonProperty("parents")
+        private List<Parents> parents;
+        
         public CommitInfo getCommitInfo() {
             return commitInfo;
         }
@@ -174,6 +178,14 @@ public class GithubAPICommitService {
 
         public void setStats(Stats stats) {
             this.stats = stats;
+        }
+
+        public List<Parents> getParents() {
+            return parents;
+        }
+
+        public void setParents(List<Parents> parents) {
+            this.parents = parents;
         }
 
         private static class CommitInfo {
@@ -240,6 +252,36 @@ public class GithubAPICommitService {
 
             public void setDeletions(int deletions) {
                 this.deletions = deletions;
+            }
+        }
+        
+        private static class Parents {
+            private String sha;
+            private String url;
+            private String html_url;
+
+            public String getSha() {
+                return sha;
+            }
+
+            public void setSha(String sha) {
+                this.sha = sha;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+
+            public String getHtml_url() {
+                return html_url;
+            }
+
+            public void setHtml_url(String html_url) {
+                this.html_url = html_url;
             }
         }
     }
