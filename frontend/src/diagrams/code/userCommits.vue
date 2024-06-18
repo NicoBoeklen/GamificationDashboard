@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="commitChart" style="padding: 1em"></canvas>
+    <canvas id="commitChart"  style="padding-bottom: 1em; padding-left: 1em;padding-right: 1em;"></canvas>
   </div>
 </template>
 

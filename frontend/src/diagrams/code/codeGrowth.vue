@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="codeGrowthChart" style="padding: 1em"></canvas>
+    <canvas id="codeGrowthChart" style="padding-bottom: 1em; padding-left: 1em;padding-right: 1em;"></canvas>
   </div>
 </template>
 

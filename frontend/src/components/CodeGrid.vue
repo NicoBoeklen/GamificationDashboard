@@ -4,8 +4,13 @@
       <v-col cols="6" v-for="n in 4" :key="n">
         <v-card>
           <template v-if="n != 3">
-            <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em">
-              <avatar-component></avatar-component>
+            <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <div v-if="n != 1">
+                <avatar-component></avatar-component>
+              </div>
+              <div v-else>
+                <team-avatar-component></team-avatar-component>
+              </div>
               {{ diagrams[n-1].title }}
             </v-card-title>
             <component :is="diagrams[n-1].component"></component>
@@ -13,14 +18,14 @@
           <template v-else>
             <v-row>
               <v-col>
-                <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em">
+                <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                   <avatar-component></avatar-component>
                   {{ diagrams[2].title1 }}
                 </v-card-title>
                 <component :is="diagrams[2].component1"></component>
               </v-col>
               <v-col>
-                <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em">
+                <v-card-title  class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                   <avatar-component></avatar-component>
                   {{ diagrams[2].title2 }}
                 </v-card-title>
@@ -41,10 +46,11 @@ import Productivity from '../diagrams/code/productivity.vue';
 import TotalUserCode from "../diagrams/code/totalUserCode.vue";
 import AverageCommitSize from "../diagrams/code/averageCommitSize.vue";
 import AvatarComponent from "../diagrams/avatar.vue"
+import TeamAvatarComponent from "../diagrams/teamAvatar.vue";
 
 export default {
   name: 'CardGrid',
-  components: {AvatarComponent},
+  components: {AvatarComponent, TeamAvatarComponent},
   data() {
     return {
       diagrams: [
