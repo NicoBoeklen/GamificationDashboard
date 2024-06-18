@@ -128,7 +128,7 @@ public class GithubAPICommitService {
                 commit.setAdditions(details.getStats().getAdditions());
                 commit.setDeletions(details.getStats().getDeletions());
                 commit.setDate(details.getCommitInfo().getAuthor().getDate());
-                commit.setMessage(details.getCommitInfo().getMessage());
+                //commit.setMessage(details.getCommitInfo().getMessage());
                 commit.setMerge(details.getParents().size()>1);
                 return commit;
             });

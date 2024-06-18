@@ -1,31 +1,30 @@
 <template>
   <div>
-    <canvas id="openIssuesChart" style="padding: 1em"></canvas>
+    <canvas id="commitChart" style="padding: 1em"></canvas>
   </div>
 </template>
 
 <script>
 import Chart from 'chart.js/auto';
-import { fetchIssues } from '../../objects/issues';
+import { fetchCommits } from '../../objects/commits';
 
 export default {
   async mounted() {
-    const issues = await fetchIssues();
-    const labels = issues.weeklyOpenIssues.map(issue => issue.week);
-    const data = issues.weeklyOpenIssues.map(issue => issue.issues);
+    const commits = (await fetchCommits());
+    const commitCount = commits.commitCountUser;
+    const labels = commits.commitsUser.map(commit => commit.week);
+    const data = commits.commitsUser.map(commit => commit.totalCommits);
 
-    new Chart(document.getElementById('openIssuesChart'), {
-      type: 'line',
+    new Chart(document.getElementById('commitChart'), {
+      type: 'bar',
       data: {
         labels: labels,
         datasets: [
           {
-            label: 'Open Issues',
+            label: 'Commits per Week, Total: ' + commitCount,
             data: data,
             fill: false,
-            borderColor: 'rgba(8, 98, 189, 0.5)',
-            tension: 0.1,
-            pointRadius: 0
+            backgroundColor: 'rgba(8, 98, 189, 0.5)',
           }
         ]
       },
@@ -43,7 +42,7 @@ export default {
             display: true,
             title: {
               display: true,
-              text: 'Open Issues'
+              text: 'Commits per Week'
             }
           }
         }
@@ -53,7 +52,9 @@ export default {
 }
 </script>
 <style scoped>
-#openIssuesChart {
+#codeGrowthChart {
   min-height: 100px;
 }
 </style>
+
+

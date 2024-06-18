@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="codeGrowthChart"></canvas>
+    <canvas id="codeGrowthChart" style="padding: 1em"></canvas>
   </div>
 </template>
 
@@ -23,8 +23,9 @@ export default {
             label: 'Total Lines of Code',
             data: data,
             fill: false,
-            borderColor: 'rgb(8,98,189)',
-            tension: 0.1
+            borderColor: 'rgba(8, 98, 189, 0.5)',
+            tension: 0.1,
+            pointRadius: 0
           }
         ]
       },

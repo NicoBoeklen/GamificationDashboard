@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="ClosedTotalIssuesChart"></canvas>
+    <canvas id="ClosedTotalIssuesChart" style="padding: 1em"></canvas>
   </div>
 </template>
 
@@ -26,15 +26,17 @@ export default {
             label: 'Closed Issues',
             data: closedData,
             fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
+            borderColor: 'rgba(8, 98, 189, 0.5)',
+            tension: 0.1,
+            pointRadius: 0
           },
           {
             label: 'Total Issues',
             data: totalData,
             fill: false,
-            borderColor: 'rgb(255, 99, 132)',
-            tension: 0.1
+            borderColor: 'rgba(230, 98, 100, 0.5)',
+            tension: 0.1,
+            pointRadius: 0
           }
         ]
       },
