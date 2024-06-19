@@ -10,6 +10,7 @@ declare module 'vue' {
     CodeGrid: typeof import('./src/components/CodeGrid.vue')['default']
     CodeInsights: typeof import('./src/components/CodeInsights.vue')['default']
     DashboardHome: typeof import('./src/components/DashboardHome.vue')['default']
+    DeploymentGrid: typeof import('./src/components/DeploymentGrid.vue')['default']
     DeploymentInsights: typeof import('./src/components/DeploymentInsights.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HeaderInsights: typeof import('./src/components/HeaderInsights.vue')['default']

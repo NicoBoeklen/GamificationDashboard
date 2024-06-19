@@ -21,15 +21,20 @@
 
     </v-app-bar>
   </v-container>
+  <v-container fluid style="margin: 0">
+    <DeploymentGrid/>
+  </v-container>
 </template>
 <script setup lang="ts">
 import HeaderInsights from "./HeaderInsights.vue";
+import DeploymentGrid from "./DeploymentGrid.vue";
 import {
   redirectCodeInsights,
   redirectDashboardHome,
   redirectDeployment,
   redirectIssueManagment
 } from "../objects/directions";
+
 </script>
 <style>
 .button{

@@ -3,6 +3,7 @@ package Default.GithubAPI;
 import Default.Apikey;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
+import Default.User.User;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -139,8 +141,8 @@ public class GithubAPIPullRequestService {
      * @return Single pullRequest with als attributes
      */
     private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo, Long repoId) {
-
         String url = String.format("/repos/%s/%s/pulls/%s", owner, repo, pullRequest.getNumber());
+        System.out.println(url);
         //Only if Pull Request search for details
         return webClient.get()
             .uri(url)
@@ -148,24 +150,25 @@ public class GithubAPIPullRequestService {
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {
                 if (details.getUser() != null) {
-                    try {
-                        pullRequest.setClosedBy(userService.findById(details.getUser().getId(), repoId).orElseThrow(ChangeSetPersister.NotFoundException::new));
-                    } catch (ChangeSetPersister.NotFoundException e) {
-                        pullRequest.setClosedBy(null);
-                    }
+                    System.out.println(details.getUser().getId());
+                    Optional<User> closedByUser = userService.findById(details.getUser().getId(), repoId);
+                    closedByUser.ifPresentOrElse(
+                        user -> pullRequest.setClosedBy(user),
+                        () -> pullRequest.setClosedBy(null)
+                    );
                 }
                 pullRequest.setAdditions(details.additions);
                 pullRequest.setDeletions(details.deletions);
                 pullRequest.setCommentNumber(details.commentNumber);
                 pullRequest.setCommitNumber(details.commitNumber);
-                try {
-                    //It can happen that an issue is opened by a user that is not a contributor
-                    if (pullRequest.getOpenedBy() != null) {
-                        pullRequest.getOpenedBy().setRepoId(repoId);
-                        pullRequest.setOpenedBy(userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
-                    }
-                } catch (ChangeSetPersister.NotFoundException e) {
-                    pullRequest.setOpenedBy(null);
+                //It can happen that an issue is opened by a user that is not a contributor
+                if (pullRequest.getOpenedBy() != null) {
+                    pullRequest.getOpenedBy().setRepoId(repoId);
+                    Optional<User> openedByUser = userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId());
+                    openedByUser.ifPresentOrElse(
+                        user -> pullRequest.setOpenedBy(user),
+                        () -> pullRequest.setOpenedBy(null)
+                    );
                 }
                 return pullRequest;
             });

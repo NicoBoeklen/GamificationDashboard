@@ -38,7 +38,7 @@ public class GithubAPIController {
         Long repoId = githubAPIService.getRepositoryId(owner, repo).block();
         return getDataFromContributors(owner, repo, repoId)
             .then(getDataFromRepository(owner, repo, repoId))
-            .then(getDataFromCommits(owner, repo, repoId))
+            //.then(getDataFromCommits(owner, repo, repoId))
             .then(getDataFromIssues(owner, repo, repoId))
             .then(getDataFromPullRequest(owner, repo, repoId))
             .then(getDataFromReleases(owner, repo, repoId))
