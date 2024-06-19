@@ -4,13 +4,13 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface ReleaseObject {
   id: number;
-  name: String;
-  publishedAt: String;
+  tag_name: String;
+  published_at: String;
 }
 
 export interface Release {
   numberOfReleases: number;
-  averageTimeBetweenReleasesInDays: number;
+  averageTimeBetweenReleases: number;
   releaseList: ReleaseObject[];
 }
 
