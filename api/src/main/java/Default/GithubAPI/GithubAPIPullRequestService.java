@@ -16,6 +16,8 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,6 +63,7 @@ public class GithubAPIPullRequestService {
         String url = String.format("/repos/%s/%s/pulls?state=closed", owner, repo);
         String url2 = String.format("/repos/%s/%s/pulls?state=open", owner, repo);
         return Flux.merge(getPullsRecursively(url), getPullsRecursively(url2))
+            .filter(Objects::nonNull)
             .distinct(PullRequest::getId) // Remove duplicates by ID
             .flatMap(pull -> fetchPullDetails(pull, owner, repo, repoId));
     }
@@ -142,35 +145,38 @@ public class GithubAPIPullRequestService {
      */
     private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/pulls/%s", owner, repo, pullRequest.getNumber());
-        System.out.println(url);
-        //Only if Pull Request search for details
+
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {
-                if (details.getUser() != null) {
-                    System.out.println(details.getUser().getId());
-                    Optional<User> closedByUser = userService.findById(details.getUser().getId(), repoId);
-                    closedByUser.ifPresentOrElse(
-                        user -> pullRequest.setClosedBy(user),
-                        () -> pullRequest.setClosedBy(null)
-                    );
+                try {
+                    if (details.getUser() != null) {
+                        Optional<User> closedByUser = userService.findById(details.getUser().getId(), repoId);
+                        pullRequest.setClosedBy(closedByUser.orElse(null));
+                    }
+                    pullRequest.setAdditions(details.additions);
+                    pullRequest.setDeletions(details.deletions);
+                    pullRequest.setCommentNumber(details.commentNumber);
+                    pullRequest.setCommitNumber(details.commitNumber);
+
+                    if (pullRequest.getOpenedBy() != null) {
+                        pullRequest.getOpenedBy().setRepoId(repoId);
+                        Optional<User> openedByUser = userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId());
+                        pullRequest.setOpenedBy(openedByUser.orElse(null));
+                    }
+
+                    return pullRequest;
+                } catch (Error e) {
+                    System.err.println("Error occurred while processing pull request details: " + e.getMessage());
+                    // Log or handle the error as needed
+                    return pullRequest;
                 }
-                pullRequest.setAdditions(details.additions);
-                pullRequest.setDeletions(details.deletions);
-                pullRequest.setCommentNumber(details.commentNumber);
-                pullRequest.setCommitNumber(details.commitNumber);
-                //It can happen that an issue is opened by a user that is not a contributor
-                if (pullRequest.getOpenedBy() != null) {
-                    pullRequest.getOpenedBy().setRepoId(repoId);
-                    Optional<User> openedByUser = userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId());
-                    openedByUser.ifPresentOrElse(
-                        user -> pullRequest.setOpenedBy(user),
-                        () -> pullRequest.setOpenedBy(null)
-                    );
-                }
-                return pullRequest;
+            })
+            .onErrorResume(e -> {
+                System.err.println("Error occurred during web client call: " + e.getMessage());
+                return Mono.just(pullRequest); // Provide a fallback value or handle the error
             });
     }
 

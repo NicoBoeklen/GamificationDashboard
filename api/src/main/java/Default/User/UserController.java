@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.NoSuchElementException;
+
 /**
  * Controller to provide get URL for User (localhost)
  * Uses the GithubAPIService
@@ -41,7 +43,7 @@ public class UserController {
     public User getUser(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
             return userService.findById(userId, repoId).orElseThrow();
-        } catch (Error e) {
+        } catch (NoSuchElementException e) {
             return null;
         }
     }

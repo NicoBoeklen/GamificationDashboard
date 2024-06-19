@@ -38,16 +38,13 @@ public class GithubAPIController {
         Long repoId = githubAPIService.getRepositoryId(owner, repo).block();
         return getDataFromContributors(owner, repo, repoId)
             .then(getDataFromRepository(owner, repo, repoId))
-            //.then(getDataFromCommits(owner, repo, repoId))
+            .then(getDataFromCommits(owner, repo, repoId))
             .then(getDataFromIssues(owner, repo, repoId))
             .then(getDataFromPullRequest(owner, repo, repoId))
             .then(getDataFromReleases(owner, repo, repoId))
             .then(Mono.just(ResponseEntity.ok("Data saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("Error occurred: " + e.getMessage())));
     }
-    
-
-    
 
     ///////////////////////////////////////////////
     // Requesting methods
