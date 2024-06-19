@@ -3,21 +3,16 @@
     <v-row>
       <v-col cols="6" v-for="n in 4" :key="n">
         <v-card>
-          <template v-if="n != 3">
+          <template v-if="n != 3 && n!=4">
             <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-              <div v-if="n == 4">
-                <avatar-component></avatar-component>
-              </div>
-              <div v-else>
                 <team-avatar-component></team-avatar-component>
-              </div>
               {{ diagrams[n-1].title }}
               <v-icon small class="info-icon" @mouseover="showTooltip[n-1] = true" @mouseleave="showTooltip[n-1] = false">mdi-information</v-icon>
               <span v-if="showTooltip[n-1]" class="tooltip">Only commits to main excluding merge commits</span>
             </v-card-title>
             <component :is="diagrams[n-1].component"></component>
           </template>
-          <template v-else>
+          <template v-else-if="n==3">
             <v-row>
               <v-col>
                 <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
@@ -37,6 +32,26 @@
               </v-col>
             </v-row>
           </template>
+          <template v-else-if="n==4">
+            <v-row>
+              <v-col>
+                <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+                  <avatar-component></avatar-component>
+                  {{ diagrams[3].title1 }}
+                </v-card-title>
+                <component :is="diagrams[3].component1"></component>
+              </v-col>
+              <v-col>
+                <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+                  <avatar-component></avatar-component>
+                  {{ diagrams[3].title2 }}
+                  <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
+                  <span v-if="showTooltip[3]" class="tooltip">Average of last 5 commits</span>
+                </v-card-title>
+                <component :is="diagrams[3].component2"></component>
+              </v-col>
+            </v-row>
+          </template>
         </v-card>
       </v-col>
     </v-row>
@@ -46,9 +61,10 @@
 <script>
 import PullRequest from '../diagrams/deployment/pullRequestCircle.vue';
 import UserCommits from '../diagrams/code/userCommits.vue';
-import Productivity from '../diagrams/code/productivity.vue';
 import PullRequestSize from '../diagrams/deployment/pullRequestSize.vue'
 import PullRequestProcessTime from "../diagrams/deployment/pullRequestProcessTime.vue";
+import PullRequestComments from "../diagrams/deployment/pullRequestComments.vue";
+import PullRequestReviews from "../diagrams/deployment/pullRequestReviews.vue";
 import AvatarComponent from '../diagrams/avatar.vue';
 import TeamAvatarComponent from '../diagrams/teamAvatar.vue';
 
@@ -66,7 +82,12 @@ export default {
           title2: 'Average Process Time',
           component2: PullRequestProcessTime
         },
-        { component: Productivity, title: 'Your Productivity' }
+        {
+          title1: 'Average number of comments',
+          component1: PullRequestComments,
+          title2: 'Amount of Reviews performed',
+          component2: PullRequestReviews
+        },
       ],
       showTooltip: [false, false, false, false], // Initialize array with false values
     };
