@@ -20,7 +20,7 @@ export default {
 
   async mounted() {
     const issue = await fetchIssues();
-    this.averageAgeOfOpenIssues = issue.averageAgeOfOpenIssues;
+    this.averageAgeOfOpenIssues = Math.round(issue.averageAgeOfOpenIssues*10)/10;
   }
 };
 </script>

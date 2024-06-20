@@ -58,6 +58,7 @@ export default {
             }
           },
           y: {
+            beginAtZero: true,
             display: true,
             title: {
               display: true,
