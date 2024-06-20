@@ -6,7 +6,10 @@
   <v-progress-linear
     v-model="progress"
     height="20"
-    color="yellow" style="border-radius: 7px;">
+    color="yellow" style="border-radius: 7px;"
+    @mouseover="showTooltip = true" @mouseleave="showTooltip = false">
+    <span v-if="showTooltip" class="tooltip">{{level}} / {{50*(realLevel+1)*(realLevel+1)-50*realLevel}}</span>
+
   </v-progress-linear>
 </template>
 
@@ -18,7 +21,8 @@ export default {
     return {
       level: 0,
       realLevel: 0,
-      progress: 0
+      progress: 0,
+      showTooltip: false
     };
   },
   async mounted() {
@@ -32,5 +36,16 @@ export default {
 </script>
 
 <style scoped>
-
+.tooltip {
+  position: absolute;
+  background-color: yellow;
+  color: #000000;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10000;
+  left: 50%;
+  bottom: -0.1em;
+  transform: translateX(-50%);
+}
 </style>

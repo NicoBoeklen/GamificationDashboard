@@ -8,8 +8,9 @@
           class="progress-milestones"
           height="25"
           :model-value="Math.round((milestone.progress / milestone.achievement.condition) * 100)"
-        >
+          @mouseover="showTooltip[index] = true" @mouseleave="showTooltip[index] = false">
           {{ milestone.achievement.xp }} XP
+          <span v-if="showTooltip[index]" class="tooltip">{{milestone.progress}} / {{milestone.achievement.condition}}</span>
         </v-progress-linear>
       </div>
     </div>
@@ -22,12 +23,14 @@ import {fetchMilestone, Milestone, MilestoneObject} from '../../objects/mileston
 import {onMounted, ref} from "vue";
 
 const milestoneUser = ref([] as Milestone[]);
+let showTooltip = ref([]);
 
 export default {
   setup() {
     onMounted(async () => {
       try {
         milestoneUser.value = await fetchMilestone();
+        showTooltip.value = new Array(milestoneUser.value.length).fill(false);
       } catch (error) {
         console.error('Failed to fetch milestones:', error);
       }
@@ -35,6 +38,7 @@ export default {
 
     return {
       milestoneUser,
+      showTooltip
     };
   }
 };
@@ -55,6 +59,20 @@ export default {
 
 .milestone-item {
   margin-bottom: 1em;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.3em 0.5em;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10000;
+  bottom: 0.15em;
+  left: 25%;
+  transform: translateX(-50%);
 }
 </style>
 
