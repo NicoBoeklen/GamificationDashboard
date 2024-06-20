@@ -1,13 +1,11 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="5">
         <v-card >
           <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
             <team-avatar-component></team-avatar-component>
             {{ diagrams[0].title }}
-            <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">mdi-information</v-icon>
-            <span v-if="showTooltip[0]" class="tooltip">Only commits to main excluding merge commits</span>
           </v-card-title>
           <component :is="diagrams[0].component"></component>
         </v-card>
@@ -18,6 +16,8 @@
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 {{ diagrams[2].title1 }}
+                <v-icon small class="info-icon" @mouseover="showTooltip[2] = true" @mouseleave="showTooltip[2] = false">mdi-information</v-icon>
+                <span v-if="showTooltip[2]" class="tooltip">Average of last 5 Reviews</span>
               </v-card-title>
               <component :is="diagrams[2].component1"></component>
             </v-col>
@@ -25,8 +25,6 @@
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 {{ diagrams[2].title2 }}
-                <v-icon small class="info-icon" @mouseover="showTooltip[2] = true" @mouseleave="showTooltip[2] = false">mdi-information</v-icon>
-                <span v-if="showTooltip[2]" class="tooltip">Average of last 5 commits</span>
               </v-card-title>
               <component :is="diagrams[2].component2"></component>
             </v-col>
@@ -34,7 +32,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="6">
+      <v-col cols="7">
         <v-card>
           <v-row>
             <v-col>
@@ -49,14 +47,14 @@
                 <team-avatar-component></team-avatar-component>
                 {{ diagrams[1].title2 }}
                 <v-icon small class="info-icon" @mouseover="showTooltip[1] = true" @mouseleave="showTooltip[1] = false">mdi-information</v-icon>
-                <span v-if="showTooltip[1]" class="tooltip">Average of last 5 commits</span>
+                <span v-if="showTooltip[1]" class="tooltip">Average of last 5 Releases</span>
               </v-card-title>
               <component :is="diagrams[1].component2"></component>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0;">
                 <team-avatar-component></team-avatar-component>
                 {{ diagrams[1].title3 }}
               </v-card-title>
@@ -71,6 +69,8 @@
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <avatar-component></avatar-component>
                 {{ diagrams[3].title1 }}
+                <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
+                <span v-if="showTooltip[3]" class="tooltip">Average of last 5 Pull Requests</span>
               </v-card-title>
               <component :is="diagrams[3].component1"></component>
             </v-col>
@@ -78,8 +78,8 @@
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <avatar-component></avatar-component>
                 {{ diagrams[3].title2 }}
-                <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
-                <span v-if="showTooltip[3]" class="tooltip">Average of last 5 commits</span>
+                <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">mdi-information</v-icon>
+                <span v-if="showTooltip[0]" class="tooltip">Average of last 5 Pull Requests</span>
               </v-card-title>
               <component :is="diagrams[3].component2"></component>
             </v-col>

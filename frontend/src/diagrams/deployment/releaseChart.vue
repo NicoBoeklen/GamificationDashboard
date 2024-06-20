@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="releaseChart" style="padding-bottom: 1em; padding-left: 1em; padding-right: 1em;"></canvas>
+    <canvas id="releaseChart" style="padding-bottom: 1em; padding-left: 1em; padding-right: 1em; margin-top: 0;"></canvas>
   </div>
 </template>
 
@@ -70,5 +70,6 @@ export default {
 <style scoped>
 #releaseChart {
   min-height: 200px;
+  max-height: 19.5em;
 }
 </style>
