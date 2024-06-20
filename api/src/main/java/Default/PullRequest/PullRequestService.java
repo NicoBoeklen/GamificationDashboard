@@ -108,7 +108,7 @@ public class PullRequestService {
     }
 
     public int getTeamReviews(Long repoId) {
-        return (int) pullRequestRepository.findAll().stream().filter(pr -> pr.getState().equals(("closed"))).filter(pr -> pr.getOpenedBy().getRepoId().equals(repoId)).count();
+        return (int) pullRequestRepository.findAll().stream().filter(pr -> pr.getState().equals(("closed"))).filter(pr -> pr.getRepoId().equals(repoId)).count();
     }
 
     public Integer getTeamReviewsByDay(Long repoId, LocalDate day) {

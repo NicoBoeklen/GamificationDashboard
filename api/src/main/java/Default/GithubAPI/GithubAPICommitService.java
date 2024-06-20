@@ -43,10 +43,10 @@ public class GithubAPICommitService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Flux (Datastream) of Commits
      */
-    public Flux<Commit> getCommits(String owner, String repo) {
+    public Flux<Commit> getCommits(String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/commits", owner, repo);
         return getCommitsRecursively(url)
-            .flatMap(commit -> fetchCommitDetails(commit, owner, repo));
+            .flatMap(commit -> fetchCommitDetails(commit, owner, repo, repoId));
     }
 
 
@@ -118,13 +118,14 @@ public class GithubAPICommitService {
      * @param repo   Name of the GitHub Repository
      * @return Single Commit with als attributes
      */
-    private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo) {
+    private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/commits/%s", owner, repo, commit.getId());
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(CommitDetails.class)
             .map(details -> {
+                commit.setRepoId(repoId);
                 commit.setAdditions(details.getStats().getAdditions());
                 commit.setDeletions(details.getStats().getDeletions());
                 commit.setDate(details.getCommitInfo().getAuthor().getDate());
