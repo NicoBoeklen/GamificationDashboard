@@ -122,4 +122,27 @@ export default {
 <style scoped>
 .min-size-component {
 }
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.3em 0.5em;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10000;
+  bottom: 1em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.v-card-title {
+  position: relative;
+}
+
+.info-icon {
+  margin-left: 0.3em;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
 </style>
