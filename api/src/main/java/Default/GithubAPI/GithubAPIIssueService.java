@@ -70,11 +70,6 @@ public class GithubAPIIssueService {
             .uri(url)
             .retrieve()
             .bodyToFlux(Issue.class)
-            .map(issue -> {
-                // Setze den RepoId-Schlüssel
-                issue.getOpenedBy().setRepoId(repoId);
-                return issue;
-            })
             .collectList()
             .flatMapMany(issues -> getNextPageUrl(url)
                 .flatMapMany(nextUrl -> Flux.fromIterable(issues).concatWith(getIssuesRecursively(nextUrl, repoId)))
@@ -144,13 +139,13 @@ public class GithubAPIIssueService {
             .retrieve()
             .bodyToMono(IssueDetails.class)
             .map(details -> {
+                issue.setRepoId(repoId);
                 //Get closedBy User if getDateClosed is not null
                 if (issue.getDateClosed() != null) {
                     try {
                         //It can happen that an issue is closed by a user that is not a contributor
-                        if (issue.getOpenedBy() != null) {
-                            issue.setClosedBy(userService.findById(details.getUser().getId(), issue.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
-                            issue.getClosedBy().setRepoId(repoId);
+                        if (details.getUser() != null) {
+                            issue.setClosedBy(userService.findById(details.getUser().getId(), issue.getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
                         }
                     } catch (ChangeSetPersister.NotFoundException e) {
                         issue.setClosedBy(null);
@@ -159,7 +154,7 @@ public class GithubAPIIssueService {
                 try {
                     //It can happen that an issue is opened by a user that is not a contributor
                     if (issue.getOpenedBy() != null) {
-                        issue.setOpenedBy(userService.findById(issue.getOpenedBy().getUserId(), issue.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
+                        issue.setOpenedBy(userService.findById(issue.getOpenedBy().getUserId(), issue.getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
                     }
                 } catch (ChangeSetPersister.NotFoundException e) {
                     issue.setOpenedBy(null);

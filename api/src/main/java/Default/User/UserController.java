@@ -42,7 +42,7 @@ public class UserController {
     @GetMapping("/avatar/user/{userId}/{repoId}")
     public User getUser(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
-            return userService.findById(userId, repoId).orElseThrow();
+            return userService.findById(userId, repoId).orElseThrow(NoSuchElementException::new);
         } catch (NoSuchElementException e) {
             return null;
         }
