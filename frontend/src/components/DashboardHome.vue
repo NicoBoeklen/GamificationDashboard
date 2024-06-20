@@ -27,7 +27,7 @@
     </v-container>
 
 
-    <v-container fluid class="main-container">
+    <v-container fluid class="main-container" style="margin:0; padding-top: 0">
       <v-row>
         <v-col cols="12" md="4" class="content-section" >
           <v-card class="project-info">
