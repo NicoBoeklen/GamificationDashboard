@@ -145,7 +145,7 @@ export default {
   font-size: 0.75rem;
   white-space: nowrap;
   z-index: 10000;
-  bottom: 1.5em;
+  bottom: 1em;
   left: 50%;
   transform: translateX(-50%);
 }
