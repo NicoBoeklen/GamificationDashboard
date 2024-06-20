@@ -18,3 +18,6 @@ export function redirectDeployment(){
 export function redirectManagementView(){
   router.push('/management')
 }
+export function redirectLogin(){
+  router.push('/')
+}

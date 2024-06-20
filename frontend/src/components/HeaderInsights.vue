@@ -11,7 +11,7 @@
 
       <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 
-      <v-btn append-icon="mdi-logout" >Logout</v-btn>
+      <v-btn @click="redirectLogin()" append-icon="mdi-logout" >Logout</v-btn>
     </template>
   </v-app-bar>
 </template>
@@ -20,12 +20,12 @@
 import {getUserName, toLogin} from "../objects/login";
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
-import {redirectManagementView} from "../objects/directions";
+import {redirectLogin, redirectManagementView} from "../objects/directions";
 import AvatarComponent from "../diagrams/avatarHeader.vue";
 
 export default {
   components: {AvatarComponent},
-  methods: {redirectManagementView},
+  methods: {redirectLogin, redirectManagementView},
   setup() {
     const userName = ref('');
     const theme = useTheme()
