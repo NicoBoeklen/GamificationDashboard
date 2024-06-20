@@ -11,11 +11,11 @@ import { fetchIssues } from '../../objects/issues';
 export default {
   async mounted() {
     const issues = await fetchIssues();
-    const labels = ['Less than 7 days', 'Between a week and a month', 'More than a month'];
+    const labels = ['More than a month', 'Between a week and a month','Less than 7 days'];
     const data = [
-    issues.amountOpenIssuesLessSevenDays,
-    issues.amountOpenIssuesBetweenWeekAndMonth,
-    issues.amountOpenIssuesMoreThanAMonth,
+      issues.amountOpenIssuesMoreThanAMonth,
+      issues.amountOpenIssuesBetweenWeekAndMonth,
+      issues.amountOpenIssuesLessSevenDays,
     ];
     new Chart(document.getElementById('ageOfIssueTime'), {
       type: 'bar',
