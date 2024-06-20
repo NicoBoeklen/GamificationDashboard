@@ -151,6 +151,7 @@ public class GithubAPIPullRequestService {
             .retrieve()
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {
+                pullRequest.setRepoId(repoId);
                 try {
                     if (details.getUser() != null) {
                         Optional<User> closedByUser = userService.findById(details.getUser().getId(), repoId);
@@ -170,7 +171,6 @@ public class GithubAPIPullRequestService {
                     return pullRequest;
                 } catch (Error e) {
                     System.err.println("Error occurred while processing pull request details: " + e.getMessage());
-                    // Log or handle the error as needed
                     return pullRequest;
                 }
             })
