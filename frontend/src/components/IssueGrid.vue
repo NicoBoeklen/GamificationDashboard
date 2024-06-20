@@ -2,16 +2,16 @@
   <v-container fluid>
     <v-row>
       <v-col cols="6">
-        <v-card name="first Card" style="margin-top: 1em;">
+        <v-card name="first Card">
           <v-row>
             <v-col>
               <v-card-title name="Open Issues" class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 Open Issues
               </v-card-title>
-              <OpenIssues/>
+              <OpenIssues class="min-size-component"/>
             </v-col>
-            <v-col>
+            <v-col >
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 Closed and Total Issues
@@ -22,7 +22,7 @@
             </v-col>
           </v-row>
         </v-card>
-        <v-card>
+        <v-card style="margin-top: 1em;">
           <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
             <team-avatar-component></team-avatar-component>
             IssueDensity
@@ -120,4 +120,6 @@ export default {
 </script>
 
 <style scoped>
+.min-size-component {
+}
 </style>
