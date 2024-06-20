@@ -11,14 +11,14 @@
             <p class="project-subtitle">{{ repoName }}</p>
           </div>
         </v-card-title>
-        <v-card-text class="project-description">
+        <v-card-text style="margin-bottom: 0; padding-bottom: 0" class="project-description">
           Description: {{ repository.description }}
           <br />
           Created at: {{ repository.created_at }}
           <br />
           Updated at: {{ repository.updated_at }}
         </v-card-text>
-        <v-carousel hide-delimiters height="300" cycle interval="15000">
+        <v-carousel hide-delimiters height="10em" cycle interval="15000">
           <v-carousel-item>
             <v-container class="fill-height" fluid>
               <v-row align="center" justify="center">
