@@ -4,9 +4,9 @@
       <v-col cols="12">
         <v-row>
           <v-col v-for="(value, name, index) in leaderboard" :key="name" cols="12">
-            <v-card class="pa-3 mb-4">
-              <div class="text-h5">{{ index + 1 }}. {{ name }}</div>
-              <div class="text-caption text-uppercase">Value: {{ value }}</div>
+            <v-card v-if="index<5" :class="{'highlighted-card': userName === name}" class="pa-3 mb-4">
+              <div :class="{'text-h5': index < 5, 'text-h4': index < 3}">{{ index + 1 }}. {{ name }}</div>
+              <div class="text-caption text-uppercase">Score: {{ value }}</div>
             </v-card>
           </v-col>
         </v-row>
@@ -21,11 +21,13 @@ import { fetchLeaderboard } from '../../objects/leaderboard';
 export default {
   data() {
     return {
-      leaderboard: {}
+      leaderboard: {},
+      userName: ''
     };
   },
   async mounted() {
     try {
+      this.userName = localStorage.getItem('userName');
       const data = await fetchLeaderboard();
       this.leaderboard = data.leaderboardMap;
     } catch (error) {
@@ -39,10 +41,15 @@ export default {
 .v-card {
   margin-bottom: 1em;
 }
-.text-h5 {
-  font-size: 1.25rem;
+
+.highlighted-card {
+  background-color: #FFD700; /* Gold color for highlighted card */
+}
+
+.text-h4 {
   font-weight: bold;
 }
+
 .text-caption {
   font-size: 0.875rem;
 }
