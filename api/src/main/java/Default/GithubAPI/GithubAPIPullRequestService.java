@@ -152,32 +152,22 @@ public class GithubAPIPullRequestService {
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {
                 pullRequest.setRepoId(repoId);
-                try {
-                    if (details.getUser() != null) {
-                        Optional<User> closedByUser = userService.findById(details.getUser().getId(), repoId);
-                        pullRequest.setClosedBy(closedByUser.orElse(null));
-                    }
-                    pullRequest.setAdditions(details.additions);
-                    pullRequest.setDeletions(details.deletions);
-                    pullRequest.setCommentNumber(details.commentNumber);
-                    pullRequest.setCommitNumber(details.commitNumber);
-
-                    if (pullRequest.getOpenedBy() != null) {
-                        pullRequest.getOpenedBy().setRepoId(repoId);
-                        Optional<User> openedByUser = userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId());
-                        pullRequest.setOpenedBy(openedByUser.orElse(null));
-                    }
-
-                    return pullRequest;
-                } catch (Error e) {
-                    System.err.println("Error occurred while processing pull request details: " + e.getMessage());
-                    return pullRequest;
+                if (details.getUser() != null) {
+                    Optional<User> closedByUser = userService.findById(details.getUser().getId(), repoId);
+                    pullRequest.setClosedBy(closedByUser.orElse(null));
                 }
-            })
-            .onErrorResume(e -> {
-                System.err.println("Error occurred during web client call: " + e.getMessage());
-                return Mono.just(pullRequest); // Provide a fallback value or handle the error
+                pullRequest.setAdditions(details.additions);
+                pullRequest.setDeletions(details.deletions);
+                pullRequest.setCommentNumber(details.commentNumber);
+                pullRequest.setCommitNumber(details.commitNumber);
+
+                if (pullRequest.getOpenedBy() != null) {
+                    Optional<User> openedByUser = userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getRepoId());
+                    pullRequest.setOpenedBy(openedByUser.orElse(null));
+                }
+                return pullRequest;
             });
+
     }
 
 
