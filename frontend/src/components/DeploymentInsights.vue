@@ -13,7 +13,7 @@
       <v-btn variant="tonal" class="button" @click="redirectCodeInsights()">Code</v-btn>
       <v-btn variant="tonal" class="button" @click="redirectIssueManagment()">Issue Management</v-btn>
       <!-- <v-btn variant="tonal" class="button">Tests</v-btn>-->
-      <v-btn variant="tonal" class="button" @click="redirectDeployment()">Deployment</v-btn>
+      <v-btn variant="tonal" class="button active" @click="redirectDeployment()">Deployment</v-btn>
 
 
 
@@ -37,10 +37,21 @@ import {
 
 </script>
 <style>
-.button{
+.button {
   display: flex;
   margin: 0 8px;
   justify-content: center;
+  transition: background-color 0.3s, color 0.3s;
+}
 
+.button:hover {
+  background-color: #424242;
+  color: #FFFFFF;
+}
+
+.button.active {
+  background-color: #b2b2b2;
+  color: #FFFFFF;
+  cursor: default;
 }
 </style>
