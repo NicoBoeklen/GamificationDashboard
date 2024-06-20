@@ -52,7 +52,17 @@
                   dense
                   class="mb-4"
                 ></v-text-field>
-                <v-btn color="primary" type="button" block class="mt-4" @click="login()">Login</v-btn>
+                <v-text-field
+                  label="Api Key"
+                  color="blue"
+                  required
+                  clearable
+                  prepend-inner-icon="mdi-account"
+                  outlined
+                  dense
+                  class="mb-4"
+                ></v-text-field>
+                <v-btn color="primary" type="button" block class="mt-4" @click="login()" @keyup.enter="login()">Login</v-btn>
               </v-form>
             </v-card-text>
           </v-card>
@@ -72,7 +82,7 @@ const rules = {
 
 <style scoped>
 .fill-height {
-  min-height: 20%;
+  min-height: 100%;
 }
 
 .highlighted {
