@@ -1,8 +1,8 @@
 <template>
   <v-card-title class="section-title">Milestones</v-card-title>
   <v-card-text>
-    <div v-if="milestoneUser.length > 0">
-      <div v-for="(milestone, index) in milestoneUser" :key="index">
+    <div class="milestone-container" v-if="milestoneUser.length > 0">
+      <div v-for="(milestone, index) in milestoneUser" :key="index" class="milestone-item">
         <p>{{ milestone.achievement.description }}</p>
         <v-progress-linear
           class="progress-milestones"
@@ -42,12 +42,19 @@ export default {
 
 <style>
 .progress-milestones {
-  margin: 1em 1em 1em 0em;
+  margin: 0em 1em 1em 0em;
   background-color: rgba(8, 98, 189, 0.1);
   border-radius: 7px;
   color: rgba(8, 98, 189, 0.5);
 }
 
+.milestone-container {
+  max-height: 20em;
+  overflow-y: auto;
+}
 
+.milestone-item {
+  margin-bottom: 1em;
+}
 </style>
 

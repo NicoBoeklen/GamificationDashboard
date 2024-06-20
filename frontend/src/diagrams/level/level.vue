@@ -24,8 +24,9 @@ export default {
   async mounted() {
     const user = await fetchAvatar();
     this.level = user.level;
-    this.realLevel = Math.round((1 + Math.sqrt(1 + (this.level / 12.5))) / 2);
-    this.progress = Math.round((((1 + Math.sqrt(1 + (this.level / 12.5))) / 2) - this.realLevel) * 100);
+    this.realLevel = Math.floor((1 + Math.sqrt(1 + (this.level / 12.5))) / 2);
+    this.progress = Math.floor((((1 + Math.sqrt(1 + (this.level / 12.5))) / 2) - Math.floor((1 + Math.sqrt(1 + (this.level / 12.5))) / 2)) * 100);
+    console.log(this.progress, this.realLevel, ((1 + Math.sqrt(1 + (this.level / 12.5))) / 2))
   }
 };
 </script>
