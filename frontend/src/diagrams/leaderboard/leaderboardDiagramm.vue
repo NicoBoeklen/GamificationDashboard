@@ -2,9 +2,9 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <v-row>
-          <v-col v-for="(value, name, index) in leaderboard" :key="name" cols="12">
-            <v-card v-if="index<5" :class="{'highlighted-card': userName === name}" class="pa-3 mb-4">
+        <v-row v-for="(value, name, index) in leaderboard" :key="name">
+          <v-col v-if="index<5" cols="12">
+            <v-card :class="{'highlighted-card': userName === name}" class="pa-3 mb-4">
               <div :class="{'text-h5': index < 5, 'text-h4': index < 3}">{{ index + 1 }}. {{ name }}</div>
               <div class="text-caption text-uppercase">Score: {{ value }}</div>
             </v-card>

@@ -27,7 +27,6 @@ export default {
         pointHoverRadius: 65,
         pointStyle: 'circle',
         pointBorderColor: 'rgb(0,0,0)',
-        pointBackgroundColor: 'rgba(255, 255, 255, 1)',
         pointHoverBackgroundColor: 'rgba(255, 255, 255, 1)',
         pointHoverBorderColor: 'rgb(0,0,0)',
         lineTension: 0.2,

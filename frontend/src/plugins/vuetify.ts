@@ -21,6 +21,11 @@ export default createVuetify({
           background: 'rgb(211,212,215)',
         },
       },
+      dark: {
+        colors: {
+          background: 'rgb(44,45,47)',
+        },
+      },
     },
   },
 })
