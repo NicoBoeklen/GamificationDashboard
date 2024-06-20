@@ -1,22 +1,16 @@
 <template>
-    <Header/>
+    <HeaderComponent/>
     <v-container fluid class="container">
+      <v-app-bar app color="#5D5A5A" dark>
       <v-row>
         <v-col cols="12" md="4">
           <div class="d-flex align-center">
-            <v-avatar color="white darken-1" size="50" class="counter-number"
-            >level</v-avatar
-            >
-            <v-progress-linear
-              model-value="50"
-              height="20"
-              color="yellow"
-              class="progress-bar"
-            />
+            <Level></Level>
           </div>
         </v-col>
 
         <v-col  class="commitment-wrapper">
+          <div class="d-flex align-center">
           <v-img
             :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/a15a58212de51f3f8af173f0f65e334091b691385ab3ae8e623d83ef49bba2bc?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
             class="commitment-logo"
@@ -25,10 +19,11 @@
           <p class="commitment-text">
             <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span> <span>ment</span>
           </p>
+          <v-btn @click="redirectCodeInsights()"  variant="outlined" style="margin-left:1em;" class="mr-3" color="grey darken-2">Insights</v-btn>
+          </div>
         </v-col>
-        <v-btn @click="redirectCodeInsights()"  class="insights-button" color="grey darken-2">Insights</v-btn>
-
       </v-row>
+      </v-app-bar>
     </v-container>
 
 
@@ -193,9 +188,10 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, ref} from 'vue';
-import Header from "./Header.vue";
+import HeaderComponent from "./Header.vue";
 import SkillDiagrammComponent from "../diagrams/skill/skillDiagramm.vue";
 import LeaderboardDiagrammComponent from "../diagrams/leaderboard/leaderboardDiagramm.vue";
+import Level from "../diagrams/level/level.vue";
 import {redirectCodeInsights, redirectInsights} from "../objects/directions";
 import {fetchRepository} from "../objects/repository";
 import type {Repository} from "../objects/repository";
@@ -204,7 +200,7 @@ const repoName = ref('');
 export default defineComponent({
   name: 'Leaderboard',
   methods: {redirectCodeInsights, redirectInsights},
-  components: {Header, SkillDiagrammComponent, LeaderboardDiagrammComponent},
+  components: {HeaderComponent, SkillDiagrammComponent, LeaderboardDiagrammComponent, Level},
   setup(){
     onMounted(async () => {
       repoName.value = localStorage.getItem('repoName') || '';
@@ -230,26 +226,14 @@ export default defineComponent({
   margin-bottom: 20px;
 }
 
-.commitment-wrapper {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2px;
-}
 
 .commitment-logo {
-  margin-right: 75px;
   height: 50px; /* Adjust height as needed */
   width: auto; /* Maintain aspect ratio */
 }
 
 .commitment-text {
   font-size: 20px; /* Adjust font size as needed */
-
-}
-
-.insights-button {
-  margin-top: 20px;
-  float: right;
 }
 
 .content-section {
@@ -308,8 +292,4 @@ export default defineComponent({
   align-items: start
 }
 
-
-.avatar img {
-  border-radius: 50%;
-}
 </style>

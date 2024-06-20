@@ -7,6 +7,7 @@ const userId = localStorage.getItem('userId');
 
 export interface User {
   avatarURL: String
+  level: number
 }
 export async function fetchAvatar(): Promise<User> {
   const response = await fetch(`${config.fetchBaseUrl}/avatar/user/${userId}/${repoId}`,  {
