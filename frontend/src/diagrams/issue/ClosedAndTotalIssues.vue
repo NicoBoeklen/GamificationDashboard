@@ -11,7 +11,8 @@ import { fetchIssues } from '../../objects/issues';
 export default {
   async mounted() {
     const issues = await fetchIssues();
-
+    const fixedIssues = issues.amountFixedIssuesTeam;
+    const totalIssues = issues.amountTotalIssuesTeam;
     const closedWeeks = issues.weeklyClosedIssues.map(issue => issue.week);
     const totalWeeks = issues.weeklyClosedIssues.map(issue => issue.week);
     const closedData = issues.weeklyClosedIssues.map(issue => issue.issues);
@@ -23,7 +24,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            label: 'Closed Issues',
+            label: 'Closed Issues, Total: ' + fixedIssues,
             data: closedData,
             fill: false,
             borderColor: 'rgba(8, 98, 189, 0.5)',
@@ -31,7 +32,7 @@ export default {
             pointRadius: 0
           },
           {
-            label: 'Total Issues',
+            label: 'Total Issues: ' + totalIssues,
             data: totalData,
             fill: false,
             borderColor: 'rgba(230, 98, 100, 0.5)',

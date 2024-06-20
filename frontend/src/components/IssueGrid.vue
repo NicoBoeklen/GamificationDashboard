@@ -23,14 +23,26 @@
           </v-row>
         </v-card>
         <v-card style="margin-top: 1em;">
-          <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-            <team-avatar-component></team-avatar-component>
-            IssueDensity
-            <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">mdi-information</v-icon>
-            <span v-if="showTooltip[0]" class="tooltip">Only commits to main excluding merge commits</span>
-          </v-card-title>
-          <IssueDensity/>
+          <v-row>
+            <v-col>
+              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+                <avatar-component></avatar-component>
+                Your Fixed Issues
+              </v-card-title>
+              <TotalFixedIssues/>
+            </v-col>
+            <v-col>
+              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+                <team-avatar-component></team-avatar-component>
+                Team Average Time to fix an Issue
+                <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
+                <span v-if="showTooltip[3]" class="tooltip">Average of last 5 commits</span>
+              </v-card-title>
+              <TeamAverageTimeFixIssue/>
+            </v-col>
+          </v-row>
         </v-card>
+
       </v-col>
       <v-col cols="6">
         <v-card>
@@ -53,27 +65,16 @@
             </v-col>
           </v-row>
         </v-card>
-
         <v-card style="margin-top: 1em;">
-          <v-row>
-            <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-                <avatar-component></avatar-component>
-                Your Fixed Issues
-              </v-card-title>
-              <TotalFixedIssues/>
-            </v-col>
-            <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-                <team-avatar-component></team-avatar-component>
-                Team Average Time to fix an Issue
-                <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
-                <span v-if="showTooltip[3]" class="tooltip">Average of last 5 commits</span>
-              </v-card-title>
-              <TeamAverageTimeFixIssue/>
-            </v-col>
-          </v-row>
+          <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+            <team-avatar-component></team-avatar-component>
+            IssueDensity
+            <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">mdi-information</v-icon>
+            <span v-if="showTooltip[0]" class="tooltip">Only commits to main excluding merge commits</span>
+          </v-card-title>
+          <IssueDensity/>
         </v-card>
+
       </v-col>
     </v-row>
   </v-container>

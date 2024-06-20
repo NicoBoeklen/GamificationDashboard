@@ -11,6 +11,7 @@ import { fetchIssues } from '../../objects/issues';
 export default {
   async mounted() {
     const issues = await fetchIssues();
+    const openIssues = issues.amountOpenIssuesTeam;
     const labels = ['Less than 7 days', 'Between a week and a month','More than a month'];
     const data = [
       issues.amountOpenIssuesLessSevenDays,
@@ -23,7 +24,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            label: 'Open Issues',
+            label: 'Open Issues, Total: ' + openIssues,
             data: data,
             fill: false,
             backgroundColor: 'rgba(8, 98, 189, 0.5)',
