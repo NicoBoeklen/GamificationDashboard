@@ -48,7 +48,7 @@ export default {
             display: true,
             title: {
               display: true,
-              text: 'Open Issues'
+              text: 'Open Issues / 1k LoC'
             }
           }
         }

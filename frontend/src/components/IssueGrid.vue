@@ -15,8 +15,8 @@
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 Closed and Total Issues
-                <v-icon small class="info-icon" @mouseover="showTooltip[2] = true" @mouseleave="showTooltip[2] = false">mdi-information</v-icon>
-                <span v-if="showTooltip[2]" class="tooltip">Average of last 5 commits</span>
+                <!--<v-icon small class="info-icon" @mouseover="showTooltip[2] = true" @mouseleave="showTooltip[2] = false">mdi-information</v-icon>
+                <span v-if="showTooltip[2]" class="tooltip">Average of last 5 commits</span>-->
               </v-card-title>
               <ClosedAndTotalIssues/>
             </v-col>
@@ -36,7 +36,7 @@
                 <team-avatar-component></team-avatar-component>
                 Team Average Time to fix an Issue
                 <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
-                <span v-if="showTooltip[3]" class="tooltip">Average of last 5 commits</span>
+                <span v-if="showTooltip[3]" class="tooltip">Average of last 5 issues</span>
               </v-card-title>
               <TeamAverageTimeFixIssue/>
             </v-col>
@@ -70,7 +70,7 @@
             <team-avatar-component></team-avatar-component>
             IssueDensity
             <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">mdi-information</v-icon>
-            <span v-if="showTooltip[0]" class="tooltip">Only commits to main excluding merge commits</span>
+            <span v-if="showTooltip[0]" class="tooltip">Issues per 1000 Lines of Code</span>
           </v-card-title>
           <IssueDensity/>
         </v-card>
