@@ -81,15 +81,8 @@
 <script  lang="ts">
 import {defineComponent, onMounted, ref} from "vue";
 import {redirectCodeInsights, redirectInsights} from "../../objects/directions";
-import Badges from "./badges.vue";
-import Quests from "./quests.vue";
-import Milestones from "./milestones.vue";
-import HeaderComponent from "../../components/Header.vue";
-import SkillDiagrammComponent from "../skill/skillDiagramm.vue";
-import LeaderboardDiagrammComponent from "../leaderboard/leaderboardDiagramm.vue";
-import Level from "../level/level.vue";
+
 import {fetchRepository, Repository} from "../../objects/repository";
-import Infos from "./infos.vue";
 let repository = ref({} as Repository);
 const repoName = ref('');
 export default defineComponent({
