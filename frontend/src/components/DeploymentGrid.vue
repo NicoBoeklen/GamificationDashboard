@@ -14,7 +14,7 @@
           <v-row>
             <v-col>
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-                <team-avatar-component></team-avatar-component>
+                <avatar-component></avatar-component>
                 {{ diagrams[2].title1 }}
                 <v-icon small class="info-icon" @mouseover="showTooltip[2] = true" @mouseleave="showTooltip[2] = false">mdi-information</v-icon>
                 <span v-if="showTooltip[2]" class="tooltip">Average of last 5 Reviews</span>
@@ -23,7 +23,7 @@
             </v-col>
             <v-col>
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-                <team-avatar-component></team-avatar-component>
+                <avatar-component></avatar-component>
                 {{ diagrams[2].title2 }}
               </v-card-title>
               <component :is="diagrams[2].component2"></component>
@@ -67,7 +67,7 @@
           <v-row>
             <v-col>
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-                <avatar-component></avatar-component>
+                <team-avatar-component></team-avatar-component>
                 {{ diagrams[3].title1 }}
                 <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
                 <span v-if="showTooltip[3]" class="tooltip">Average of last 5 Pull Requests</span>
@@ -76,7 +76,7 @@
             </v-col>
             <v-col>
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
-                <avatar-component></avatar-component>
+                <team-avatar-component></team-avatar-component>
                 {{ diagrams[3].title2 }}
                 <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">mdi-information</v-icon>
                 <span v-if="showTooltip[0]" class="tooltip">Average of last 5 Pull Requests</span>
