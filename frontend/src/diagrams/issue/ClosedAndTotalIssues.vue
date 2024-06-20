@@ -7,14 +7,20 @@
 <script>
 import Chart from 'chart.js/auto';
 import { fetchIssues } from '../../objects/issues';
+function convertLocalDateTimeToLocalDate(weekString) {
+  // Umwandlung des Strings in ein Date-Objekt
+  const dateObj = new Date(weekString);
+  const formattedDate = dateObj.toISOString().split('T')[0];
 
+  return formattedDate;
+}
 export default {
   async mounted() {
     const issues = await fetchIssues();
     const fixedIssues = issues.amountFixedIssuesTeam;
     const totalIssues = issues.amountTotalIssuesTeam;
-    const closedWeeks = issues.weeklyClosedIssues.map(issue => issue.week);
-    const totalWeeks = issues.weeklyClosedIssues.map(issue => issue.week);
+    const closedWeeks = issues.weeklyClosedIssues.map(issue => convertLocalDateTimeToLocalDate(issue.week));
+    const totalWeeks = issues.weeklyClosedIssues.map(issue => convertLocalDateTimeToLocalDate(issue.week));
     const closedData = issues.weeklyClosedIssues.map(issue => issue.issues);
     const totalData = issues.weeklyTotalIssues.map(issue => issue.issues);
     const labels = Array.from(new Set([...closedWeeks, ...totalWeeks]));

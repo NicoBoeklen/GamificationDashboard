@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 1em">
+  <div style="padding: 1em 1em 2.65em;">
     <div>
       <!-- <strong style="color: green;">+  </strong>-->
       <span>

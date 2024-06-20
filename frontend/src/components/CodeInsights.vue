@@ -11,7 +11,7 @@
       <v-spacer></v-spacer>
     </v-app-bar>
   </v-container>
-  <v-container fluid style="margin: 0">
+  <v-container fluid style="padding-bottom: 0; margin: 0">
     <CardGrid/>
   </v-container>
 </template>

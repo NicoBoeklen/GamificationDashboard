@@ -19,7 +19,7 @@
           <p class="commitment-text">
             <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span> <span>ment</span>
           </p>
-          <v-btn @click="redirectCodeInsights()"  variant="outlined" style="margin-left:1em;" class="mr-3" color="grey darken-2">Insights</v-btn>
+          <v-btn @click="redirectCodeInsights()"  variant="outlined" style="margin-left:1em;" class="mr-3">Insights</v-btn>
           </div>
         </v-col>
       </v-row>

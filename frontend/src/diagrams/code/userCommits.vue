@@ -52,9 +52,7 @@ export default {
 }
 </script>
 <style scoped>
-#codeGrowthChart {
-  min-height: 100px;
-}
+
 </style>
 
 

@@ -7,11 +7,17 @@
 <script>
 import Chart from 'chart.js/auto';
 import { fetchIssues } from '../../objects/issues';
+function convertLocalDateTimeToLocalDate(weekString) {
+  // Umwandlung des Strings in ein Date-Objekt
+  const dateObj = new Date(weekString);
+  const formattedDate = dateObj.toISOString().split('T')[0];
 
+  return formattedDate;
+}
 export default {
   async mounted() {
     const issues = await fetchIssues();
-    const labels = issues.issuesPer1000LoC.map(issue => issue.week);
+    const labels = issues.issuesPer1000LoC.map(issue => convertLocalDateTimeToLocalDate(issue.week));
     const data = issues.issuesPer1000LoC.map(issue => issue.issueDensity);
     new Chart(document.getElementById('issueDensity'), {
       type: 'line',
