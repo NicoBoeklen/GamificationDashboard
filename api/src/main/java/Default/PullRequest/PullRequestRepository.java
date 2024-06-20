@@ -21,21 +21,21 @@ public interface PullRequestRepository extends JpaRepository<PullRequest, Long> 
     @Query("SELECT p FROM PullRequest p WHERE p.closedBy.userId = :userId AND p.state= 'closed' AND p.openedBy.repoId = :repoId ORDER BY p.dateClosed DESC")
     List<PullRequest> findLastFivePullRequestsByUser(@Param("userId") Long userId, Pageable pageable, @Param("repoId") Long repoId);
 
-    @Query("SELECT p FROM PullRequest p WHERE p.state= 'closed' AND p.repoId = :repoId ORDER BY p.dateClosed DESC")
+    @Query("SELECT p FROM PullRequest p WHERE p.state= 'closed' AND p.repositoryId = :repoId ORDER BY p.dateClosed DESC")
     List<PullRequest> findLastFivePullRequests(Pageable pageable, @Param("repoId") Long repoId);
 
-    @Query("SELECT p FROM PullRequest p WHERE p.state= 'open' AND p.repoId = :repoId ORDER BY p.dateClosed DESC")
+    @Query("SELECT p FROM PullRequest p WHERE p.state= 'open' AND p.repositoryId = :repoId ORDER BY p.dateClosed DESC")
     List<PullRequest> findLastFiveOpenPullRequests(Pageable pageable, @Param("repoId") Long repoId);
 
-    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'open' AND p.repoId = :repoId")
+    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'open' AND p.repositoryId = :repoId")
     Integer getOpenPullRequests(@Param("repoId") Long repoId);
 
-    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'closed' AND p.dateClosed >= CURRENT_DATE - 30 AND p.repoId = :repoId")
+    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.state= 'closed' AND p.dateClosed >= CURRENT_DATE - 30 AND p.repositoryId = :repoId")
     Integer getClosedPullRequestsLastMonth(@Param("repoId") Long repoId);
 
     @Query("SELECT COALESCE(MAX(p.count),0) FROM (SELECT COUNT(p) AS count FROM PullRequest p WHERE p.state= 'closed' AND p.closedBy.repoId = :repoId GROUP BY p.closedBy.userId) p")
     Double getMaxReviewsSingleUser(@Param("repoId") Long repoId);
 
-    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.repoId = :repoId AND CAST(p.dateClosed AS DATE) = :day")
+    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.repositoryId = :repoId AND CAST(p.dateClosed AS DATE) = :day")
     Integer getTeamReviewsByDay(@Param("repoId") Long repoId, @Param("day") LocalDate day);
 }

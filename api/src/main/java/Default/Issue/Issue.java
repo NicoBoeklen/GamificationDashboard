@@ -38,8 +38,8 @@ public class Issue {
     })
     @JsonProperty("user")
     private User openedBy;
-
-    private Long repoId;
+    
+    private Long repositoryId;
 
     ///////////////////////////////////////////////
     // Getter & Setter
@@ -101,10 +101,10 @@ public class Issue {
     }
 
     public Long getRepoId() {
-        return repoId;
+        return repositoryId;
     }
 
     public void setRepoId(Long repoId) {
-        this.repoId = repoId;
+        this.repositoryId = repoId;
     }
 }
