@@ -17,8 +17,11 @@ export interface Issue {
   amountFixedIssuesTeam: number;
   amountOpenIssuesTeam: number;
   amountTotalClosedIssuesUser: number;
-  averageTimeFixIssueOpenTeam: number;
-  averageTimeFixIssueTotalTeam: number;
+  averageAgeOfOpenIssues: number;
+  amountOpenIssuesLessSevenDays: number;
+  amountOpenIssuesBetweenWeekAndMonth: number;
+  amountOpenIssuesMoreThanAMonth: number;
+  averageTimeToFixIssueInDaysTeam: number;
   weeklyClosedIssues: WeeklyClosedIssues[];
   weeklyOpenIssues: weeklyOpenIssues[];
   weeklyTotalIssues: weeklyTotalIssues[];
