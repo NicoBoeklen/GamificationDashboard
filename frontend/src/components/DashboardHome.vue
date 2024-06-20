@@ -123,10 +123,10 @@
             <v-card-text>
               <div class="quest-details">
                 <p class="team-quest">Team:create 3 commits</p>
-                  <v-progress-linear model-value="50" height="20" color="green darken-2"></v-progress-linear>
+                  <v-progress-linear model-value="50" height="20" color="rgba(8, 98, 189, 0.5)"></v-progress-linear>
 
                 <p class="individual-quest">Individual:fix 1 Issue </p>
-                  <v-progress-linear model-value="25" height="20" color="orange"></v-progress-linear>
+                  <v-progress-linear model-value="25" height="20" color="rgba(8, 98, 189, 0.5)"></v-progress-linear>
 
               </div>
             </v-card-text>
@@ -137,10 +137,10 @@
             <v-card-text>
               <div class="milestone-details">
                 <p class="individual-milestone">Individual: Write 1000 LoC
-                  <v-progress-linear model-value="75" height="21" color="green darken-2" class="individual-progress-bar" />
+                  <v-progress-linear model-value="75" height="21" color="rgba(8, 98, 189, 0.5)" class="individual-progress-bar" />
                 </p>
                 <p class="team-milestone">Team: 100% Test Coverage
-                  <v-progress-linear model-value="60" height="21" color="orange" class="team-progress-bar" />
+                  <v-progress-linear model-value="60" height="21" color="rgba(8, 98, 189, 0.5)" class="team-progress-bar" />
                 </p>
               </div>
             </v-card-text>
