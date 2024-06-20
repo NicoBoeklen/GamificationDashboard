@@ -62,7 +62,14 @@
                   dense
                   class="mb-4"
                 ></v-text-field>
-                <v-btn color="primary" type="button" block class="mt-4" @click="login()" @keyup.enter="login()">Login</v-btn>
+                <v-btn color="primary" type="button" block class="mt-4" @click="login()" @keyup.enter="login()" :disabled="isLoading">
+                  <template v-if="isLoading">
+                    <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
+                  </template>
+                  <template v-else>
+                    Login
+                  </template>
+                </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
@@ -75,9 +82,14 @@
 <script setup lang="ts">
 import { toLogin } from "../objects/login";
 import { login } from "../objects/login";
+import {ref} from "vue";
+
 const rules = {
   required: (value: string) => !!value || 'Required!'
 };
+
+
+
 </script>
 
 <style scoped>
