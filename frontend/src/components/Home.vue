@@ -62,7 +62,7 @@
                   dense
                   class="mb-4"
                 ></v-text-field>
-                <v-btn color="primary" type="button" block class="mt-4" @click="login()" @keyup.enter="login()" :disabled="isLoading">
+                <v-btn color="primary" type="button" block class="mt-4" @click="handleLogin()" @keyup.enter="handleLogin()" :disabled="isLoading">
                   <template v-if="isLoading">
                     <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
                   </template>
@@ -83,11 +83,15 @@
 import { toLogin } from "../objects/login";
 import { login } from "../objects/login";
 import {ref} from "vue";
-
+const isLoading = ref(false);
 const rules = {
   required: (value: string) => !!value || 'Required!'
 };
-
+const handleLogin = () => {
+  login((loading: boolean) => {
+    isLoading.value = loading;
+  });
+};
 
 
 </script>

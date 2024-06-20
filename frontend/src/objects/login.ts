@@ -24,31 +24,38 @@ export const toLogin: Ref<Login> = ref<Login>({
 });
 
 
-export function login(){
+export async function login(onLoadingChange: (isLoading: boolean) => void) {
+  onLoadingChange(true); // Ladezustand auf true setzen
   console.log("login wird durchgeführt");
-  console.log(toLogin.value.userName+toLogin.value.ownerName+toLogin.value.repoName);
-  fetch(`${config.fetchBaseUrl}/api/login`,
-    {method: "POST", headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(toLogin.value)})
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();})
-    .then(data => data as Login)
-    .then(data => {
-      console.log(data);
-      showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
-      toLogin.value = data;
-      console.log(toLogin.value.userName)
-      localStorage.setItem('userName', toLogin.value.userName)
-      localStorage.setItem('repoId', String(toLogin.value.repoId))
-      localStorage.setItem('userId', String(toLogin.value.userId))
-      localStorage.setItem('repoName', toLogin.value.repoName)
-      router.push('/dashboard');
-    })
-    .catch(error => showToast(new Toast("Error", error, "error", faXmark, 10)));
+  console.log(toLogin.value.userName + toLogin.value.ownerName + toLogin.value.repoName);
 
+  try {
+    const response = await fetch(`${config.fetchBaseUrl}/api/login`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(toLogin.value)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json() as Login;
+    console.log(data);
+
+    showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
+    toLogin.value = data;
+    console.log(toLogin.value.userName);
+    localStorage.setItem('userName', toLogin.value.userName);
+    localStorage.setItem('repoId', String(toLogin.value.repoId));
+    localStorage.setItem('userId', String(toLogin.value.userId));
+    localStorage.setItem('repoName', toLogin.value.repoName);
+    router.push('/dashboard');
+  } catch (error) {
+   console.log(error)
+  } finally {
+    onLoadingChange(false); // Ladezustand auf false setzen
+  }
 }
 
 export function getUserName(): string {
