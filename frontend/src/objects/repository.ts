@@ -1,7 +1,7 @@
 import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
-import type {Ref} from "vue";
+
 export interface Repository {
   description: string;
   created_at: string;

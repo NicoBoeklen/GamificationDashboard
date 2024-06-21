@@ -4,7 +4,8 @@
 <div class="quest-details">
   <h3 style="margin-bottom: 0.5em">Individual</h3>
   <p class="individual-quest" v-if="questsUser.length > 0"> {{ questsUser[0].quest.description }} </p>
-  <p class="individual-quest" v-else>Loading...</p>
+  <p class="individual-quest" v-else>Loading <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
+  </p>
   <v-progress-linear class="progress-quest" v-if="questsUser.length > 0" height="25"  :model-value="Math.round((questsUser[0].progress/questsUser[0].quest.condition)*100)"
                      @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">
     {{questsUser[0].quest.xp}} XP
@@ -13,7 +14,8 @@
 
   <h3 style="margin-bottom: 0.5em">Team</h3>
   <p class="team-quest" v-if="questsUser.length > 0">{{ questsUser[1].quest.description }}</p>
-  <p class="team-quest" v-else>Loading...</p>
+  <p class="team-quest" v-else>Loading      <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
+  </p>
   <v-progress-linear class="progress-quest" v-if="questsUser.length > 0" height="25" :model-value= "Math.round((questsUser[1].progress/questsUser[1].quest.condition)*100)"
                      @mouseover="showTooltip[1] = true" @mouseleave="showTooltip[1] = false">
     {{questsUser[1].quest.xp}} XP

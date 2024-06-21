@@ -16,7 +16,9 @@
         </v-progress-linear>
       </div>
     </div>
-    <p v-else>Loading...</p>
+    <p v-else>Loading
+      <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
+    </p>
   </v-card-text>
 </template>
 
