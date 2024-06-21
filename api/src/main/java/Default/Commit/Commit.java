@@ -32,6 +32,8 @@ public class Commit {
     @JsonProperty("author")
     private User author;
     
+    private Long repositoryId;
+    
     ///////////////////////////////////////////////
     // Getter & Setter
     ///////////////////////////////////////////////    
@@ -90,5 +92,13 @@ public class Commit {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public Long getRepoId() {
+        return repositoryId;
+    }
+
+    public void setRepoId(Long repoId) {
+        this.repositoryId = repoId;
     }
 }

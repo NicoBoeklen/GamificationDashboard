@@ -42,7 +42,9 @@ public class IssueController {
     @GetMapping("/api/issuesStats/{userId}/{repoId}")
     public IssueStats getIssueInfo(@PathVariable Long userId, @PathVariable Long repoId) {
         return new IssueStats(issueService.getAllIssuesTeam(repoId), issueService.getFixedIssuesTeam(repoId), issueService.getOpenIssuesTeam(repoId), issueService.getTotalClosedIssuesUser(userId,repoId),
-            issueService.getAverageAgeOfOpenIssues(repoId), issueService.getCountOpenIssuesLessSevenDays(repoId), issueService.getOpenIssuesTeam(repoId)- issueService.getCountOpenIssuesLessSevenDays(repoId)-issueService.getCountOpenIssuesMoreOneMonth(repoId), issueService.getCountOpenIssuesMoreOneMonth(repoId), issueService.getTeamAverageTimeFixIssue(repoId),issueService.getWeeklyClosedIssues(repoId),
+            issueService.getAverageAgeOfOpenIssues(repoId), issueService.getCountOpenIssuesLessSevenDays(repoId), 
+            issueService.getOpenIssuesTeam(repoId)- issueService.getCountOpenIssuesLessSevenDays(repoId)-issueService.getCountOpenIssuesMoreOneMonth(repoId), 
+            issueService.getCountOpenIssuesMoreOneMonth(repoId), issueService.getTeamAverageTimeFixIssue(repoId),issueService.getWeeklyClosedIssues(repoId),
             issueService.getWeeklyOpenIssues(repoId),issueService.getWeeklyTotalIssues(repoId),issueService.getIssuesPer1000LoCPerWeek(repoId));
     }
 }

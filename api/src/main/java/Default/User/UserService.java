@@ -31,7 +31,4 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
-    public String getUserAvatar(String username) {
-        return userRepository.getUserAvatar(username);
-    }
 }

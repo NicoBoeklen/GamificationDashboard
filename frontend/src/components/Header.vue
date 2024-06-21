@@ -1,27 +1,28 @@
 <template>
     <v-app-bar :elevation="0" app color="#5D5A5A" dark>
-      <v-avatar>
-        <img  alt="Avatar" />
-      </v-avatar>
+      <avatar-component></avatar-component>
       <v-toolbar-title class="mx-5">{{ userName }}</v-toolbar-title>
 
       <v-app-bar-title>GitHub Dashboard</v-app-bar-title>
 
       <template v-slot:append>
-        <v-btn variant="outlined" class="mr-3">Management View</v-btn>
+        <v-btn @click="redirectManagementView()" variant="outlined" class="mr-3">Management View</v-btn>
 
         <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 
-        <v-btn append-icon="mdi-logout" >Logout</v-btn>
+        <v-btn @click="redirectLogin()" append-icon="mdi-logout" >Logout</v-btn>
       </template>
     </v-app-bar>
 </template>
 
 <script>
-import {getUserName, toLogin} from "../objects/login";
+import AvatarComponent from "../diagrams/avatarHeader.vue"
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'
+import {redirectLogin, redirectManagementView} from "../objects/directions";
 export default {
+  components: {AvatarComponent},
+  methods: {redirectLogin, redirectManagementView},
   setup() {
     const userName = ref('');
     const theme = useTheme()

@@ -7,15 +7,18 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    CodeGrid: typeof import('./src/components/CodeGrid.vue')['default']
     CodeInsights: typeof import('./src/components/CodeInsights.vue')['default']
     DashboardHome: typeof import('./src/components/DashboardHome.vue')['default']
+    DeploymentGrid: typeof import('./src/components/DeploymentGrid.vue')['default']
     DeploymentInsights: typeof import('./src/components/DeploymentInsights.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HeaderInsights: typeof import('./src/components/HeaderInsights.vue')['default']
+    HeaderManagement: typeof import('./src/components/HeaderManagement.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     Insights: typeof import('./src/components/Insights.vue')['default']
+    IssueGrid: typeof import('./src/components/IssueGrid.vue')['default']
     IssueManagementInsights: typeof import('./src/components/IssueManagementInsights.vue')['default']
-    IssueManagmentInsights: typeof import('./src/components/IssueManagmentInsights.vue')['default']
     ManagementView: typeof import('./src/components/ManagementView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -1,325 +1,180 @@
 <template>
-    <Header/>
-    <v-container class="container">
+  <HeaderComponent/>
+  <v-container fluid class="container">
+    <v-app-bar app color="#5D5A5A" dark>
       <v-row>
         <v-col cols="12" md="4">
           <div class="d-flex align-center">
-            <v-avatar color="white darken-1" size="50" class="counter-number"
-            >level</v-avatar
-            >
-            <v-progress-linear
-              model-value="50"
-              height="20"
-              color="yellow"
-              class="progress-bar"
-            />
+            <Level></Level>
           </div>
         </v-col>
 
-        <v-col  class="commitment-wrapper">
-          <v-img
-            :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/a15a58212de51f3f8af173f0f65e334091b691385ab3ae8e623d83ef49bba2bc?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-            class="commitment-logo"
-            alt="Commitment Logo"
-          />
-          <p class="commitment-text">
-            <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span> <span>ment</span>
-          </p>
-        </v-col>
-        <v-btn @click="redirectInsights()"  class="insights-button" color="grey darken-2">Insights</v-btn>
-
-      </v-row>
-    </v-container>
-
-
-    <v-container class="main-container">
-      <v-row>
-        <v-col cols="12" md="4" class="content-section" >
-          <v-card class="project-info">
-            <v-card-title class="project-header">
-              <div>
-                <h1 class="project-title">Your Project</h1>
-                <p class="project-subtitle">Softwarepraktikum</p>
-              </div>
-            </v-card-title>
-            <v-card-text class="project-description">
-              Description: dkaskdsakd dsakdkasdk adkadkadksa
-              <br />
-              Created at: 25.05.2024
-              <br />
-              Updated at: 25.05.2024
-            </v-card-text>
-              <v-carousel hide-delimiters height="300" cycle interval="15000">
-                <v-carousel-item>
-                  <v-container class="fill-height" fluid>
-                    <v-row align="center" justify="center">
-                      <v-col class="text-center">
-                        <div>
-                          <h2>Erstes Item</h2>
-                          <p>Beschreibung des ersten Items</p>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-carousel-item>
-
-                <v-carousel-item>
-                  <v-container class="fill-height" fluid>
-                    <v-row align="center" justify="center">
-                      <v-col class="text-center">
-                        <div>
-                          <h2>Zweites Item</h2>
-                          <p>Beschreibung des zweiten Items</p>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-carousel-item>
-
-                <v-carousel-item>
-                  <v-container class="fill-height" fluid>
-                    <v-row align="center" justify="center">
-                      <v-col class="text-center">
-                        <div>
-                          <h2>Drittes Item</h2>
-                          <p>Beschreibung des dritten Items</p>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-carousel-item>
-              </v-carousel>
-
-
-          </v-card>
-
-
-          <v-card class="badges-section">
-            <v-card-title class="section-title">Badges</v-card-title>
-            <v-card-text class="badges-container" style="display: flex">
-              <v-img
-                :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/196eacaba534187ca530bde1ec70c21657fa163daf5d8f5b7a4d0d2d7bf2439c?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-                class="badge"
-                alt="Badge 1"
-              />
-              <v-img
-                :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/85e03766cb7ee30ce9f8855881450461c28cf54928fc1ef3fcb1d42a17dbb83a?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-                class="badge"
-                alt="Badge 2"
-              />
-              <v-img
-                :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/6aafcacc208e50dc71e7aeb9701f7d46d6f4389846c8f726b1f750773a7a62f5?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-                class="badge"
-                alt="Badge 3"
-              />
-              <v-img
-                :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/5e8e314d956b0814fc1a00042dc6bd098726acab30e645a4f3808aa2cf234fc8?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-                class="badge"
-                alt="Badge 4"
-              />
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-
-        <v-col cols="12" md="4" class="Quest-Milestones">
-          <v-card class="daily-quests">
-            <v-card-title class="section-title">Daily Quests</v-card-title>
-            <v-card-text>
-              <div class="quest-details">
-                <p class="team-quest">Team:create 3 commits</p>
-                  <v-progress-linear model-value="50" height="20" color="green darken-2"></v-progress-linear>
-
-                <p class="individual-quest">Individual:fix 1 Issue </p>
-                  <v-progress-linear model-value="25" height="20" color="orange"></v-progress-linear>
-
-              </div>
-            </v-card-text>
-          </v-card>
-
-          <v-card class="milestones">
-            <v-card-title class="section-title">Milestones</v-card-title>
-            <v-card-text>
-              <div class="milestone-details">
-                <p class="individual-milestone">Individual: Write 1000 LoC
-                  <v-progress-linear model-value="75" height="21" color="green darken-2" class="individual-progress-bar" />
-                </p>
-                <p class="team-milestone">Team: 100% Test Coverage
-                  <v-progress-linear model-value="60" height="21" color="orange" class="team-progress-bar" />
-                </p>
-              </div>
-            </v-card-text>
-          </v-card>
-
-          <v-card class="skills-section">
-            <v-card-title class="section-title">Your Skill</v-card-title>
-            <v-card-text>
-              <v-img
-                :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/81eabb22cac08b2287addddfd799f21f73a1d93835cc2bc7583fe1f65abe5281?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-                class="skill"
-                alt="Your skill representation"
-              />
-            </v-card-text>
-          </v-card>
-
-        </v-col>
-
-
-        <v-col cols="12" md="4" class="Leaderboard">
-          <v-card class="leaderboard-section">
-            <v-card-title>Leaderboard</v-card-title>
-              <v-list lines="one" v-for="leader in leaders" :key="leader.rank">
-                <v-list-item
-                  :key="leader.rank"
-                  :title="leader.rank +'  '+ leader.name  "
-                >
-                </v-list-item>
-              </v-list>
-          </v-card>
+        <v-col class="commitment-wrapper">
+          <div class="d-flex align-center">
+            <!--<v-img
+              :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/a15a58212de51f3f8af173f0f65e334091b691385ab3ae8e623d83ef49bba2bc?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
+              class="commitment-logo"
+              alt="Commitment Logo"
+            />
+            <p class="commitment-text">
+              <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span>
+              <span>ment</span>
+            </p>-->
+            <div class="right-align-container">
+              <p>To update your project data please re-login!</p>
+              <v-btn @click="redirectCodeInsights()" variant="outlined" class="mr-3">Insights
+              </v-btn>
+            </div>
+          </div>
         </v-col>
       </v-row>
-
-    </v-container>
-
-
+    </v-app-bar>
+  </v-container>
 
 
+  <v-container fluid class="main-container" style="margin:0; padding-top: 0">
+    <v-row>
+      <v-col cols="12" md="4" class="content-section">
+        <v-card class="project-info">
+          <infos></infos>
+        </v-card>
+
+        <v-card class="badges-section">
+          <badges></badges>
+        </v-card>
+      </v-col>
 
 
+      <v-col cols="12" md="4" class="Quest-Milestones">
+        <v-card class="daily-quests">
+          <quests></quests>
+        </v-card>
+
+        <v-card class="milestones">
+          <milestones></milestones>
+        </v-card>
+
+      </v-col>
+
+
+      <v-col cols="12" md="4" class="Leaderboard">
+        <v-card class="leaderboard-section">
+          <v-card-title class="d-flex align-items-center">Leaderboard
+            <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">
+              mdi-information
+            </v-icon>
+            <span v-if="showTooltip[0]" class="tooltip">Sum of your 4 Skill Values</span>
+          </v-card-title>
+          <leaderboard-diagramm-component></leaderboard-diagramm-component>
+        </v-card>
+        <v-card class="skills-section">
+          <v-card-title class="d-flex align-items-center section-title">Your Skill
+            <v-icon small class="info-icon" @mouseover="showTooltip[1] = true" @mouseleave="showTooltip[1] = false">
+              mdi-information
+            </v-icon>
+            <span v-if="showTooltip[1]" class="tooltip">10 means you have the highest value. 8 would be 80% of the maximum</span>
+          </v-card-title>
+          <skill-diagramm-component></skill-diagramm-component>
+        </v-card>
+      </v-col>
+    </v-row>
+
+  </v-container>
 
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import Header from "./Header.vue";
-import {redirectInsights} from "../objects/directions";
-
+import {defineComponent, onMounted, ref} from 'vue';
+import HeaderComponent from "./Header.vue";
+import SkillDiagrammComponent from "../diagrams/skill/skillDiagramm.vue";
+import LeaderboardDiagrammComponent from "../diagrams/leaderboard/leaderboardDiagramm.vue";
+import Level from "../diagrams/level/level.vue";
+import {redirectCodeInsights, redirectInsights} from "../objects/directions";
+import Milestones from "../diagrams/dashboard/milestones.vue";
+import Quests from "../diagrams/dashboard/quests.vue";
+import Badges from "../diagrams/dashboard/badges.vue";
+import Infos from "../diagrams/dashboard/infos.vue";
 
 export default defineComponent({
   name: 'Leaderboard',
-  methods: {redirectInsights},
-  components: {Header},
+  methods: {redirectCodeInsights, redirectInsights},
+  components: {
+    Infos,
+    Quests,
+    Milestones,
+    Badges,
+    HeaderComponent,
+    SkillDiagrammComponent,
+    LeaderboardDiagrammComponent,
+    Level
+  },
   data() {
     return {
-      leaders: [
-        {
-          rank: 1,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/f77b48eb9d16d39e1c7ad7b5f8e2bc3847fd652604f32c03cdf04e486257dab6?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Klaus Mustermann',
-          badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1e8399cb57e88e5e9092227495545dfb63d59951c400cd17ae5479e6e0306f1b?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-        },
-        {
-          rank: 2,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/06d69d3f6c7276984cf4cf171b587ee1241dc88c0392aa0cd06cf87d09a74ceb?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Irene Mustermann',
-          badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e372f5bef41dc732160069bbfdec8c6db632f36f961f734593352180524e99ba?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-        },
-        {
-          rank: 3,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Jeff Bezos',
-          badge: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-        },
-        {
-          rank: 4,
-          avatar: 'https://cdn.builder.io/api/v1/image/assets/TEMP/400f329893e75bc90b6e6ae8ff65b94830315c38f9b9989d986c67e1a2572d1e?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&',
-          name: 'Jeff Joe',
-          badge: '',
-        },
-      ],
-    };
-  },
-
+      showTooltip: [false, false],
+    }
+  }
 });
-
 </script>
 
 <style scoped>
-
-.counter-box {
-  margin-bottom: 20px;
+.right-align-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+.right-align-container p {
+  margin: 0;
+  margin-right: 1em;
 }
 
-.commitment-wrapper {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2px;
+.info-icon {
+  margin-left: 0.3em;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.3em 0.5em;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10000;
+  top: 1em;
+  bottom: 85%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .commitment-logo {
-  margin-right: 75px;
   height: 50px; /* Adjust height as needed */
   width: auto; /* Maintain aspect ratio */
 }
 
 .commitment-text {
   font-size: 20px; /* Adjust font size as needed */
-
-}
-
-.insights-button {
-  margin-top: 20px;
-  float: right;
 }
 
 .content-section {
-  margin-bottom: 20px;
+  margin-bottom: 1em;
 }
 
 .project-info {
-  margin-bottom: 20px;
+  margin-bottom: 1em;
 }
-
-.project-header {
-  margin-bottom: 10px;
-}
-
-.project-title {
-  margin-bottom: 5px;
-  font-size: 24px; /* Adjust font size as needed */
-}
-
-.project-subtitle {
-  font-size: 18px; /* Adjust font size as needed */
-}
-
-.project-description {
-  margin-bottom: 10px;
-}
-
-.project-stats {
-  display: flex;
-  justify-content: space-between;
-}
-
-
 
 .daily-quests,
-.milestones {
-  margin-bottom: 10px;
+.milestones,
+.leaderboard-section {
+  margin-bottom: 1em;
 }
 
 .section-title {
   font-size: 20px; /* Adjust font size as needed */
-  margin-bottom: 10px;
+  margin-bottom: 1em;
 }
 
-.quest-details,
-.milestone-details {
-  margin-bottom: 1px;
-}
-
-
-
-.badge {
-  margin-right: 10px;
-  height: 50px; /* Adjust height as needed */
-  width: auto;
-  align-items: start
-}
-
-
-.avatar img {
-  border-radius: 50%;
-}
 </style>

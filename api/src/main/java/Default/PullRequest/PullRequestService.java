@@ -11,6 +11,8 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class PullRequestService {
@@ -28,13 +30,11 @@ public class PullRequestService {
      * @return The saved pullRequest
      */
     public Mono<PullRequest> savePullRequest(PullRequest pullRequest) {
-        try {
-            Issue issue = issueService.findIssuesByNumber(pullRequest.getNumber()).stream().filter(i -> i.getOpenedBy().getRepoId().equals(pullRequest.getOpenedBy().getRepoId())).findFirst().orElseThrow();
-            issueService.deleteIssueById(issue.getId());
-            return Mono.fromCallable(() -> pullRequestRepository.save(pullRequest));
-        } catch (Error e) {
-            return Mono.fromCallable(() -> pullRequestRepository.save(pullRequest));
+        Optional<Issue> issue = issueService.findIssuesByNumber(pullRequest.getNumber()).stream().filter(i -> i.getRepoId().equals(pullRequest.getRepoId())).findFirst();
+        if (issue.isPresent()) {
+            issueService.deleteIssueById(issue.get().getId());
         }
+        return Mono.fromCallable(() -> pullRequestRepository.save(pullRequest));
     }
 
     public Integer getNumberReviews(Long userId, Long repoId) {
@@ -105,7 +105,7 @@ public class PullRequestService {
     }
 
     public int getTeamReviews(Long repoId) {
-        return (int) pullRequestRepository.findAll().stream().filter(pr -> pr.getState().equals(("closed"))).filter(pr -> pr.getOpenedBy().getRepoId().equals(repoId)).count();
+        return (int) pullRequestRepository.findAll().stream().filter(pr -> pr.getState().equals(("closed"))).filter(pr -> pr.getRepoId().equals(repoId)).count();
     }
 
     public Integer getTeamReviewsByDay(Long repoId, LocalDate day) {

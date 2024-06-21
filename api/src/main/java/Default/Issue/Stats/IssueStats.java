@@ -9,7 +9,7 @@ public class IssueStats {
     public Integer amountFixedIssuesTeam;
     public Integer amountOpenIssuesTeam;
     public Integer amountTotalClosedIssuesUser;
-    public Double averageAgeOfOpenIssuesInDays;
+    public Double averageAgeOfOpenIssues;
     public Integer amountOpenIssuesLessSevenDays;
     public Integer amountOpenIssuesBetweenWeekAndMonth;
     public Integer amountOpenIssuesMoreThanAMonth;
@@ -20,13 +20,13 @@ public class IssueStats {
     public List<IssuesWeeklyDouble> issuesPer1000LoC;
     
     public IssueStats(Integer amountTotalIssuesTeam, Integer amountFixedIssuesTeam, Integer amountOpenIssuesTeam, Integer amountTotalClosedIssuesUser,
-                       Double averageTimeFixIssueOpenTeam,Integer amountOpenIssuesLessSevenDays, Integer amountOpenIssuesBetweenWeekAndMonth, Integer amountOpenIssuesMoreThanAMonth, Double averageTimeFixIssueTotalTeam, List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues,
-                      List<IssuesWeekly> weeklyTotalIssues, List<IssuesWeeklyDouble> issuesPer1000LoC) {
+                       Double averageAgeOfOpenIssues,Integer amountOpenIssuesLessSevenDays, Integer amountOpenIssuesBetweenWeekAndMonth, Integer amountOpenIssuesMoreThanAMonth, Double averageTimeFixIssueTotalTeam, 
+                      List<IssuesWeekly> weeklyClosedIssues, List<IssuesWeekly> weeklyOpenIssues, List<IssuesWeekly> weeklyTotalIssues, List<IssuesWeeklyDouble> issuesPer1000LoC) {
         this.amountTotalIssuesTeam = amountTotalIssuesTeam;
         this.amountFixedIssuesTeam = amountFixedIssuesTeam;
         this.amountOpenIssuesTeam = amountOpenIssuesTeam;
         this.amountTotalClosedIssuesUser = amountTotalClosedIssuesUser;
-        this.averageAgeOfOpenIssuesInDays = averageTimeFixIssueOpenTeam;
+        this.averageAgeOfOpenIssues = averageAgeOfOpenIssues;
         this.amountOpenIssuesLessSevenDays = amountOpenIssuesLessSevenDays;
         this.amountOpenIssuesBetweenWeekAndMonth = amountOpenIssuesBetweenWeekAndMonth;
         this.amountOpenIssuesMoreThanAMonth = amountOpenIssuesMoreThanAMonth;

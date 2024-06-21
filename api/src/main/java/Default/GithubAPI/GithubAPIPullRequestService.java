@@ -3,6 +3,7 @@ package Default.GithubAPI;
 import Default.Apikey;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequest;
+import Default.User.User;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +26,7 @@ import java.util.regex.Pattern;
  * Functionality to request issues via GitHub API
  * Uses API Key to avoid rate-limit
  * With API-Key 5000 Requests per Hour are possible
- * 
+ * <p>
  * ToDo: Check if mergedBy is good for closedBy (=Who reviewed). Whats with auto merge?
  */
 @Service
@@ -59,6 +63,7 @@ public class GithubAPIPullRequestService {
         String url = String.format("/repos/%s/%s/pulls?state=closed", owner, repo);
         String url2 = String.format("/repos/%s/%s/pulls?state=open", owner, repo);
         return Flux.merge(getPullsRecursively(url), getPullsRecursively(url2))
+            .filter(Objects::nonNull)
             .distinct(PullRequest::getId) // Remove duplicates by ID
             .flatMap(pull -> fetchPullDetails(pull, owner, repo, repoId));
     }
@@ -82,7 +87,7 @@ public class GithubAPIPullRequestService {
                 .flatMapMany(nextUrl -> Flux.fromIterable(pullRequest).concatWith(getPullsRecursively(nextUrl)))
                 .switchIfEmpty(Flux.fromIterable(pullRequest)));
     }
-    
+
     /**
      * Method to Avoid Pagination of GitHub
      *
@@ -139,42 +144,39 @@ public class GithubAPIPullRequestService {
      * @return Single pullRequest with als attributes
      */
     private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo, Long repoId) {
-
         String url = String.format("/repos/%s/%s/pulls/%s", owner, repo, pullRequest.getNumber());
-        //Only if Pull Request search for details
+
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {
+                pullRequest.setRepoId(repoId);
                 if (details.getUser() != null) {
-                    try {
-                        pullRequest.setClosedBy(userService.findById(details.getUser().getId(), repoId).orElseThrow(ChangeSetPersister.NotFoundException::new));
-                    } catch (ChangeSetPersister.NotFoundException e) {
-                        pullRequest.setClosedBy(null);                    }
+                    Optional<User> closedByUser = userService.findById(details.getUser().getId(), repoId);
+                    pullRequest.setClosedBy(closedByUser.orElse(null));
                 }
                 pullRequest.setAdditions(details.additions);
                 pullRequest.setDeletions(details.deletions);
                 pullRequest.setCommentNumber(details.commentNumber);
                 pullRequest.setCommitNumber(details.commitNumber);
-                try {
-                    //It can happen that an issue is opened by a user that is not a contributor
-                    pullRequest.getOpenedBy().setRepoId(repoId);
-                    pullRequest.setOpenedBy(userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getOpenedBy().getRepoId()).orElseThrow(ChangeSetPersister.NotFoundException::new));
-                } catch (ChangeSetPersister.NotFoundException e) {
-                    pullRequest.setOpenedBy(null);
+
+                if (pullRequest.getOpenedBy() != null) {
+                    Optional<User> openedByUser = userService.findById(pullRequest.getOpenedBy().getUserId(), pullRequest.getRepoId());
+                    pullRequest.setOpenedBy(openedByUser.orElse(null));
                 }
                 return pullRequest;
             });
+
     }
-        
+
 
     /**
      * Anonym Class for Requesting Issue Details
      * Represents the structure of the response of the GitHub API
      */
     private static class PullRequestDetails {
-        
+
         @JsonProperty("additions")
         private Integer additions;
 

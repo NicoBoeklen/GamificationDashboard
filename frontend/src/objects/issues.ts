@@ -1,7 +1,6 @@
 import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {type Ref, ref} from "vue";
 interface WeeklyIssues {
   week: string;
   issues: number;
@@ -18,25 +17,17 @@ export interface Issue {
   amountFixedIssuesTeam: number;
   amountOpenIssuesTeam: number;
   amountTotalClosedIssuesUser: number;
-  averageTimeFixIssueOpenTeam: number;
-  averageTimeFixIssueTotalTeam: number;
+  averageAgeOfOpenIssues: number;
+  amountOpenIssuesLessSevenDays: number;
+  amountOpenIssuesBetweenWeekAndMonth: number;
+  amountOpenIssuesMoreThanAMonth: number;
+  averageTimeToFixIssueInDaysTeam: number;
   weeklyClosedIssues: WeeklyClosedIssues[];
   weeklyOpenIssues: weeklyOpenIssues[];
   weeklyTotalIssues: weeklyTotalIssues[];
   issuesPer1000LoC: issuesPer1000LoC[];
 }
-let issue: Issue = {
-  amountTotalIssuesTeam: 0,
-  amountFixedIssuesTeam: 0,
-  amountOpenIssuesTeam: 0,
-  amountTotalClosedIssuesUser: 0,
-  averageTimeFixIssueOpenTeam: 0,
-  averageTimeFixIssueTotalTeam: 0,
-  weeklyClosedIssues: [],
-  weeklyOpenIssues: [],
-  weeklyTotalIssues: [],
-  issuesPer1000LoC: [],
-};
+
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
 console.log("UserId lautet"+userId);

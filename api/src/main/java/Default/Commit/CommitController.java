@@ -41,7 +41,7 @@ public class CommitController {
      */
     @GetMapping("/commits/{owner}/{repo}/{repoId}")
     public Mono<ResponseEntity<String>> getCommits(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId) {
-        return githubAPICommitService.getCommits(owner, repo)
+        return githubAPICommitService.getCommits(owner, repo, repoId)
             .flatMap(commit -> {
                 //If author is not a contributor (no User exists in Database)
                 if (commit.getAuthor() != null) {

@@ -15,3 +15,9 @@ export function redirectIssueManagment() {
 export function redirectDeployment(){
   router.push('/deployment')
 }
+export function redirectManagementView(){
+  router.push('/management')
+}
+export function redirectLogin(){
+  router.push('/')
+}

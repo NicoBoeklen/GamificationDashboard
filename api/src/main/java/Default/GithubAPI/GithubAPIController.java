@@ -45,9 +45,6 @@ public class GithubAPIController {
             .then(Mono.just(ResponseEntity.ok("Data saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("Error occurred: " + e.getMessage())));
     }
-    
-
-    
 
     ///////////////////////////////////////////////
     // Requesting methods

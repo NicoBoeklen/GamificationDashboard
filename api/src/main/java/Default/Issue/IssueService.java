@@ -73,7 +73,7 @@ public class IssueService {
     }
 
     public Double getAverageAgeOfOpenIssues(Long repoId) {
-        return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).filter(issue -> issue.getOpenedBy() != null).filter(issue -> issue.getOpenedBy().getRepoId().equals(repoId)).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
+        return issueRepository.findAll().stream().filter(issue -> issue.getState().equals("open")).filter(issue -> issue.getOpenedBy() != null).filter(issue -> issue.getRepoId().equals(repoId)).mapToLong(issue -> ChronoUnit.DAYS.between(issue.getDateOpened(), LocalDateTime.now())).average().orElse(0);
     }
 
     public Integer getCountOpenIssuesLessSevenDays(Long repoId) {
@@ -95,10 +95,22 @@ public class IssueService {
     }
 
     public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
-        return issueRepository.findWeeklyClosedIssues(repoId);
+        Set<LocalDateTime> weekList = getWeeksBetweenDates(issueRepository.findWeekFirstIssue(repoId));
+        List<IssuesWeekly> weeklyTotalIssues = new ArrayList<>();
+        for (LocalDateTime week : weekList) {
+            long openIssuesCount = 0;
+            for (Issue issue : issueRepository.getAllClosedIssues(repoId)) {
+                LocalDateTime truncatedClosedDate= truncateDate(issue.getDateClosed());
+                if(truncatedClosedDate.isBefore(week)||truncatedClosedDate.isEqual(week)){
+                    openIssuesCount++;
+                }
+            }
+            weeklyTotalIssues.add(new IssuesWeekly(week, openIssuesCount));
+        }
+        return weeklyTotalIssues;
     }
     public List<IssuesWeekly> getWeeklyTotalIssues(Long repoId) {
-        Set<LocalDateTime> weekList = getIssueWeeks(issueRepository.getAllIssues(repoId));
+        Set<LocalDateTime> weekList = getWeeksBetweenDates(issueRepository.findWeekFirstIssue(repoId));
         List<IssuesWeekly> weeklyTotalIssues = new ArrayList<>();
         for (LocalDateTime week : weekList) {
             long openIssuesCount = 0;
@@ -116,23 +128,25 @@ public class IssueService {
         }
         return weeklyTotalIssues;
     }
+    private Set<LocalDateTime> getWeeksBetweenDates(LocalDateTime startDate) {
+        LocalDateTime endDate = LocalDateTime.now();
+        Set<LocalDateTime> weeks = new TreeSet<>();
+        if (startDate==null){
+            return weeks;
+        }
+        while (!startDate.isAfter(endDate)) {
+            weeks.add(startDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
+            startDate = startDate.plusWeeks(1);
+        }
+        return weeks;
+    }
     private LocalDateTime truncateDate(LocalDateTime date) {
         return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(java.time.temporal.ChronoUnit.DAYS);
-    }
-    private Set<LocalDateTime> getIssueWeeks(List<Issue> issues) {
-        Set<LocalDateTime> weekList = new TreeSet<>();
-        for (Issue issue: issues){
-            weekList.add(issue.getDateOpened().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
-            if (issue.getDateClosed() != null) {
-                weekList.add(issue.getDateClosed().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS));
-            }
-        }
-        return weekList;
     }
     public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId){
         List<Issue> issues= issueRepository.getAllIssues(repoId);
         List<IssuesWeekly> weeklyOpenIssues = new ArrayList<>();
-        Set<LocalDateTime> weekList = getIssueWeeks(issues);
+        Set<LocalDateTime> weekList = getWeeksBetweenDates(issueRepository.findWeekFirstIssue(repoId));
         for (LocalDateTime week : weekList) {
             long openIssuesCount = 0;
             for (Issue issue : issues) {

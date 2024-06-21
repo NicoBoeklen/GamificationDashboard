@@ -17,7 +17,7 @@ public class PullRequest extends Issue {
 
     @JsonProperty("review_comments")
     private Integer commentNumber;
-
+        
     ///////////////////////////////////////////////
     // Getter & Setter
     ///////////////////////////////////////////////

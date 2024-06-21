@@ -43,10 +43,10 @@ public class GithubAPICommitService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Flux (Datastream) of Commits
      */
-    public Flux<Commit> getCommits(String owner, String repo) {
+    public Flux<Commit> getCommits(String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/commits", owner, repo);
         return getCommitsRecursively(url)
-            .flatMap(commit -> fetchCommitDetails(commit, owner, repo));
+            .flatMap(commit -> fetchCommitDetails(commit, owner, repo, repoId));
     }
 
 
@@ -118,20 +118,22 @@ public class GithubAPICommitService {
      * @param repo   Name of the GitHub Repository
      * @return Single Commit with als attributes
      */
-    private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo) {
+    private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo, Long repoId) {
         String url = String.format("/repos/%s/%s/commits/%s", owner, repo, commit.getId());
         return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(CommitDetails.class)
             .map(details -> {
+                commit.setRepoId(repoId);
                 commit.setAdditions(details.getStats().getAdditions());
                 commit.setDeletions(details.getStats().getDeletions());
                 commit.setDate(details.getCommitInfo().getAuthor().getDate());
-                commit.setMessage(details.getCommitInfo().getMessage());
+                //commit.setMessage(details.getCommitInfo().getMessage());
+                commit.setMerge(details.getParents().size()>1);
                 return commit;
-            })
-            .map(commits -> setCommitMerge(commit));
+            });
+            //.map(commits -> setCommitMerge(commit));
     }
 
     /**
@@ -159,7 +161,10 @@ public class GithubAPICommitService {
 
         @JsonProperty("stats")
         private Stats stats;
-
+        
+        @JsonProperty("parents")
+        private List<Parents> parents;
+        
         public CommitInfo getCommitInfo() {
             return commitInfo;
         }
@@ -174,6 +179,14 @@ public class GithubAPICommitService {
 
         public void setStats(Stats stats) {
             this.stats = stats;
+        }
+
+        public List<Parents> getParents() {
+            return parents;
+        }
+
+        public void setParents(List<Parents> parents) {
+            this.parents = parents;
         }
 
         private static class CommitInfo {
@@ -240,6 +253,36 @@ public class GithubAPICommitService {
 
             public void setDeletions(int deletions) {
                 this.deletions = deletions;
+            }
+        }
+        
+        private static class Parents {
+            private String sha;
+            private String url;
+            private String html_url;
+
+            public String getSha() {
+                return sha;
+            }
+
+            public void setSha(String sha) {
+                this.sha = sha;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+
+            public String getHtml_url() {
+                return html_url;
+            }
+
+            public void setHtml_url(String html_url) {
+                this.html_url = html_url;
             }
         }
     }
