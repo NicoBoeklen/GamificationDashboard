@@ -58,6 +58,7 @@ export default {
             },
             y: {
               display: true,
+              beginAtZero: true,
               title: {
                 display: true,
                 text: 'Open Issues'
