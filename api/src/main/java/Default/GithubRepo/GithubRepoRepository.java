@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface GithubRepoRepository extends JpaRepository<GithubRepo, Long> {
 
-    @Query("SELECT r FROM GithubRepo r WHERE r.owner.repoId=:repoId")
+    @Query("SELECT r FROM GithubRepo r WHERE r.id =:repoId")
     GithubRepo findByRepoIdUserId(@Param("repoId") Long repoId);
 }
 

@@ -1,6 +1,7 @@
 package Default.Gamification.Quest;
 
 import Default.Commit.CommitService;
+import Default.Gamification.Achievement.UserAchievementRepository;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequestService;
 import Default.User.User;
@@ -21,6 +22,9 @@ public class QuestService {
 
     @Autowired
     private UserQuestRepository userQuestRepository;
+
+    @Autowired
+    private UserAchievementRepository userAchievementRepository;
 
     @Autowired
     private UserService userService;
@@ -114,6 +118,8 @@ public class QuestService {
                     }
                     break;
             }
+            user.setLevel(userQuestRepository.findAll().stream().filter(q -> q.getUser().equals(user)).mapToInt(q -> q.getQuest().getXp()).sum() 
+                + userAchievementRepository.findAll().stream().filter(q -> q.getUser().equals(user)).mapToInt(q -> q.getAchievement().getXp()).sum());
         }
         return todaysQuests;
     }
