@@ -3,6 +3,8 @@
   <v-card-text>
     <div class="milestone-container" v-if="milestoneUser.length > 0">
       <div v-for="(milestone, index) in milestoneUser" :key="index" class="milestone-item">
+        <h3 style="margin-bottom: 0.5em" v-if="index===0">Individual</h3>
+        <h3 style="margin-bottom: 0.5em" v-if="index===14">Team</h3>
         <p>{{ milestone.achievement.description }}</p>
         <v-progress-linear
           class="progress-milestones"
@@ -53,7 +55,7 @@ export default {
 }
 
 .milestone-container {
-  max-height: 20em;
+  max-height: 30em;
   overflow-y: auto;
 }
 

@@ -49,18 +49,6 @@
             <milestones></milestones>
           </v-card>
 
-          <v-card class="skills-section">
-            <v-card-title class="section-title">Your Skill</v-card-title>
-            <!-- <v-card-text>
-              <v-img
-                :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/81eabb22cac08b2287addddfd799f21f73a1d93835cc2bc7583fe1f65abe5281?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-                class="skill"
-                alt="Your skill representation"
-              />
-            </v-card-text> -->
-            <skill-diagramm-component></skill-diagramm-component>
-          </v-card>
-
         </v-col>
 
 
@@ -68,24 +56,15 @@
           <v-card class="leaderboard-section">
             <v-card-title>Leaderboard</v-card-title>
             <leaderboard-diagramm-component></leaderboard-diagramm-component>
-             <!-- <v-list lines="one" v-for="leader in leaders" :key="leader.rank">
-                <v-list-item
-                  :key="leader.rank"
-                  :title="leader.rank +'  '+ leader.name  "
-                >
-                </v-list-item>
-              </v-list>-->
+          </v-card>
+          <v-card class="skills-section">
+            <v-card-title class="section-title">Your Skill</v-card-title>
+            <skill-diagramm-component></skill-diagramm-component>
           </v-card>
         </v-col>
       </v-row>
 
     </v-container>
-
-
-
-
-
-
 
 </template>
 
@@ -113,12 +92,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-.counter-box {
-  margin-bottom: 20px;
-}
-
-
 .commitment-logo {
   height: 50px; /* Adjust height as needed */
   width: auto; /* Maintain aspect ratio */
@@ -129,23 +102,22 @@ export default defineComponent({
 }
 
 .content-section {
-  margin-bottom: 20px;
+  margin-bottom: 1em;
 }
 
 .project-info {
-  margin-bottom: 20px;
+  margin-bottom: 1em;
 }
 
-
-
 .daily-quests,
-.milestones {
-  margin-bottom: 10px;
+.milestones,
+.leaderboard-section{
+  margin-bottom: 1em;
 }
 
 .section-title {
   font-size: 20px; /* Adjust font size as needed */
-  margin-bottom: 10px;
+  margin-bottom: 1em;
 }
 
 </style>
