@@ -1,6 +1,7 @@
 <template>
   <div>
-    <canvas id="releaseChart" style="padding-bottom: 1em; padding-left: 1em; padding-right: 1em; margin-top: 0;"></canvas>
+    <p v-if="releasesCount === 0" style="margin-left: 1em; margin-top: 0.5em;margin-bottom: 0.5em">No Releases</p>
+    <canvas v-else id="releaseChart" style="padding-bottom: 1em; padding-left: 1em; padding-right: 1em; margin-top: 0;"></canvas>
   </div>
 </template>
 
@@ -8,11 +9,17 @@
 import Chart from 'chart.js/auto';
 import { fetchReleases } from '../../objects/releases.ts';
 
-export default {
+let releasesCount;
+
+export default {data() {
+    return {
+      releasesCount: 0,
+    };
+  },
   async mounted() {
     const releases = await fetchReleases();
+    releasesCount = releases.releaseList.length;
     const latestReleases = releases.releaseList.slice(0, 4); // Die neuesten 4 Releases
-
     const labels = latestReleases.map(release => release.tag_name);
     const publishedDates = latestReleases.map(release => release.published_at);
 
