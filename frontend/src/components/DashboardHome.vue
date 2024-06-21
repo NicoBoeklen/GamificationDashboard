@@ -113,13 +113,12 @@ export default defineComponent({
       showTooltip: [false, false],
     }
   },
-  beforeRouteEnter(to, from, next) {
-    if (from.name === 'home') {
-      next()
+  mounted() {
+    if (localStorage.getItem('loaded') === "falsch") {
+      localStorage.setItem('loaded', "true");
       console.log("Ich sollte die Seite aktualisieren")
-      //window.location.reload();
+      window.location.reload();
     }
-    next();
   }
 });
 </script>
