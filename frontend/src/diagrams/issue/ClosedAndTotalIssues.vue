@@ -58,6 +58,19 @@ export default {
         },
         options: {
           responsive: true,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                title: function(context) {
+                  return 'Week: ' + context[0].label;
+                },
+                label: function(context) {
+                  const issues = context.raw; // Beispiel für Benutzer-spezifische Commits
+                  return 'Issues: ' + issues;
+                }
+              }
+            }
+          },
           scales: {
             x: {
               display: true,

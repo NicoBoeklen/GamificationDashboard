@@ -36,7 +36,7 @@ export default {
           labels: labels,
           datasets: [
             {
-              label: 'Open Issues',
+              label: 'Open Issues / 1000 LoC',
               data: data,
               fill: false,
               borderColor: 'rgba(8, 98, 189, 0.5)',
