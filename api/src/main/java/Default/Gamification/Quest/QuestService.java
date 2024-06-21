@@ -120,6 +120,7 @@ public class QuestService {
             }
             user.setLevel(userQuestRepository.findAll().stream().filter(q -> q.getUser().equals(user)).mapToInt(q -> q.getQuest().getXp()).sum() 
                 + userAchievementRepository.findAll().stream().filter(q -> q.getUser().equals(user)).mapToInt(q -> q.getAchievement().getXp()).sum());
+            userService.saveUser2(user);
         }
         return todaysQuests;
     }

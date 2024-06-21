@@ -112,6 +112,14 @@ export default defineComponent({
     return {
       showTooltip: [false, false],
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    if (from.name === 'home') {
+      next()
+      console.log("Ich sollte die Seite aktualisieren")
+      //window.location.reload();
+    }
+    next();
   }
 });
 </script>
@@ -123,6 +131,7 @@ export default defineComponent({
   align-items: center;
   width: 100%;
 }
+
 .right-align-container p {
   margin: 0;
   margin-right: 1em;

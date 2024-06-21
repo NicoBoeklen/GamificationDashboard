@@ -34,12 +34,21 @@ export default {
     };
   },
   async mounted() {
+    await fetchMilestone();
     const user = await fetchAvatar();
     this.level = user.level;
     this.realLevel = Math.floor((1 + Math.sqrt(1 + (this.level / 12.5))) / 2);
     this.progress = Math.floor((((1 + Math.sqrt(1 + (this.level / 12.5))) / 2) - Math.floor((1 + Math.sqrt(1 + (this.level / 12.5))) / 2)) * 100);
     console.log(this.progress, this.realLevel, ((1 + Math.sqrt(1 + (this.level / 12.5))) / 2))
-  }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name ==='dashboard') {
+        console.log("Ich sollte die Level aktualisieren")
+        //window.location.reload();
+      }
+    }
+  },
 };
 </script>
 
