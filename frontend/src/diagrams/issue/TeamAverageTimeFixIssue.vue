@@ -2,7 +2,7 @@
   <div style="padding: 1em">
     <div>
       <span>
-        <span :style="{ fontSize:'1.5em'}">{{ averageTimeToFixIssueInDaysTeam }}</span> Days
+        <span :style="{ color: issueColor,fontSize:'1.5em'}">{{ averageTimeToFixIssueInDaysTeam }}</span> Days
       </span>
     </div>
   </div>
@@ -16,6 +16,17 @@ export default {
     return {
       averageTimeToFixIssueInDaysTeam: 0,
     };
+  },
+  computed: {
+    issueColor() {
+      if (this.averageTimeToFixIssueInDaysTeam < 7) {
+        return 'green';
+      } else if (this.averageTimeToFixIssueInDaysTeam < 14) {
+        return '#DAA520'; // Dark yellow
+      } else {
+        return 'red';
+      }
+    }
   },
 
   async mounted() {

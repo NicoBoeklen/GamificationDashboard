@@ -2,7 +2,7 @@
   <div style="padding: 1em">
     <div>
       <span>
-        <span :style="{ fontSize:'1.5em'}">{{ averageAgeOfOpenIssues }}</span> Days
+        <span :style="{ color: issueColor,fontSize:'1.5em'}">{{ averageAgeOfOpenIssues }}</span> Days
       </span>
     </div>
   </div>
@@ -17,7 +17,17 @@ export default {
       averageAgeOfOpenIssues: 0,
     };
   },
-
+  computed: {
+    issueColor() {
+      if (this.averageAgeOfOpenIssues < 7) {
+        return 'green';
+      } else if (this.averageAgeOfOpenIssues < 14) {
+        return '#DAA520'; // Dark yellow
+      } else {
+        return 'red';
+      }
+    }
+  },
   async mounted() {
     const issue = await fetchIssues();
     this.averageAgeOfOpenIssues = Math.round(issue.averageAgeOfOpenIssues*10)/10;
