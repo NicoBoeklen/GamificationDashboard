@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container class="leaderboard-container" fluid>
     <v-row>
       <v-col cols="12" v-if="Object.keys(leaderboard).length > 0">
         <v-row v-for="(value, name, index) in leaderboard" :key="name">
@@ -40,6 +40,10 @@ export default {
 </script>
 
 <style scoped>
+.leaderboard-container {
+  max-height: 17em;
+  overflow-y: auto;
+}
 .highlighted-card {
   background-color: #FFD700; /* Gold color for highlighted card */
 }
