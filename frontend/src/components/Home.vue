@@ -41,7 +41,10 @@
                   dense
                   :disabled="isLoading"
                   class="mb-4"
-                ></v-text-field>
+                ><v-tooltip
+                  activator="parent"
+                  location="start"
+                >Public Repository</v-tooltip></v-text-field>
                 <v-text-field
                   label="Owner Name"
                   :rules="[rules.required]"
@@ -56,7 +59,7 @@
                   class="mb-4"
                 ></v-text-field>
                 <v-text-field
-                  label="Api Key"
+                  label="Github Api Key"
                   :rules="[rules.required]"
                   v-model="toLogin.apiKey"
                   color="blue"
@@ -67,7 +70,10 @@
                   dense
                   :disabled="isLoading"
                   class="mb-4"
-                ></v-text-field>
+                ><v-tooltip style="width: 20em"
+                  activator="parent"
+                  location="start"
+                >Github ->  Settings ->  Developer-Settings ->  Personal-Access Token->  Tokens(Classic) ->  new</v-tooltip></v-text-field>
                 <v-btn color="primary" type="button" block class="mt-4" @click="handleLogin()" @keyup.enter="handleLogin()" :disabled="isLoading">
                   <template v-if="isLoading">
                     <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
