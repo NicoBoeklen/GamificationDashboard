@@ -19,21 +19,21 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
 
     @Query("SELECT new Default.Issue.Stats.IssuesWeekly(CAST(DATE_TRUNC('week', i.dateClosed) AS LocalDate), COUNT (i)) " +
         "FROM Issue i " +
-        "WHERE i.state = 'closed' AND i.repositoryId = :repoId  AND NOT TYPE(i)=PullRequest" +
+        "WHERE i.state = 'closed' AND i.repositoryId = :repoId  AND NOT TYPE(i)=PullRequest " +
         "GROUP BY CAST(DATE_TRUNC('week', i.dateClosed) AS LocalDate)" +
         "ORDER BY CAST(DATE_TRUNC('week', i.dateClosed) AS LocalDate)")
     List<IssuesWeekly> getClosedIssuesWeekly(@Param("repoId") Long repoId);
 
     @Query("SELECT new Default.Issue.Stats.IssuesWeekly(CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate), COUNT (i)) " +
         "FROM Issue i " +
-        "WHERE i.state = 'open' AND i.repositoryId = :repoId AND NOT TYPE(i)=PullRequest" +
+        "WHERE i.state = 'open' AND i.repositoryId = :repoId AND NOT TYPE(i)=PullRequest " +
         "GROUP BY CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate)" +
         "ORDER BY CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate)")
     List<IssuesWeekly> getOpenIssuesWeekly(@Param("repoId") Long repoId);
 
     @Query("SELECT new Default.Issue.Stats.IssuesWeekly(CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate), COUNT (i)) " +
         "FROM Issue i " +
-        "WHERE i.repositoryId = :repoId AND NOT TYPE(i)=PullRequest" +
+        "WHERE i.repositoryId = :repoId AND NOT TYPE(i)=PullRequest " +
         "GROUP BY CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate)" +
         "ORDER BY CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate)")
     List<IssuesWeekly> getTotalIssuesWeekly(@Param("repoId") Long repoId);
