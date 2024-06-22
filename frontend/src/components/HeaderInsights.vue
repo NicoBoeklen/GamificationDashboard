@@ -7,7 +7,7 @@
     <v-app-bar-title><strong>Insights</strong>: {{ repoName }}</v-app-bar-title>
 
     <template v-slot:append>
-      <v-btn @click="redirectManagementView()" variant="outlined" class="mr-3">Management View</v-btn>
+      <v-btn disabled @click="redirectManagementView()" variant="outlined" class="mr-3">Management View</v-btn>
 
       <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 

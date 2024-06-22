@@ -20,7 +20,7 @@
           <template v-else>
             <v-row>
               <v-col>
-                <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+                <v-card-title class="d-flex align-items-center" style="padding-right: 0; margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                   <avatar-component></avatar-component>
                   {{ diagrams[2].title1 }}
                 </v-card-title>

@@ -36,6 +36,7 @@ export default {
       data: data,
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             position: 'top',
@@ -48,7 +49,6 @@ export default {
             }
           }
         },
-        maintainAspectRatio: false,
         cutout: 90,
       }
     });

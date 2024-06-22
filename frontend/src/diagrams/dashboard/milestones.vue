@@ -57,7 +57,7 @@ export default {
 }
 
 .milestone-container {
-  max-height: 30em;
+  max-height: 29em;
   overflow-y: auto;
 }
 

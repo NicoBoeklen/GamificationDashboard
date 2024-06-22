@@ -3,7 +3,7 @@
     <p v-if="!loaded" style="margin-left: 1em">Loading
       <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
     </p>
-    <canvas id="ClosedTotalIssuesChart" style="padding: 1em"></canvas>
+    <div class="chart-container"><canvas id="ClosedTotalIssuesChart" style="padding: 1em"></canvas></div>
   </div>
 </template>
 
@@ -58,6 +58,7 @@ export default {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             tooltip: {
               callbacks: {
@@ -98,4 +99,17 @@ export default {
 }
 </script>
 <style scoped>
+.chart-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 50%;
+  height: 0;
+}
+#ClosedTotalIssuesChart {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>
