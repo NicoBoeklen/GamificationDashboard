@@ -40,6 +40,10 @@ public class PullRequestService {
         return pullRequestRepository.getNumberReviews(userId, repoId);
     }
 
+    public Integer getNumberReviewsTotal(Long repoId) {
+        return pullRequestRepository.getNumberReviewsTotal(repoId);
+    }
+
     public Integer getNumberReviewsByDay(Long userId, Long repoId, LocalDate day) {
         return pullRequestRepository.getNumberReviewsByDay(userId, repoId, day);
     }

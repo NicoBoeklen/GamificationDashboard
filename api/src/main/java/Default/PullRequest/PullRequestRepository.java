@@ -14,6 +14,9 @@ import java.util.List;
 public interface PullRequestRepository extends JpaRepository<PullRequest, Long> {
     @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.closedBy.userId = :userId AND p.openedBy.repoId = :repoId")
     Integer getNumberReviews(@Param("userId") Long userId, @Param("repoId") Long repoId);
+
+    @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.repositoryId = :repoId")
+    Integer getNumberReviewsTotal(@Param("repoId") Long repoId);
     
     @Query("SELECT COUNT(p) FROM PullRequest p WHERE p.closedBy.userId = :userId AND p.openedBy.repoId = :repoId AND CAST(p.dateClosed AS DATE) = :day")
     Integer getNumberReviewsByDay(@Param("userId") Long userId, @Param("repoId") Long repoId, @Param("day") LocalDate day);

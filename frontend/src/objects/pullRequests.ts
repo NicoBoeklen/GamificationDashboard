@@ -4,6 +4,7 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 export interface PullRequest {
   numberReviewsUser: number;
+  numberReviewsTotal: number;
   averageCommentsPerReviewUser: number;
   openPullRequests: number;
   closedPullRequestsLastMonth: number;
