@@ -11,12 +11,12 @@
               </v-card-title>
               <OpenIssues class="min-size-component"/>
             </v-col>
+          </v-row>
+            <v-row>
             <v-col >
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 Closed and Total Issues
-                <!--<v-icon small class="info-icon" @mouseover="showTooltip[2] = true" @mouseleave="showTooltip[2] = false">mdi-information</v-icon>
-                <span v-if="showTooltip[2]" class="tooltip">Average of last 5 commits</span>-->
               </v-card-title>
               <ClosedAndTotalIssues/>
             </v-col>
@@ -25,7 +25,7 @@
         <v-card style="margin-top: 1em;">
           <v-row>
             <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <v-card-title class="d-flex align-items-center" style="padding-right: 0; margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <avatar-component></avatar-component>
                 Your Fixed Issues
               </v-card-title>
@@ -34,7 +34,7 @@
             <v-col>
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
-                Team Average Time to fix an Issue
+                Average Time to fix an Issue
                 <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
                 <span v-if="showTooltip[3]" class="tooltip">Average of last 5 issues</span>
               </v-card-title>
@@ -109,7 +109,6 @@ export default {
           title2: 'Closed and Total Issues'
         },
         {component1: IssueDensity, title1: 'IssueDensity'},
-        {tile1: 'asdadadsa', component1: '', title2: '', component2: ''},
         {title1: 'Your fixedIssues', component1: 'TotalFixedIssues'},
       ],
       showTooltip: [false, false, false, false],

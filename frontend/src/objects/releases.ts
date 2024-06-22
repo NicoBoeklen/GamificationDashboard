@@ -4,8 +4,8 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface ReleaseObject {
   id: number;
-  tag_name: String;
-  published_at: String;
+  tag_name: string;
+  published_at: string;
 }
 
 export interface Release {

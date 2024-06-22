@@ -3,6 +3,8 @@ package Default.PullRequest.Stats;
 public class PullRequestMetric {
     
     private Integer numberReviewsUser;
+
+    private Integer numberReviewsTotal;
     
     private Double averageCommentsPerReviewUser;
     
@@ -18,8 +20,9 @@ public class PullRequestMetric {
     
     private Double averageProcessTimeInHours;
 
-    public PullRequestMetric(Integer numberReviewsUser, Double averageCommentsPerReviewUser, Integer openPullRequests, Integer closedPullRequestsLastMonth, Double averageAdditionsPerPRTeam, Double averageDeletionsPerPRTeam, Double averageCommitsPerPRTeam, Double averageProcessTime) {
+    public PullRequestMetric(Integer numberReviewsUser, Integer numberReviewsTotal, Double averageCommentsPerReviewUser, Integer openPullRequests, Integer closedPullRequestsLastMonth, Double averageAdditionsPerPRTeam, Double averageDeletionsPerPRTeam, Double averageCommitsPerPRTeam, Double averageProcessTime) {
         this.numberReviewsUser = numberReviewsUser;
+        this.numberReviewsTotal = numberReviewsTotal;
         this.averageCommentsPerReviewUser = averageCommentsPerReviewUser;
         this.openPullRequests = openPullRequests;
         this.closedPullRequestsLastMonth = closedPullRequestsLastMonth;
@@ -91,5 +94,17 @@ public class PullRequestMetric {
 
     public void setAverageProcessTime(Double averageProcessTime) {
         this.averageProcessTimeInHours = averageProcessTime;
+    }
+
+    public Integer getNumberReviewsTotal() {
+        return numberReviewsTotal;
+    }
+
+    public void setNumberReviewsTotal(Integer numberReviewsTotal) {
+        this.numberReviewsTotal = numberReviewsTotal;
+    }
+
+    public void setAverageProcessTimeInHours(Double averageProcessTimeInHours) {
+        this.averageProcessTimeInHours = averageProcessTimeInHours;
     }
 }

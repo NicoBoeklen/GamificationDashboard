@@ -41,6 +41,7 @@ public class PullRequestController {
     @GetMapping("/pullMetrics/{userId}/{repoId}")
     public PullRequestMetric getPullRequestMetrics(@PathVariable Long userId, @PathVariable Long repoId) {
         return new PullRequestMetric(pullRequestService.getNumberReviews(userId, repoId),
+            pullRequestService.getNumberReviewsTotal(repoId),
             pullRequestService.getAverageCommentsOfLastFivePullRequestsByUser(userId, repoId),
             pullRequestService.getOpenPullRequests(repoId),
             pullRequestService.getClosedPullRequestsLastMonth(repoId), 
