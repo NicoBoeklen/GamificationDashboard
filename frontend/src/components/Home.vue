@@ -57,6 +57,8 @@
                 ></v-text-field>
                 <v-text-field
                   label="Api Key"
+                  :rules="[rules.required]"
+                  v-model="toLogin.apiKey"
                   color="blue"
                   required
                   clearable
