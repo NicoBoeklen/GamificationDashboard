@@ -47,7 +47,12 @@ export default {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
           scales: {
             x: {
               display: true,

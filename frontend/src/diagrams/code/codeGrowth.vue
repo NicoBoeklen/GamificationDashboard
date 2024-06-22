@@ -3,7 +3,9 @@
     <p v-if="!loaded" style="margin-left: 1em">Loading
       <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
     </p>
-    <div class="chart-container"> <canvas id="codeGrowthChart" style="padding-bottom: 1em; padding-left: 1em;padding-right: 1em;"></canvas> </div>
+    <div class="chart-container">
+      <canvas id="codeGrowthChart" style="padding-bottom: 1em; padding-left: 1em;padding-right: 1em;"></canvas>
+    </div>
   </div>
 </template>
 
@@ -40,7 +42,12 @@ export default {
         },
         options: {
           responsive: true,
-          //maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
           scales: {
             x: {
               display: true,
@@ -75,6 +82,7 @@ export default {
   padding-bottom: 50%;
   height: 0;
 }
+
 #codeGrowthChart {
   position: absolute;
   top: 0;
