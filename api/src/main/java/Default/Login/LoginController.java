@@ -26,6 +26,7 @@ public class LoginController {
         login.setOwnerName(loginRequest.getOwnerName());
         login.setRepoName(loginRequest.getRepoName());
         login.setUserName(loginRequest.getUserName());
+        login.setApiKey(loginRequest.getApiKey());
         Long repoId = githubAPIService.getRepositoryId(login.getOwnerName(), login.getRepoName()).block();
         System.out.println("RepoIdsdaada" + repoId);
         login.setRepoId(repoId);
@@ -34,7 +35,6 @@ public class LoginController {
         System.out.println("UserId: " + userId);
         login.setUserId(userId);
         login.setRepoId(repoId);
-        login.setApiKey(Apikey.Key.apiKey);
         return loginService.saveLogin(login);
     }
     @GetMapping("/api/loggedUser/{sessionId}")

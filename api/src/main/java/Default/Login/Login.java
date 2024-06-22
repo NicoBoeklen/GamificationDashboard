@@ -18,7 +18,6 @@ public class Login {
     private String ownerName;
 
     private String userName;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String apiKey;
     private Long repoId; // new field
     private Long userId;

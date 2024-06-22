@@ -28,10 +28,10 @@ public class GithubAPICommitService {
     /**
      * Defines Header and webClient with API-Key
      */
-    public GithubAPICommitService(WebClient.Builder webClientBuilder) {
+    public GithubAPICommitService(WebClient.Builder webClientBuilder, String apiKey) {
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
             .build();
     }
 

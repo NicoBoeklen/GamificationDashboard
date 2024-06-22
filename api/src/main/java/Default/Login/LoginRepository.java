@@ -7,8 +7,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface LoginRepository extends JpaRepository<Login, Long> {
-    @Query("SELECT l from Login l where l.id = :sessionId")
-    Login getLoggedUser(@Param("sessionId") Long sessionId);
+    @Query("SELECT l from Login l where l.repoId = :repoId AND l.userId")
+    Login getLoggedUser(@Param("repoId") Long repoId, @Param("repoId") Long userId);
     
     void deleteAll();
 }
