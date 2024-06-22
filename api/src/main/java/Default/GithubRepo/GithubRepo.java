@@ -1,7 +1,6 @@
 package Default.GithubRepo;
 
 import Default.User.User;
-import Default.User.UserRepoId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 

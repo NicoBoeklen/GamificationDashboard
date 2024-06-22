@@ -1,6 +1,5 @@
 package Default.Gamification.Quest;
 
-import Default.Gamification.Achievement.UserAchievement;
 import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
