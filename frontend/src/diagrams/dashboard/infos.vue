@@ -1,7 +1,7 @@
 <template>
   <v-card-title class="project-header">
+    Your Project
     <div>
-      <h1 class="project-title">Your Project</h1>
       <p class="project-subtitle">{{ repoName }}</p>
     </div>
   </v-card-title>

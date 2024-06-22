@@ -2,16 +2,16 @@ import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
-interface AchievementObject{
-  name: String;
-  description: String;
+export interface MilestoneObject{
+  name: string;
+  description: string;
   xp: number;
-  type: String;
+  type: string;
   condition: number;
 }
 
 export interface Milestone {
-  achievements: AchievementObject;
+  achievement: MilestoneObject;
   progress: number;
 }
 
@@ -19,7 +19,7 @@ const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
 console.log("UserId lautet"+userId);
 
-export async function fetchMilestone(): Promise<Milestone> {
+export async function fetchMilestone(): Promise<Milestone[]> {
   const response = await fetch(`${config.fetchBaseUrl}/milestones/${userId}/${repoId}`,  {
     method: "GET",
     headers: {
@@ -30,7 +30,7 @@ export async function fetchMilestone(): Promise<Milestone> {
   if (!response.ok) {
     throw new Error("Failed to fetch Milestones");
   }
-  const milestone: Milestone = await response.json();
+  const milestone: Milestone[] = await response.json();
   showToast(new Toast("Success", `Milestones fetched successfully!`, "success", faCheck, 5));
   return milestone;
 }

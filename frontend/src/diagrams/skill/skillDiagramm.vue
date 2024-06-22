@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="skillsChart" style="padding-bottom: 1em; padding-left: 1em; padding-right: 1em;"></canvas>
+    <canvas id="skillsChart" style="padding: 0em 1em 0em 1em; margin: -3em 0"></canvas>
   </div>
 </template>
 
@@ -59,8 +59,7 @@ export default {
         },
         plugins: {
           legend: {
-            display: true,
-            position: 'top'
+            display: false,
           }
         }
       }

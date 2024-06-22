@@ -68,6 +68,7 @@ public class GithubRepoController {
     public GithubRepo getRepo(@PathVariable Long repoId) {
         return githubRepoRepository.findByRepoIdUserId(repoId);
     }
+    
     @GetMapping("/api/repositoryData/all")
     public List<GithubRepo> getRepos() {
         return githubRepoRepository.findAll();

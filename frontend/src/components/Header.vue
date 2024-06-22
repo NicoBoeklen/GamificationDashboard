@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import {getUserName, toLogin} from "../objects/login";
 import AvatarComponent from "../diagrams/avatarHeader.vue"
 import {onMounted, ref} from "vue";
 import { useTheme } from 'vuetify'

@@ -47,10 +47,11 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
     toLogin.value = data;
     console.log(toLogin.value.userName);
     localStorage.setItem('userName', toLogin.value.userName);
+    localStorage.setItem('loaded', "falsch");
     localStorage.setItem('repoId', String(toLogin.value.repoId));
     localStorage.setItem('userId', String(toLogin.value.userId));
     localStorage.setItem('repoName', toLogin.value.repoName);
-    router.push('/dashboard');
+    await router.push('/dashboard');
   } catch (error) {
    console.log(error)
   } finally {

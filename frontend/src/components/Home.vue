@@ -26,6 +26,7 @@
                   prepend-inner-icon="mdi-account"
                   outlined
                   dense
+                  :disabled="isLoading"
                   class="mb-4"
                 ></v-text-field>
                 <v-text-field
@@ -38,6 +39,7 @@
                   prepend-inner-icon="mdi-server"
                   outlined
                   dense
+                  :disabled="isLoading"
                   class="mb-4"
                 ></v-text-field>
                 <v-text-field
@@ -50,6 +52,7 @@
                   prepend-inner-icon="mdi-account"
                   outlined
                   dense
+                  :disabled="isLoading"
                   class="mb-4"
                 ></v-text-field>
                 <v-text-field
@@ -60,6 +63,7 @@
                   prepend-inner-icon="mdi-account"
                   outlined
                   dense
+                  :disabled="isLoading"
                   class="mb-4"
                 ></v-text-field>
                 <v-btn color="primary" type="button" block class="mt-4" @click="handleLogin()" @keyup.enter="handleLogin()" :disabled="isLoading">

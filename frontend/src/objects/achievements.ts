@@ -3,15 +3,15 @@ import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface AchievementObject{
-  name: String;
-  description: String;
+  name: string;
+  description: string;
   xp: number;
-  type: String;
+  type: string;
   condition: number;
 }
 
 export interface Achievement {
-  achievements: AchievementObject;
+  achievement: AchievementObject;
 }
 
 const repoId = localStorage.getItem('repoId');

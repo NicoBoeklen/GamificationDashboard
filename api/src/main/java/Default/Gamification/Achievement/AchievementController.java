@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 public class AchievementController {
@@ -24,10 +25,10 @@ public class AchievementController {
     public List<UserMilestone> getUserMilestones(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
             setAchievements();
-            User user = userService.findById(userId, repoId).orElseThrow();
+            User user = userService.findById(userId, repoId).orElseThrow(NoSuchElementException::new);
             List<UserMilestone> milestoneAchievement = achievementService.checkAndAwardAchievements(user);
             return milestoneAchievement;
-        } catch (Error e) {
+        } catch (NoSuchElementException e) {
             return new ArrayList<>();
         }
     }
