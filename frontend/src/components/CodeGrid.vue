@@ -98,4 +98,6 @@ export default {
   font-size: 0.875rem;
   cursor: pointer;
 }
+
+
 </style>
