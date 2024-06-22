@@ -1,13 +1,12 @@
 package Default.GithubAPI;
 
-import Default.Apikey;
 import Default.Issue.IssueService;
+import Default.Login.LoginRepository;
 import Default.PullRequest.PullRequest;
 import Default.User.User;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -29,6 +28,8 @@ import java.util.regex.Pattern;
  */
 @Service
 public class GithubAPIPullRequestService {
+    @Autowired
+    private LoginRepository loginRepository;
 
     private final WebClient webClient;
 
@@ -44,7 +45,6 @@ public class GithubAPIPullRequestService {
     public GithubAPIPullRequestService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
 
@@ -57,13 +57,13 @@ public class GithubAPIPullRequestService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Flux (Datastream) of PullRequests
      */
-    public Flux<PullRequest> getPullRequests(String owner, String repo, Long repoId) {
+    public Flux<PullRequest> getPullRequests(String owner, String repo, Long repoId, Long sessionId) {
         String url = String.format("/repos/%s/%s/pulls?state=closed", owner, repo);
         String url2 = String.format("/repos/%s/%s/pulls?state=open", owner, repo);
-        return Flux.merge(getPullsRecursively(url), getPullsRecursively(url2))
+        return Flux.merge(getPullsRecursively(url,sessionId), getPullsRecursively(url2,sessionId))
             .filter(Objects::nonNull)
             .distinct(PullRequest::getId) // Remove duplicates by ID
-            .flatMap(pull -> fetchPullDetails(pull, owner, repo, repoId));
+            .flatMap(pull -> fetchPullDetails(pull, owner, repo, repoId,sessionId));
     }
 
 
@@ -73,16 +73,18 @@ public class GithubAPIPullRequestService {
      * Recursively continues with next page
      *
      * @param url
+     * @param sessionId
      * @return Returns a Flux of pullRequest
      */
-    private Flux<PullRequest> getPullsRecursively(String url) {
+    private Flux<PullRequest> getPullsRecursively(String url, Long sessionId) {
         return webClient.get()
             .uri(url)
+            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(PullRequest.class)
             .collectList()
-            .flatMapMany(pullRequest -> getNextPageUrl(url)
-                .flatMapMany(nextUrl -> Flux.fromIterable(pullRequest).concatWith(getPullsRecursively(nextUrl)))
+            .flatMapMany(pullRequest -> getNextPageUrl(url, sessionId)
+                .flatMapMany(nextUrl -> Flux.fromIterable(pullRequest).concatWith(getPullsRecursively(nextUrl, sessionId)))
                 .switchIfEmpty(Flux.fromIterable(pullRequest)));
     }
 
@@ -92,7 +94,7 @@ public class GithubAPIPullRequestService {
      * @param url The current page URL
      * @return A Mono containing the URL of the next page, or empty if no next page exists
      */
-    private Mono<String> getNextPageUrl(String url) {
+    private Mono<String> getNextPageUrl(String url, Long sessionId) {
         URI uri = URI.create(url);
         String baseUrl = uri.getPath();
         String query = uri.getQuery();
@@ -119,6 +121,7 @@ public class GithubAPIPullRequestService {
 
         return webClient.get()
             .uri(nextUrl)
+            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
@@ -141,11 +144,12 @@ public class GithubAPIPullRequestService {
      * @param repo        Name of the GitHub Repository
      * @return Single pullRequest with als attributes
      */
-    private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo, Long repoId) {
+    private Mono<PullRequest> fetchPullDetails(PullRequest pullRequest, String owner, String repo, Long repoId, Long sessionId) {
         String url = String.format("/repos/%s/%s/pulls/%s", owner, repo, pullRequest.getNumber());
 
         return webClient.get()
             .uri(url)
+            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {

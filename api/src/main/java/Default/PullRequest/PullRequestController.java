@@ -30,9 +30,9 @@ public class PullRequestController {
      * @param repo  GitHub Repository name
      * @return "Pull Requests saved successfully" with 200 or 500 Error if exception is thrown
      */
-    @GetMapping("/pullRequests/{owner}/{repo}/{repoId}")
-    public Mono<ResponseEntity<String>> getPullRequest(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId) {
-        return githubAPIPullRequestService.getPullRequests(owner, repo, repoId)
+    @GetMapping("/pullRequests/{owner}/{repo}/{repoId}/{sessionId}")
+    public Mono<ResponseEntity<String>> getPullRequest(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId,@PathVariable Long sessionId) {
+        return githubAPIPullRequestService.getPullRequests(owner, repo, repoId,sessionId)
             .flatMap(pullRequestService::savePullRequest)  // Save each Pull Request
             .then(Mono.just(ResponseEntity.ok("PullRequests saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
