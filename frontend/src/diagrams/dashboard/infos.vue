@@ -2,7 +2,7 @@
   <v-card-title class="project-header">
     Your Project
     <div>
-      <p class="project-subtitle">{{ repoName }}</p>
+      <h3 class="project-subtitle">{{ repoName }}</h3>
     </div>
   </v-card-title>
   <v-card-text style="margin-bottom: 0; padding-bottom: 0" class="project-description">
@@ -85,7 +85,7 @@
 }
 
 .project-subtitle {
-  font-size: 18px; /* Adjust font size as needed */
+  font-size: 18px;
 }
 
 .project-description {

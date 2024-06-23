@@ -2,7 +2,7 @@
   <v-card-title class="section-title">Badges</v-card-title>
   <v-card-text v-if="achievementUser.length > 0">
     <div v-if="codeAchievements.length > 0">
-      <h3>Code</h3>
+      <h3 class="subtitle">Code</h3>
       <div class="badges-container">
         <div v-for="(achievement, index) in codeAchievements" :key="index" class="badge-wrapper">
           <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
@@ -96,6 +96,9 @@ export default {
 
 
 <style>
+.subtitle {
+  font-size: 18px;
+}
 .badge-wrapper {
 display: flex;
 flex-direction: column;
@@ -113,7 +116,5 @@ display: flex;
 flex-wrap: wrap;
 justify-content: space-between;
 }
-.section-title {
-  margin-bottom: 1em;
-}
+
 </style>
