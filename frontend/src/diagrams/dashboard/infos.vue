@@ -1,16 +1,18 @@
 <template>
   <v-card-title class="project-header">
     Your Project
+  </v-card-title>
+  <v-card-text>
     <div>
       <h3 class="project-subtitle">{{ repoName }}</h3>
     </div>
-  </v-card-title>
-  <v-card-text style="margin-bottom: 0; padding-bottom: 0" class="project-description">
+    <div style="margin-bottom: 0; padding-bottom: 0" class="project-description">
     Description: {{ repository.description }}
     <br /> <br>
     Created at: {{ formatDate(repository.created_at)}}
     <br />
     Updated at: {{ formatDate(repository.updated_at)}}
+    </div>
   </v-card-text>
   <v-carousel hide-delimiters height="10em" cycle interval="15000">
     <v-carousel-item>
@@ -80,16 +82,13 @@
   </v-carousel>
 </template>
 <style>
-.project-header {
-  margin-bottom: 10px;
-}
-
 .project-subtitle {
   font-size: 18px;
+  margin-bottom: 0.5em;
 }
 
 .project-description {
-  margin-bottom: 10px;
+  margin-bottom: 0.5em;
 }
 
 </style>
