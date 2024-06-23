@@ -29,10 +29,16 @@ export default {
 
     function toggleTheme() {
       theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+      localStorage.setItem('theme', theme.global.name.value);
     }
     onMounted(() => {
       userName.value = localStorage.getItem('userName');
       console.log('Username:', userName);
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        theme.global.name.value = savedTheme;
+      }
     });
 
 
