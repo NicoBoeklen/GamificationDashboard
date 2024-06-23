@@ -4,9 +4,9 @@
     <div v-for="(achievement, index) in achievementUser" :key="index">
       <p>{{achievement.achievement.name}}</p>
       <v-img
-        :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/196eacaba534187ca530bde1ec70c21657fa163daf5d8f5b7a4d0d2d7bf2439c?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
+        src={{achievement.achievement.image}}
         class="badge"
-        alt="Badge 1"
+        alt={{achievement.achievement.name}}
         @mouseover="showTooltip[index] = true"
         @mouseleave="showTooltip[index] = false"
       ><span v-if="showTooltip[index]" class="tooltip">{{ achievement.achievement.description }} </span></v-img>
@@ -58,6 +58,11 @@ export default {
   bottom: 0.25em;
   left: 25%;
   transform: translateX(-50%);
+}
+.badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 </style>
 

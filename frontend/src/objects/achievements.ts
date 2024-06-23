@@ -8,6 +8,7 @@ export interface AchievementObject {
   xp: number;
   type: string;
   condition: number;
+  image: string;
 }
 
 export interface Achievement {
