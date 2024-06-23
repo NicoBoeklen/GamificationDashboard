@@ -40,9 +40,11 @@
       </div>
     </div>
   </v-card-text>
-  <p v-else>Loading
+  <v-card-text v-else>
+  <p>Loading
     <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
   </p>
+  </v-card-text>
 </template>
 
 
