@@ -2,7 +2,20 @@
   <v-card-title class="section-title">Badges</v-card-title>
   <v-card-text class="badges-container">
     <div v-for="(achievement, index) in achievementUser" :key="index">
-
+      <p v-if="achievement.achievement.image!=''">{{ achievement.achievement.name }}</p>
+      <v-img v-if="achievement.achievement.image!=''"
+             :src="getImageUrl(achievement.achievement.image)" class="badge"
+             alt={{achievement.achievement.name}}
+             @mouseover="showTooltip[index] = true"
+             @mouseleave="showTooltip[index] = false"
+      =======
+      <p>{{achievement.achievement.name}}</p>
+      <v-img
+          :src="achievement.achievement.image"
+          class="badge"
+          :alt="achievement.achievement.name"
+          @mouseover="showTooltip[index] = true"
+          @mouseleave="showTooltip[index] = false"
       ><span v-if="showTooltip[index]" class="tooltip">{{ achievement.achievement.description }} </span></v-img>
     </div>
   </v-card-text>
