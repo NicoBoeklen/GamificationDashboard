@@ -24,7 +24,7 @@ public class AchievementController {
     @GetMapping("/milestones/{userId}/{repoId}")
     public List<UserMilestone> getUserMilestones(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
-            setAchievements();
+            //setAchievements();
             User user = userService.findById(userId, repoId).orElseThrow(NoSuchElementException::new);
             List<UserMilestone> milestoneAchievement = achievementService.checkAndAwardAchievements(user);
             return milestoneAchievement;
@@ -37,10 +37,10 @@ public class AchievementController {
     public List<UserAchievement> getUserAchievements(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
             setAchievements();
-            User user = userService.findById(userId, repoId).orElseThrow();
+            User user = userService.findById(userId, repoId).orElseThrow(NoSuchElementException::new);
             achievementService.checkAndAwardAchievements(user);
             return achievementService.getAchievements(user);
-        } catch (Error e) {
+        } catch (NoSuchElementException e) {
             return new ArrayList<>();
         }
     }
