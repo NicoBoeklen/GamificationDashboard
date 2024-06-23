@@ -6,6 +6,11 @@ export interface Repository {
   description: string;
   created_at: string;
   updated_at: string;
+  language: string;
+  openIssues: number;
+  numberOfReleases: number;
+  numberOfOpenPullRequests: number;
+  numberOfContributors: number;
 }
 
 
