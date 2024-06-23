@@ -54,6 +54,8 @@
               </v-card-title>
               <AgeOfIssueTime/>
             </v-col>
+          </v-row>
+          <v-row>
             <v-col>
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
