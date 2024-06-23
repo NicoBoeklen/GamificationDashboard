@@ -137,12 +137,12 @@ public class AchievementService {
     public void setAchievements() {
         if (achievementRepository.findAll().size() == 0) {
             List<Achievement> achievements = new ArrayList<>();
-            //Commits
+            //Commits 
             achievements.add(new Achievement("First Commit", "Get 1 Commit.", 10, "commits", 1));
             achievements.add(new Achievement("10 Commits", "Get 10 Commit.", 50, "commits", 10));
             achievements.add(new Achievement("50 Commits", "Get 50 Commit.", 300, "commits", 50));
             achievements.add(new Achievement("100 Commits", "Get 100 Commit.", 500, "commits", 100));
-            //Issues
+            //Issues 
             achievements.add(new Achievement("Debugging", "Fix 1 Issue.", 10, "issues", 1));
             achievements.add(new Achievement("Debugging Amateur", "Fix 5 Issue.", 50, "issues", 5));
             achievements.add(new Achievement("Debugging Apprentice", "Fix 10 Issue.", 100, "issues", 10));

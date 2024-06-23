@@ -2,7 +2,7 @@ import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
-interface AchievementObject{
+export interface AchievementObject {
   name: string;
   description: string;
   xp: number;

@@ -23,6 +23,31 @@
     />
   </v-card-text>
 </template>
+<script lang="ts">
+import {fetchAchievement, Achievement, AchievementObject} from '../../objects/achievements';
+import {onMounted, ref} from "vue";
+
+const achievementUser = ref([] as Achievement[]);
+let showTooltip = ref([]);
+
+export default {
+  setup() {
+    onMounted(async () => {
+      try {
+        achievementUser.value = await fetchAchievement();
+        showTooltip.value = new Array(achievementUser.value.length).fill(false);
+      } catch (error) {
+        console.error('Failed to fetch achievement:', error);
+      }
+    });
+
+    return {
+      achievementUser,
+      showTooltip
+    };
+  }
+};
+</script>
 <style>
 .badge {
   margin-right: 10px;
