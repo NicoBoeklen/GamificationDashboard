@@ -4,9 +4,9 @@
     <div v-for="(achievement, index) in achievementUser" :key="index">
       <p>{{achievement.achievement.name}}</p>
       <v-img
-        src={{achievement.achievement.image}}
+        :src="achievement.achievement.image"
         class="badge"
-        alt={{achievement.achievement.name}}
+        :alt="achievement.achievement.name"
         @mouseover="showTooltip[index] = true"
         @mouseleave="showTooltip[index] = false"
       ><span v-if="showTooltip[index]" class="tooltip">{{ achievement.achievement.description }} </span></v-img>

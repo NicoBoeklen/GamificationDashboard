@@ -37,6 +37,7 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
     });
 
     if (!response.ok) {
+      showToast(new Toast("Error", `Login Failed!`, "error", faXmark, 5));
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -54,7 +55,7 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
     await router.push('/dashboard');
   } catch (error) {
     const err = error as Error
-   console.log(err)
+    console.log('Ein Fehler ist aufgetreten:', error);
     showToast(new Toast("Error", `Login Failed! ${err.message}`, "error", faXmark, 5));
   } finally {
     onLoadingChange(false); // Ladezustand auf false setzen
