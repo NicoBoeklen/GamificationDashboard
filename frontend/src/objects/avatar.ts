@@ -22,7 +22,7 @@ export async function fetchAvatar(): Promise<User> {
     throw new Error("Failed to fetch User");
   }
   const user: User = await response.json();
-  showToast(new Toast("Success", `User fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `User fetched successfully!`, "success", faCheck, 5));
   return user;
 }
 
@@ -38,6 +38,6 @@ export async function fetchAvatarUser(userIdPara: number): Promise<User> {
     throw new Error("Failed to fetch User");
   }
   const user: User = await response.json();
-  showToast(new Toast("Success", `User fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `User fetched successfully!`, "success", faCheck, 5));
   return user;
 }

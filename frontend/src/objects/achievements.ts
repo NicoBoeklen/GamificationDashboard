@@ -31,6 +31,6 @@ export async function fetchAchievement(): Promise<Achievement[]> {
     throw new Error("Failed to fetch Achievements");
   }
   const achievement: Achievement[] = await response.json();
-  showToast(new Toast("Success", `Achievements fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Achievements fetched successfully!`, "success", faCheck, 5));
   return achievement;
 }

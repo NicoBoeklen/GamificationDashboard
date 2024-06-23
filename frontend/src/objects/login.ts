@@ -56,7 +56,7 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
   } catch (error) {
     const err = error as Error
     console.log('Ein Fehler ist aufgetreten:', error);
-    showToast(new Toast("Error", `Login Failed! ${err.message}`, "error", faXmark, 5));
+    //showToast(new Toast("Error", `Login Failed! ${err.message}`, "error", faXmark, 5));
   } finally {
     onLoadingChange(false); // Ladezustand auf false setzen
   }

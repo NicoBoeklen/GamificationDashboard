@@ -43,7 +43,7 @@ export async function fetchIssues(): Promise<Issue> {
     throw new Error("Failed to fetch issues");
   }
   const issue: Issue = await response.json();
-  showToast(new Toast("Success", `Issues fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Issues fetched successfully!`, "success", faCheck, 5));
   return issue;
 }
 

@@ -41,6 +41,6 @@ export async function fetchCommits(): Promise<Commit> {
     throw new Error("Failed to fetch commits");
   }
   const commit: Commit = await response.json();
-  showToast(new Toast("Success", `Commits fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Commits fetched successfully!`, "success", faCheck, 5));
   return commit;
 }

@@ -27,7 +27,7 @@ export async function fetchRepository(): Promise<Repository> {
     throw new Error("Failed to fetch Repository-information");
   }
   const repository: Repository = await response.json();
-  showToast(new Toast("Success", `Repository-information fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Repository-information fetched successfully!`, "success", faCheck, 5));
   return repository;
 }
 
