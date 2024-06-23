@@ -72,7 +72,7 @@ public class GithubAPIIssueService {
     private Flux<Issue> getIssuesRecursively(String url, Long repoId, Long sessionId) {
         return webClient.get()
             .uri(url)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(Issue.class)
             .collectList()
@@ -115,7 +115,7 @@ public class GithubAPIIssueService {
 
         return webClient.get()
             .uri(nextUrl)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
@@ -144,7 +144,7 @@ public class GithubAPIIssueService {
         String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getNumber());
         return webClient.get()
             .uri(url)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(IssueDetails.class)
             .map(details -> {

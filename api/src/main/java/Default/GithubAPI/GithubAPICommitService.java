@@ -4,6 +4,7 @@ import Default.Commit.Commit;
 import Default.Login.LoginRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -63,7 +64,7 @@ public class GithubAPICommitService {
     private Flux<Commit> getCommitsRecursively(String url, Long sessionId) {
         return webClient.get()
             .uri(url)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(Commit.class)
             .collectList()
@@ -98,7 +99,7 @@ public class GithubAPICommitService {
 
         return webClient.get()
             .uri(nextUrl)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
@@ -126,7 +127,7 @@ public class GithubAPICommitService {
         String url = String.format("/repos/%s/%s/commits/%s", owner, repo, commit.getId());
         return webClient.get()
             .uri(url)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(CommitDetails.class)
             .map(details -> {

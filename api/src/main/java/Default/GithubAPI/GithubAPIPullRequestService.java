@@ -7,6 +7,7 @@ import Default.User.User;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -79,7 +80,7 @@ public class GithubAPIPullRequestService {
     private Flux<PullRequest> getPullsRecursively(String url, Long sessionId) {
         return webClient.get()
             .uri(url)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(PullRequest.class)
             .collectList()
@@ -121,7 +122,7 @@ public class GithubAPIPullRequestService {
 
         return webClient.get()
             .uri(nextUrl)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
@@ -149,7 +150,7 @@ public class GithubAPIPullRequestService {
 
         return webClient.get()
             .uri(url)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(PullRequestDetails.class)
             .map(details -> {

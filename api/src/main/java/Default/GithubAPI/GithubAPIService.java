@@ -7,6 +7,7 @@ import Default.User.User;
 import Default.User.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -54,7 +55,7 @@ public class GithubAPIService {
         System.out.println("getRepository"+loginRepository.getApiKeyForLoggedUser(sessionId));
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}", owner, repo)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(GithubRepo.class);
     }
@@ -62,7 +63,7 @@ public class GithubAPIService {
     public Mono<Long> getRepositoryId(String owner, String repo, Long sessionId) {
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}", owner, repo)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(JsonNode.class)
             .map(jsonNode -> jsonNode.get("id").asLong());
@@ -78,7 +79,7 @@ public class GithubAPIService {
     public Flux<Release> getReleases(String owner, String repo, Long repoId,Long sessionId) {
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}/releases", owner, repo)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(Release.class);
     }
@@ -107,7 +108,7 @@ public class GithubAPIService {
     private Flux<User> getContributorsRecursively(String url, Long repoId, Long sessionId) {
         return webClient.get()
             .uri(url)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(User.class)
             .map(user -> {
@@ -147,7 +148,7 @@ public class GithubAPIService {
 
         return webClient.get()
             .uri(nextUrl)
-            .header("Authorization", "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
