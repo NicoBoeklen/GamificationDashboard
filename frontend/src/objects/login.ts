@@ -3,6 +3,7 @@ import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {type Ref, ref} from "vue";
 import router from "../router";
+import {toast} from "vuetify-sonner";
 
 let userNameSave: string;
 
@@ -38,7 +39,16 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
 
     if (!response.ok) {
       showToast(new Toast("Error", `Login Failed!`, "error", faXmark, 5));
+      toast("Login Failed!", {
+        description: "Username, Ownername, ApiKey or RepoName is wrong!",
+        cardProps: {
+          color: 'error'
+        },
+        prependIcon: 'mdi-cancel',
+        progressBar: true,
+      })
       throw new Error(`HTTP error! status: ${response.status}`);
+
     }
 
     const data = await response.json() as Login;

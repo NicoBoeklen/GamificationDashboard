@@ -5,9 +5,10 @@
     </v-main>
   </v-app>
 
+<VSonner position="top-right" />
   <div class="toasts-container">
   <Toasts vertical-position="top" horizontal-position="end">
-    <template v-for="toast of activeToasts" :key="toast.key">
+    <template v-for="toast in activeToasts" :key="toast.key">
       <Toast :type="toast.type" class="alert alert-border-left alert-info">
         <div class="flex-fill flex flex-column">
           <div class="flex">
@@ -31,9 +32,9 @@
 .toasts-container {
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
   z-index: 1000;
-  width: 300px; /* Adjust the width as necessary */
+  width: 30px; /* Adjust the width as necessary */
   padding: 10px; /* Optional: Add padding around the container */
 }
 
@@ -78,5 +79,7 @@ import {Close, Toast, Toasts} from "agnostic-vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {RouterView} from 'vue-router'
 import {reactive} from "vue";
+import { VSonner, toast } from 'vuetify-sonner'
+import {red} from "vuetify/util/colors";
 console.log('Active Toasts:', activeToasts);
 </script>

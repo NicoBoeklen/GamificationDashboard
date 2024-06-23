@@ -23,7 +23,8 @@
     "volar": "^0.0.2",
     "vue": "^3.4.21",
     "vue-chartjs": "^5.3.1",
-    "vuetify": "^3.5.8"
+    "vuetify": "^3.5.8",
+    "vuetify-sonner": "^0.3.19"
   },
   "devDependencies": {
     "@babel/types": "^7.24.0",
