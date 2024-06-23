@@ -23,6 +23,7 @@ import { useTheme } from 'vuetify'
 import {redirectLogin, redirectManagementView} from "../objects/directions";
 import AvatarComponent from "../diagrams/avatarHeader.vue";
 
+
 export default {
   components: {AvatarComponent},
   methods: {redirectLogin, redirectManagementView},
@@ -33,12 +34,18 @@ export default {
 
     function toggleTheme() {
       theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+      localStorage.setItem('theme', theme.global.name.value);
     }
     onMounted(() => {
       userName.value = localStorage.getItem('userName');
       console.log('Username:', userName);
       repoName.value = localStorage.getItem('repoName');
       console.log('Reponame:', repoName);
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        theme.global.name.value = savedTheme;
+      }
     });
 
     return { userName, toggleTheme, repoName };
