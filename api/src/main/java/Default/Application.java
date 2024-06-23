@@ -20,8 +20,10 @@ public class Application {
             @Override
             public void addCorsMappings(@Nonnull CorsRegistry registry) {
                 registry.addMapping("/**")
+                    .allowedOrigins("*")
                     .allowedMethods("OPTIONS", "HEAD", "GET", "PUT", "POST", "DELETE")
-                    .allowedOrigins("http://localhost","http://193.197.230.87");
+                    .allowedHeaders("*")
+                    .allowCredentials(true);
             }
         };
     }
