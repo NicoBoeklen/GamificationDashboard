@@ -48,12 +48,14 @@
         <v-card>
           <v-row>
             <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0; margin-right: 10em">
                 <team-avatar-component></team-avatar-component>
                 Age of Issue
               </v-card-title>
               <AgeOfIssueTime/>
             </v-col>
+          </v-row>
+          <v-row>
             <v-col>
               <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>

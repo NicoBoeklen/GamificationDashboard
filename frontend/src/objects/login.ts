@@ -53,7 +53,9 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
     localStorage.setItem('repoName', toLogin.value.repoName);
     await router.push('/dashboard');
   } catch (error) {
-   console.log(error)
+    const err = error as Error
+   console.log(err)
+    showToast(new Toast("Error", `Login Failed! ${err.message}`, "error", faXmark, 5));
   } finally {
     onLoadingChange(false); // Ladezustand auf false setzen
   }
