@@ -71,7 +71,7 @@ public class GithubAPIController {
      */
     Mono<String> getDataFromRepository(String owner, String repo, Long repoId, Long sessionId) {
         return webClient.get()
-            .uri("/repository/{owner}/{repo}/{repoId}/{sessionId}", owner, repo, repoId)
+            .uri("/repository/{owner}/{repo}/{repoId}/{sessionId}", owner, repo, repoId,sessionId)
             .retrieve()
             .bodyToMono(String.class)
             .doOnNext(response -> System.out.println("Repository Response: " + response))

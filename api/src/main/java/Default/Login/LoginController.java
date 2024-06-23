@@ -28,6 +28,7 @@ public class LoginController {
         login.setRepoName(loginRequest.getRepoName());
         login.setUserName(loginRequest.getUserName());
         login.setApiKey(loginRequest.getApiKey());
+        loginService.saveLogin(login);
         System.out.println("Your API Key is " + login.getApiKey());
         Long repoId = githubAPIService.getRepositoryId(login.getOwnerName(), login.getRepoName(),login.getId()).block();
         System.out.println("RepoIdsdaada" + repoId);

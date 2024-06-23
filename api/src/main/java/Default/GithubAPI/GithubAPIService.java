@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,8 +40,20 @@ public class GithubAPIService {
      */
     public GithubAPIService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-            .baseUrl("https://api.github.com").build();
+            .baseUrl("https://api.github.com")
+            .build();
     }
+    public String getGitHubData(Long sessionId) {
+        String apiKey = loginRepository.getApiKeyForLoggedUser(sessionId);
+            WebClient webClient = webClientBuilder.build();
+            return webClient.get()
+                .uri("https://api.github.com/user")
+                .headers(headers -> headers.setBearerAuth(apiKey))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        }
+
     Mono<Long> getUserId(String user, Long repoId, Long sessionId) {
         return Mono.fromCallable(() -> getUserIdByNameAndRepo(user, repoId,sessionId));
     }
@@ -52,18 +65,18 @@ public class GithubAPIService {
      * @return Returns a Mono (Data Object) of the Repository
      */
     public Mono<GithubRepo> getRepository(String owner, String repo, Long sessionId) {
-        System.out.println("getRepository"+loginRepository.getApiKeyForLoggedUser(sessionId));
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}", owner, repo)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToMono(GithubRepo.class);
     }
 
     public Mono<Long> getRepositoryId(String owner, String repo, Long sessionId) {
+        System.out.println("sessionId is"+loginRepository.getApiKeyForLoggedUser(sessionId));
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}", owner, repo)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToMono(JsonNode.class)
             .map(jsonNode -> jsonNode.get("id").asLong());
@@ -79,7 +92,7 @@ public class GithubAPIService {
     public Flux<Release> getReleases(String owner, String repo, Long repoId,Long sessionId) {
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}/releases", owner, repo)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToFlux(Release.class);
     }
@@ -108,7 +121,7 @@ public class GithubAPIService {
     private Flux<User> getContributorsRecursively(String url, Long repoId, Long sessionId) {
         return webClient.get()
             .uri(url)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToFlux(User.class)
             .map(user -> {
@@ -148,7 +161,7 @@ public class GithubAPIService {
 
         return webClient.get()
             .uri(nextUrl)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
