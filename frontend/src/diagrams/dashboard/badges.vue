@@ -59,6 +59,10 @@ export default {
   setup() {
     onMounted(async () => {
       try {
+        achievementUser.value = [];
+        codeAchievements.value = [];
+        issuesAchievements.value = [];
+        deploymentAchievements.value = [];
         achievementUser.value = await fetchAchievement();
         sortAchievements();
       } catch (error) {
