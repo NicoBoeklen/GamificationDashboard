@@ -2,23 +2,22 @@
   <v-card-title class="section-title">Badges</v-card-title>
   <v-card-text class="badges-container">
     <div v-for="(achievement, index) in achievementUser" :key="index">
-      <p>{{achievement.achievement.name}}</p>
-      <v-img
-        src={{achievement.achievement.image}}
-        class="badge"
-        alt={{achievement.achievement.name}}
-        @mouseover="showTooltip[index] = true"
-        @mouseleave="showTooltip[index] = false"
+      <p v-if="achievement.achievement.image!=''">{{ achievement.achievement.name }}</p>
+      <v-img v-if="achievement.achievement.image!=''"
+             :src="getImageUrl(achievement.achievement.image)" class="badge"
+             alt={{achievement.achievement.name}}
+             @mouseover="showTooltip[index] = true"
+             @mouseleave="showTooltip[index] = false"
       ><span v-if="showTooltip[index]" class="tooltip">{{ achievement.achievement.description }} </span></v-img>
     </div>
   </v-card-text>
 </template>
 <script lang="ts">
-import {fetchAchievement, Achievement, AchievementObject} from '../../objects/achievements';
+import {fetchAchievement, Achievement} from '../../objects/achievements';
 import {onMounted, ref} from "vue";
 
 const achievementUser = ref([] as Achievement[]);
-let showTooltip = ref([]);
+let showTooltip = ref([] as boolean[]);
 
 export default {
   setup() {
@@ -30,10 +29,13 @@ export default {
         console.error('Failed to fetch achievement:', error);
       }
     });
-
+    const getImageUrl = (imageName: string) => {
+      return new URL(`../../assets/${imageName}`, import.meta.url).href;
+    };
     return {
       achievementUser,
-      showTooltip
+      showTooltip,
+      getImageUrl
     };
   }
 };
@@ -53,12 +55,12 @@ export default {
   padding: 0.3em 0.5em;
   border-radius: 4px;
   font-size: 0.75rem;
-  white-space: nowrap;
   z-index: 10000;
-  bottom: 0.25em;
+  bottom: 0em;
   left: 25%;
   transform: translateX(-50%);
 }
+
 .badges-container {
   display: flex;
   flex-wrap: wrap;
