@@ -8,14 +8,6 @@
              alt={{achievement.achievement.name}}
              @mouseover="showTooltip[index] = true"
              @mouseleave="showTooltip[index] = false"
-      =======
-      <p>{{achievement.achievement.name}}</p>
-      <v-img
-          :src="achievement.achievement.image"
-          class="badge"
-          :alt="achievement.achievement.name"
-          @mouseover="showTooltip[index] = true"
-          @mouseleave="showTooltip[index] = false"
       ><span v-if="showTooltip[index]" class="tooltip">{{ achievement.achievement.description }} </span></v-img>
     </div>
   </v-card-text>
