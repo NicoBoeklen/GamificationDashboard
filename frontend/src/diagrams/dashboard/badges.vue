@@ -1,6 +1,6 @@
 <template>
   <v-card-title class="section-title">Badges</v-card-title>
-  <v-card-text>
+  <v-card-text v-if="achievementUser.length > 0">
     <div v-if="codeAchievements.length > 0">
       <h3>Code</h3>
       <div class="badges-container">
@@ -40,6 +40,9 @@
       </div>
     </div>
   </v-card-text>
+  <p v-else>Loading
+    <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
+  </p>
 </template>
 
 
@@ -81,6 +84,7 @@ export default {
     };
 
     return {
+      achievementUser,
       codeAchievements,
       issuesAchievements,
       deploymentAchievements,
