@@ -36,11 +36,11 @@ public class AchievementController {
     @GetMapping("/achievements/{userId}/{repoId}")
     public List<UserAchievement> getUserAchievements(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
-            setAchievements();
-            User user = userService.findById(userId, repoId).orElseThrow();
-            achievementService.checkAndAwardAchievements(user);
+            //setAchievements();
+            User user = userService.findById(userId, repoId).orElseThrow(NoSuchElementException::new);
+            //achievementService.checkAndAwardAchievements(user);
             return achievementService.getAchievements(user);
-        } catch (Error e) {
+        } catch (NoSuchElementException e) {
             return new ArrayList<>();
         }
     }

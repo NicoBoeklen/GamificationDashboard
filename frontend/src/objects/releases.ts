@@ -28,6 +28,6 @@ export async function fetchReleases(): Promise<Release> {
     throw new Error("Failed to fetch Releases");
   }
   const release: Release = await response.json();
-  showToast(new Toast("Success", `Releases fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Releases fetched successfully!`, "success", faCheck, 5));
   return release;
 }

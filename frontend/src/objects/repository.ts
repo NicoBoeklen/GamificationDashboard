@@ -6,6 +6,11 @@ export interface Repository {
   description: string;
   created_at: string;
   updated_at: string;
+  language: string;
+  openIssues: number;
+  numberOfReleases: number;
+  numberOfOpenPullRequests: number;
+  numberOfContributors: number;
 }
 
 
@@ -22,7 +27,7 @@ export async function fetchRepository(): Promise<Repository> {
     throw new Error("Failed to fetch Repository-information");
   }
   const repository: Repository = await response.json();
-  showToast(new Toast("Success", `Repository-information fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Repository-information fetched successfully!`, "success", faCheck, 5));
   return repository;
 }
 

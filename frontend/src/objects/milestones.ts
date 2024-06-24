@@ -17,7 +17,7 @@ export interface Milestone {
 
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-console.log("UserId lautet"+userId);
+//console.log("UserId lautet"+userId);
 
 export async function fetchMilestone(): Promise<Milestone[]> {
   const response = await fetch(`${config.fetchBaseUrl}/milestones/${userId}/${repoId}`,  {
@@ -31,6 +31,6 @@ export async function fetchMilestone(): Promise<Milestone[]> {
     throw new Error("Failed to fetch Milestones");
   }
   const milestone: Milestone[] = await response.json();
-  showToast(new Toast("Success", `Milestones fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Milestones fetched successfully!`, "success", faCheck, 5));
   return milestone;
 }

@@ -14,14 +14,17 @@ public class Achievement {
     private int xp;
     private String type;
     private int condition;
+    
+    private String image;
 
 
-    public Achievement(String name, String description, int xp, String type, int condition) {
+    public Achievement(String name, String description, int xp, String type, int condition, String image) {
         this.name = name;
         this.description = description;
         this.xp = xp;
         this.type = type;
         this.condition = condition;
+        this.image = image;
     }
     
     public Achievement() {
@@ -75,4 +78,13 @@ public class Achievement {
     public void setCondition(int condition) {
         this.condition = condition;
     }
+
+    public String getImage() {
+        return image;
+    }
+    
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

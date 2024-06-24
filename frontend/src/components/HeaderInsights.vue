@@ -38,9 +38,9 @@ export default {
     }
     onMounted(() => {
       userName.value = localStorage.getItem('userName');
-      console.log('Username:', userName);
+      //console.log('Username:', userName);
       repoName.value = localStorage.getItem('repoName');
-      console.log('Reponame:', repoName);
+      //console.log('Reponame:', repoName);
 
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {
