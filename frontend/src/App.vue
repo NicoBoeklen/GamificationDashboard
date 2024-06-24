@@ -81,5 +81,5 @@ import {RouterView} from 'vue-router'
 import {reactive} from "vue";
 import { VSonner, toast } from 'vuetify-sonner'
 import {red} from "vuetify/util/colors";
-console.log('Active Toasts:', activeToasts);
+//console.log('Active Toasts:', activeToasts);
 </script>

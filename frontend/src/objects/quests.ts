@@ -18,7 +18,7 @@ export interface Quest {
 
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-console.log("UserId lautet"+userId);
+//console.log("UserId lautet"+userId);
 
 export async function fetchQuests(): Promise<Quest[]> {
   const response = await fetch(`${config.fetchBaseUrl}/quest/${userId}/${repoId}`,  {

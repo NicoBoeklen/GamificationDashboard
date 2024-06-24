@@ -27,8 +27,8 @@ export const toLogin: Ref<Login> = ref<Login>({
 
 export async function login(onLoadingChange: (isLoading: boolean) => void) {
   onLoadingChange(true); // Ladezustand auf true setzen
-  console.log("login wird durchgeführt");
-  console.log(toLogin.value.userName + toLogin.value.ownerName + toLogin.value.repoName);
+  //console.log("login wird durchgeführt");
+  //console.log(toLogin.value.userName + toLogin.value.ownerName + toLogin.value.repoName);
 
   try {
     const response = await fetch(`${config.fetchBaseUrl}/api/login`, {
@@ -52,11 +52,11 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
     }
 
     const data = await response.json() as Login;
-    console.log(data);
+    //console.log(data);
 
     showToast(new Toast("Alert", `Login Successful!`, "success", faCheck, 5));
     toLogin.value = data;
-    console.log(toLogin.value.userName);
+    //console.log(toLogin.value.userName);
     localStorage.setItem('userName', toLogin.value.userName);
     localStorage.setItem('loaded', "falsch");
     localStorage.setItem('repoId', String(toLogin.value.repoId));

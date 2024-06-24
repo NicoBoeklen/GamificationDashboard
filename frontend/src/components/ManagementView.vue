@@ -122,7 +122,7 @@ export default defineComponent({
   setup(){
     onMounted(async () => {
       repoName.value = localStorage.getItem('repoName') || '';
-      console.log('Repo Name:', repoName.value);
+      //console.log('Repo Name:', repoName.value);
       repository.value =  await fetchRepository();
 
     });

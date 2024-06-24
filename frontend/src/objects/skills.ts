@@ -11,7 +11,7 @@ export interface Skill {
 
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-console.log("UserId lautet"+userId);
+//console.log("UserId lautet"+userId);
 
 export async function fetchSkills(): Promise<Skill> {
   const response = await fetch(`${config.fetchBaseUrl}/getSkills/${userId}/${repoId}`,  {
