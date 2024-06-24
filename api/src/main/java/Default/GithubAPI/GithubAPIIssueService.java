@@ -2,6 +2,7 @@ package Default.GithubAPI;
 
 import Default.Apikey;
 import Default.Issue.Issue;
+import Default.Login.LoginRepository;
 import Default.User.UserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class GithubAPIIssueService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private LoginRepository loginRepository;
 
     /**
      * Defines Header and webClient with API-Key
@@ -36,7 +39,6 @@ public class GithubAPIIssueService {
     public GithubAPIIssueService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
 
@@ -44,16 +46,17 @@ public class GithubAPIIssueService {
      * This Method is called to get all Issues from a GitHub Repo
      * And then get the Details (closedBy) by requesting every specific issue again with its URL
      *
-     * @param owner Name of the Owner of the GitHub Repository
-     * @param repo  Name of the GitHub Repository
+     * @param owner     Name of the Owner of the GitHub Repository
+     * @param repo      Name of the GitHub Repository
+     * @param sessionId
      * @return Returns a Flux (Data-stream) of Issues
      */
-    public Flux<Issue> getIssues(String owner, String repo, Long repoId) {
+    public Flux<Issue> getIssues(String owner, String repo, Long repoId, Long sessionId) {
         String url = String.format("/repos/%s/%s/issues", owner, repo);
         String url2 = String.format("/repos/%s/%s/issues?state=closed", owner, repo);
-        return Flux.merge(getIssuesRecursively(url, repoId), getIssuesRecursively(url2, repoId))
+        return Flux.merge(getIssuesRecursively(url, repoId,sessionId), getIssuesRecursively(url2, repoId,sessionId))
             .distinct(Issue::getId) // Remove duplicates by Issue ID
-            .flatMap(issue -> fetchIssueDetails(issue, owner, repo, repoId));
+            .flatMap(issue -> fetchIssueDetails(issue, owner, repo, repoId,sessionId));
     }
 
 
@@ -62,27 +65,30 @@ public class GithubAPIIssueService {
      * Gets all issues of the actual page and adds them to the other flux of issues
      * Recursively continues with next page
      *
-     * @param url URL
+     * @param url       URL
+     * @param sessionId
      * @return Returns a Flux of Issues
      */
-    private Flux<Issue> getIssuesRecursively(String url, Long repoId) {
+    private Flux<Issue> getIssuesRecursively(String url, Long repoId, Long sessionId) {
         return webClient.get()
             .uri(url)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(Issue.class)
             .collectList()
-            .flatMapMany(issues -> getNextPageUrl(url)
-                .flatMapMany(nextUrl -> Flux.fromIterable(issues).concatWith(getIssuesRecursively(nextUrl, repoId)))
+            .flatMapMany(issues -> getNextPageUrl(url,sessionId)
+                .flatMapMany(nextUrl -> Flux.fromIterable(issues).concatWith(getIssuesRecursively(nextUrl, repoId, sessionId)))
                 .switchIfEmpty(Flux.fromIterable(issues)));
     }
 
     /**
      * Method to Avoid Pagination of GitHub
      *
-     * @param url The current page URL
+     * @param url       The current page URL
+     * @param sessionId
      * @return A Mono containing the URL of the next page, or empty if no next page exists
      */
-    private Mono<String> getNextPageUrl(String url) {
+    private Mono<String> getNextPageUrl(String url, Long sessionId) {
         URI uri = URI.create(url);
         String baseUrl = uri.getPath();
         String query = uri.getQuery();
@@ -109,6 +115,7 @@ public class GithubAPIIssueService {
 
         return webClient.get()
             .uri(nextUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
@@ -127,15 +134,17 @@ public class GithubAPIIssueService {
      * Gets the details of the issue: closedBy
      * Requests every single issue with own URL
      *
-     * @param issue issue to be requested
-     * @param owner Name of the owner of the GitHub Repository
-     * @param repo  Name of the GitHub Repository
+     * @param issue     issue to be requested
+     * @param owner     Name of the owner of the GitHub Repository
+     * @param repo      Name of the GitHub Repository
+     * @param sessionId
      * @return Single Issue with als attributes
      */
-    private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo, Long repoId) {
+    private Mono<Issue> fetchIssueDetails(Issue issue, String owner, String repo, Long repoId, Long sessionId) {
         String url = String.format("/repos/%s/%s/issues/%s", owner, repo, issue.getNumber());
         return webClient.get()
             .uri(url)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(IssueDetails.class)
             .map(details -> {

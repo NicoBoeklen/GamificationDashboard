@@ -2,10 +2,12 @@ package Default.User;
 
 import Default.GithubAPI.GithubAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.NoSuchElementException;
@@ -22,6 +24,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Qualifier("webClientBuilder")
 
     /**
      * Saves the Contributors (Users) in the repository. Calls the Methods in GithubAPIService
@@ -30,9 +33,9 @@ public class UserController {
      * @param repo  GitHub Repository name
      * @return "Contributors saved successfully" with 200 or 500 Error if exception is thrown
      */
-    @GetMapping("/contributors/{owner}/{repo}/{repoId}")
-    public Mono<ResponseEntity<String>> getContributors(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId) {
-        return githubAPIService.getContributors(owner, repo, repoId)
+    @GetMapping("/contributors/{owner}/{repo}/{repoId}/{sessionId}")
+    public Mono<ResponseEntity<String>> getContributors(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId,@PathVariable Long sessionId) {
+        return githubAPIService.getContributors(owner, repo, repoId,sessionId)
             .flatMap(userService::saveUser)  // Save each user
             .then(Mono.just(ResponseEntity.ok("Contributors saved successfully")))
             .onErrorResume(e -> Mono.just(ResponseEntity.status(500).body("An error occurred: " + e.getMessage())));
