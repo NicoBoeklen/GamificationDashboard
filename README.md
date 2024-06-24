@@ -1,7 +1,7 @@
 # REST API and SPA Project For ToDos
 
-> This repository contains an example of a web application based on a RESTful API with Spring Boot (`api/`) and a single page application with Vue.js v3 (`frontend/`).
-> You can create and delete different todos with their assignees (frontend therefore does not exist)
+> This repository contains a Dashboard application based on a RESTful API with Spring Boot (`api/`) and a frontend application with Vue.js v3 (`frontend/`).
+> You can view your Github Projects in the Dashboard and have a gamified experience with the Dashboard
 > Please refer to the `README.md` files in the respective folders for concrete instructions.
 
 ## Quick Start
@@ -19,11 +19,8 @@
 
 Assuming all prerequisites are fulfilled, you can follow these instructions to get to know the application:
 
-### Testing the backend
-- Open http://localhost:8080/api/v1/assignees in your browser. It will show you all assignees, probably there is none 
-- Open http://localhost:8080/api/v1/todos in your browser. It will show you all todos, probably there is none
 
 ### Testing the frontend
-- It will host the UI at http://localhost:5173, which you can now also open in your browser.
-- Navigate to the Todos view by clicking on the respective menu item or via the direct ULR http://localhost:5173/#/todos.
-- Delete a todo. Then confirm its deletion via the API by opening http://localhost:8080/api/v1/todos in your browser again.
+- It will host the UI at http://localhost:80/, which you can now also open in your browser.
+- You can now login with your Github-account and view your projects in the Dashboard.
+- At the Dashboard page you can navigate to the Insights page to have a detailed view of your projects.
