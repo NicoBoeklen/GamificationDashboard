@@ -28,7 +28,7 @@ export interface Commit {
 
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-console.log("UserId lautet"+userId);
+//console.log("UserId lautet"+userId);
 export async function fetchCommits(): Promise<Commit> {
   const response = await fetch(`${config.fetchBaseUrl}/commitMetrics/${userId}/${repoId}`,  {
     method: "GET",
@@ -41,6 +41,6 @@ export async function fetchCommits(): Promise<Commit> {
     throw new Error("Failed to fetch commits");
   }
   const commit: Commit = await response.json();
-  showToast(new Toast("Success", `Commits fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Commits fetched successfully!`, "success", faCheck, 5));
   return commit;
 }

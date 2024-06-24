@@ -31,7 +31,7 @@ import {fetchQuests, Quest, QuestObject} from '../../objects/quests';
 import {onMounted, ref} from "vue";
 
 const questsUser = ref([] as Quest[]);
-let showTooltip = ref([]);
+let showTooltip = ref([] as boolean[]);
 
 
 export default {

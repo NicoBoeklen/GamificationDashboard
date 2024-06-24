@@ -10,7 +10,7 @@
                 style="width: 1em; height:1em; margin: 0 0.25em; border-radius: 50%;">
                 {{ name }}
               </div>
-              <div class="text-caption text-uppercase">Score: {{ value }}</div>
+              <div class="text-caption text-uppercase">Score: {{ value.toFixed(1) }}</div>
             </v-card>
           </v-col>
         </v-row>

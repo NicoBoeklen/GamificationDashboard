@@ -1,61 +1,134 @@
 <template>
   <v-card-title class="section-title">Badges</v-card-title>
-  <v-card-text class="badges-container" style="display: flex">
-    <v-img
-      :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/196eacaba534187ca530bde1ec70c21657fa163daf5d8f5b7a4d0d2d7bf2439c?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-      class="badge"
-      alt="Badge 1"
-    />
-    <v-img
-      :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/85e03766cb7ee30ce9f8855881450461c28cf54928fc1ef3fcb1d42a17dbb83a?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-      class="badge"
-      alt="Badge 2"
-    />
-    <v-img
-      :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/6aafcacc208e50dc71e7aeb9701f7d46d6f4389846c8f726b1f750773a7a62f5?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-      class="badge"
-      alt="Badge 3"
-    />
-    <v-img
-      :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/5e8e314d956b0814fc1a00042dc6bd098726acab30e645a4f3808aa2cf234fc8?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-      class="badge"
-      alt="Badge 4"
-    />
+  <v-card-text v-if="achievementUser.length > 0">
+    <div class="container">
+      <div v-if="codeAchievements.length > 0">
+        <h3 class="subtitle">Code</h3>
+        <div class="badges-container">
+          <div v-for="(achievement, index) in codeAchievements" :key="index" class="badge-wrapper">
+            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <v-img v-if="achievement.achievement.image!=''"
+                   :src="getImageUrl(achievement.achievement.image)" class="badge"
+                   :alt="achievement.achievement.name">
+            </v-img>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="issuesAchievements.length > 0">
+        <h3>Issues</h3>
+        <div class="badges-container">
+          <div v-for="(achievement, index) in issuesAchievements" :key="index" class="badge-wrapper">
+            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <v-img v-if="achievement.achievement.image!=''"
+                   :src="getImageUrl(achievement.achievement.image)" class="badge"
+                   :alt="achievement.achievement.name">
+            </v-img>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="deploymentAchievements.length > 0">
+        <h3>Deployment</h3>
+        <div class="badges-container">
+          <div v-for="(achievement, index) in deploymentAchievements" :key="index" class="badge-wrapper">
+            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <v-img v-if="achievement.achievement.image!=''"
+                   :src="getImageUrl(achievement.achievement.image)" class="badge"
+                   :alt="achievement.achievement.name">
+            </v-img>
+          </div>
+        </div>
+      </div>
+    </div>
+  </v-card-text>
+  <v-card-text v-else>
+    <p>Loading
+      <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
+    </p>
   </v-card-text>
 </template>
+
+
 <script lang="ts">
-import {fetchAchievement, Achievement, AchievementObject} from '../../objects/achievements';
+import {fetchAchievement, Achievement} from '../../objects/achievements';
 import {onMounted, ref} from "vue";
 
 const achievementUser = ref([] as Achievement[]);
-let showTooltip = ref([]);
+const codeAchievements = ref([] as Achievement[]);
+const issuesAchievements = ref([] as Achievement[]);
+const deploymentAchievements = ref([] as Achievement[]);
 
 export default {
   setup() {
     onMounted(async () => {
       try {
+        achievementUser.value = [];
+        codeAchievements.value = [];
+        issuesAchievements.value = [];
+        deploymentAchievements.value = [];
         achievementUser.value = await fetchAchievement();
-        showTooltip.value = new Array(achievementUser.value.length).fill(false);
+        sortAchievements();
       } catch (error) {
         console.error('Failed to fetch achievement:', error);
       }
     });
 
+    const sortAchievements = () => {
+      achievementUser.value.forEach(achievement => {
+        const type = achievement.achievement.type;
+        if (['commits', 'commitsTeam', 'linesOfCodeAdded', 'linesOfCodeDeleted', 'linesOfCodeAddedTeam'].includes(type)) {
+          codeAchievements.value.push(achievement);
+        } else if (['issues', 'issuesTeam'].includes(type)) {
+          issuesAchievements.value.push(achievement);
+        } else if (['pullRequests', 'pullRequestsTeam'].includes(type)) {
+          deploymentAchievements.value.push(achievement);
+        }
+      });
+    };
+
+    const getImageUrl = (imageName: string) => {
+      return new URL(`../../assets/${imageName}`, import.meta.url).href;
+    };
+
     return {
       achievementUser,
-      showTooltip
+      codeAchievements,
+      issuesAchievements,
+      deploymentAchievements,
+      getImageUrl
     };
   }
 };
 </script>
+
+
 <style>
+.subtitle {
+  font-size: 18px;
+}
+
+.badge-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .badge {
-  margin-right: 10px;
-  height: 50px; /* Adjust height as needed */
-  width: auto;
-  align-items: start
+  height: 7.5em;
+  width: 7.5em;
+  margin: 0 0.4em 0.4em 0.4em;
+}
+
+.badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.container {
+  max-height: 29em;
+  overflow-y: auto;
 }
 
 </style>
-<script setup lang="ts">
-</script>

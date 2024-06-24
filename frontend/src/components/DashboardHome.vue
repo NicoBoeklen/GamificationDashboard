@@ -107,7 +107,7 @@ export default defineComponent({
   mounted() {
     if (localStorage.getItem('loaded') === "falsch") {
       localStorage.setItem('loaded', "true");
-      console.log("Ich sollte die Seite aktualisieren")
+      //console.log("Ich sollte die Seite aktualisieren")
       window.location.reload();
     }
   }

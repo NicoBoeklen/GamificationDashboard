@@ -22,6 +22,6 @@ export async function fetchLeaderboard(): Promise<Leaderboard> {
     throw new Error("Failed to fetch Leaderboard");
   }
   const leaderboard: Leaderboard = await response.json();
-  showToast(new Toast("Success", `Leaderboard fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Leaderboard fetched successfully!`, "success", faCheck, 5));
   return leaderboard;
 }
