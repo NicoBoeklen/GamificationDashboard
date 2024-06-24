@@ -17,7 +17,7 @@ export interface Milestone {
 
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-console.log("UserId lautet"+userId);
+//console.log("UserId lautet"+userId);
 
 export async function fetchMilestone(): Promise<Milestone[]> {
   const response = await fetch(`${config.fetchBaseUrl}/milestones/${userId}/${repoId}`,  {

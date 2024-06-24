@@ -28,7 +28,7 @@ export interface Commit {
 
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-console.log("UserId lautet"+userId);
+//console.log("UserId lautet"+userId);
 export async function fetchCommits(): Promise<Commit> {
   const response = await fetch(`${config.fetchBaseUrl}/commitMetrics/${userId}/${repoId}`,  {
     method: "GET",

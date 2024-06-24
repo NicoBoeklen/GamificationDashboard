@@ -33,7 +33,7 @@ export default {
     }
     onMounted(() => {
       userName.value = localStorage.getItem('userName');
-      console.log('Username:', userName);
+      //console.log('Username:', userName);
 
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {

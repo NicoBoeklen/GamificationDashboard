@@ -1,56 +1,58 @@
 <template>
   <v-card-title class="section-title">Badges</v-card-title>
   <v-card-text v-if="achievementUser.length > 0">
-    <div v-if="codeAchievements.length > 0">
-      <h3 class="subtitle">Code</h3>
-      <div class="badges-container">
-        <div v-for="(achievement, index) in codeAchievements" :key="index" class="badge-wrapper">
-          <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
-          <v-img v-if="achievement.achievement.image!=''"
-                 :src="getImageUrl(achievement.achievement.image)" class="badge"
-                 :alt="achievement.achievement.name">
-          </v-img>
+    <div class="container">
+      <div v-if="codeAchievements.length > 0">
+        <h3 class="subtitle">Code</h3>
+        <div class="badges-container">
+          <div v-for="(achievement, index) in codeAchievements" :key="index" class="badge-wrapper">
+            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <v-img v-if="achievement.achievement.image!=''"
+                   :src="getImageUrl(achievement.achievement.image)" class="badge"
+                   :alt="achievement.achievement.name">
+            </v-img>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="issuesAchievements.length > 0">
-      <h3>Issues</h3>
-      <div class="badges-container">
-        <div v-for="(achievement, index) in issuesAchievements" :key="index" class="badge-wrapper">
-          <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
-          <v-img v-if="achievement.achievement.image!=''"
-                 :src="getImageUrl(achievement.achievement.image)" class="badge"
-                 :alt="achievement.achievement.name">
-          </v-img>
+      <div v-if="issuesAchievements.length > 0">
+        <h3>Issues</h3>
+        <div class="badges-container">
+          <div v-for="(achievement, index) in issuesAchievements" :key="index" class="badge-wrapper">
+            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <v-img v-if="achievement.achievement.image!=''"
+                   :src="getImageUrl(achievement.achievement.image)" class="badge"
+                   :alt="achievement.achievement.name">
+            </v-img>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="deploymentAchievements.length > 0">
-      <h3>Deployment</h3>
-      <div class="badges-container">
-        <div v-for="(achievement, index) in deploymentAchievements" :key="index" class="badge-wrapper">
-          <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
-          <v-img v-if="achievement.achievement.image!=''"
-                 :src="getImageUrl(achievement.achievement.image)" class="badge"
-                 :alt="achievement.achievement.name">
-          </v-img>
+      <div v-if="deploymentAchievements.length > 0">
+        <h3>Deployment</h3>
+        <div class="badges-container">
+          <div v-for="(achievement, index) in deploymentAchievements" :key="index" class="badge-wrapper">
+            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <v-img v-if="achievement.achievement.image!=''"
+                   :src="getImageUrl(achievement.achievement.image)" class="badge"
+                   :alt="achievement.achievement.name">
+            </v-img>
+          </div>
         </div>
       </div>
     </div>
   </v-card-text>
   <v-card-text v-else>
-  <p>Loading
-    <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
-  </p>
+    <p>Loading
+      <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
+    </p>
   </v-card-text>
 </template>
 
 
 <script lang="ts">
-import { fetchAchievement, Achievement } from '../../objects/achievements';
-import { onMounted, ref } from "vue";
+import {fetchAchievement, Achievement} from '../../objects/achievements';
+import {onMounted, ref} from "vue";
 
 const achievementUser = ref([] as Achievement[]);
 const codeAchievements = ref([] as Achievement[]);
@@ -105,22 +107,28 @@ export default {
 .subtitle {
   font-size: 18px;
 }
+
 .badge-wrapper {
-display: flex;
-flex-direction: column;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .badge {
-height: 7.5em;
-width: 7.5em;
-margin: 0 0.4em 0.4em 0.4em;
+  height: 7.5em;
+  width: 7.5em;
+  margin: 0 0.4em 0.4em 0.4em;
 }
 
 .badges-container {
-display: flex;
-flex-wrap: wrap;
-justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.container {
+  max-height: 29em;
+  overflow-y: auto;
 }
 
 </style>

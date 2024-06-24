@@ -17,7 +17,7 @@ export interface Achievement {
 
 const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
-console.log("UserId lautet"+userId);
+//console.log("UserId lautet"+userId);
 
 export async function fetchAchievement(): Promise<Achievement[]> {
   const response = await fetch(`${config.fetchBaseUrl}/achievements/${userId}/${repoId}`,  {
