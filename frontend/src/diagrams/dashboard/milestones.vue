@@ -23,7 +23,8 @@
 </template>
 
 <script lang="ts">
-import {fetchMilestone, Milestone, MilestoneObject} from '../../objects/milestones';
+import {fetchMilestone} from '../../objects/milestones';
+import type { Milestone} from '../../objects/milestones';
 import {onMounted, ref} from "vue";
 
 const milestoneUser = ref([] as Milestone[]);

@@ -27,7 +27,8 @@
 </template>
 
 <script lang="ts">
-import {fetchQuests, Quest, QuestObject} from '../../objects/quests';
+import {fetchQuests, } from '../../objects/quests';
+import type {Quest} from '../../objects/quests';
 import {onMounted, ref} from "vue";
 
 const questsUser = ref([] as Quest[]);

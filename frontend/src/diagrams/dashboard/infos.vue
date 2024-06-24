@@ -96,7 +96,8 @@
 import {defineComponent, onMounted, ref} from "vue";
 import {redirectCodeInsights, redirectInsights} from "../../objects/directions";
 import 'moment/locale/de';
-import {fetchRepository, Repository} from "../../objects/repository";
+import {fetchRepository} from "../../objects/repository";
+import type {Repository} from "../../objects/repository";
 let repository = ref({} as Repository);
 const repoName = ref('');
 export default defineComponent({

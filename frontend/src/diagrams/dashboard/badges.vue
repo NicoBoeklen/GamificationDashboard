@@ -51,7 +51,8 @@
 
 
 <script lang="ts">
-import {fetchAchievement, Achievement} from '../../objects/achievements';
+import {fetchAchievement} from '../../objects/achievements';
+import type { Achievement } from '../../objects/achievements';
 import {onMounted, ref} from "vue";
 
 const achievementUser = ref([] as Achievement[]);
