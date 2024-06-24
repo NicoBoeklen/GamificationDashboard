@@ -21,7 +21,8 @@ public class Application {
             public void addCorsMappings(@Nonnull CorsRegistry registry) {
                 registry.addMapping("/**")
                     .allowedMethods("OPTIONS", "HEAD", "GET", "PUT", "POST", "DELETE")
-                    .allowedOrigins("*");
+                    .allowedOrigins("*")
+                    .allowCredentials(false);
             }
         };
     }
