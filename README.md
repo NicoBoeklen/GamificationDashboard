@@ -19,8 +19,7 @@
 
 Assuming all prerequisites are fulfilled, you can follow these instructions to get to know the application:
 
-
 ### Testing the frontend
 - It will host the UI at http://localhost:80/, which you can now also open in your browser.
-- You can now login with your Github-account and view your projects in the Dashboard.
+- You can now login with your Github-account and view your public projects in the Dashboard.
 - At the Dashboard page you can navigate to the Insights page to have a detailed view of your projects.

@@ -32,7 +32,6 @@ java -jar ./target/rest-api.jar
 ./mvnw spring-boot:run
 ```
 
-
 ## Documentation
 
 - General references: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle

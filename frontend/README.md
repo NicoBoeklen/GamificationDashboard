@@ -48,7 +48,7 @@ npm run dev
 
 After that you can visit the Website at
 ```sh
-http://localhost:5173
+http://localhost:80
 ```
 ### Frontend Test
 - Login Screen on http://localhost:80
