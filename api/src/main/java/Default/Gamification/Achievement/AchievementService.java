@@ -139,15 +139,15 @@ public class AchievementService {
             List<Achievement> achievements = new ArrayList<>();
             //Commits 
             achievements.add(new Achievement("First Commit", "Get 1 Commit.", 10, "commits", 1, "FirstCommit.png"));
-            achievements.add(new Achievement("10 Commits", "Get 10 Commit.", 50, "commits", 10, "10Commits.png"));
-            achievements.add(new Achievement("50 Commits", "Get 50 Commit.", 300, "commits", 50, "50Commits.png"));
-            achievements.add(new Achievement("100 Commits", "Get 100 Commit.", 500, "commits", 100, "100Commits.png"));
+            achievements.add(new Achievement("10 Commits", "Get 10 Commits.", 50, "commits", 10, "10Commits.png"));
+            achievements.add(new Achievement("50 Commits", "Get 50 Commits.", 300, "commits", 50, "50Commits.png"));
+            achievements.add(new Achievement("100 Commits", "Get 100 Commits.", 500, "commits", 100, "100Commits.png"));
             //Issues 
             achievements.add(new Achievement("Debugging", "Fix 1 Issue.", 10, "issues", 1, "1FixDebugg.png"));
-            achievements.add(new Achievement("Debugging Amateur", "Fix 5 Issue.", 50, "issues", 5, "5Issue1.png"));
-            achievements.add(new Achievement("Debugging Apprentice", "Fix 10 Issue.", 100, "issues", 10, "10Issues.png"));
-            achievements.add(new Achievement("Debugging Pro", "Fix 15 Issue.", 100, "issues", 15, "15Issues.png"));
-            achievements.add(new Achievement("Debugging Master", "Fix 20 Issue.", 200, "issues", 20, "DebuggMaster.png"));
+            achievements.add(new Achievement("Debugging Amateur", "Fix 5 Issues.", 50, "issues", 5, "5Issue1.png"));
+            achievements.add(new Achievement("Debugging Apprentice", "Fix 10 Issues.", 100, "issues", 10, "10Issues.png"));
+            achievements.add(new Achievement("Debugging Pro", "Fix 15 Issues.", 100, "issues", 15, "15Issues.png"));
+            achievements.add(new Achievement("Debugging Master", "Fix 20 Issues.", 200, "issues", 20, "DebuggMaster.png"));
             //Reviews
             achievements.add(new Achievement("Code Reviewer", "Review 10 Pull Requests.", 500, "pullRequests", 10, "CodeReviewer.png"));
             //LoC Deleted
@@ -159,8 +159,8 @@ public class AchievementService {
 
             //Team-Achievements
             //Commits
-            achievements.add(new Achievement("500 Team Commits", "Get 500 Commit in your team.", 500, "commitsTeam", 500, "500TeamCommits.png" ));
-            achievements.add(new Achievement("1000 Team Commits", "Get 1000 Commit in your team.", 1000, "commitsTeam", 1000, "1000TeamCommits.png"));
+            achievements.add(new Achievement("500 Team Commits", "Get 500 Commits in your team.", 500, "commitsTeam", 500, "500TeamCommits.png" ));
+            achievements.add(new Achievement("1000 Team Commits", "Get 1000 Commits in your team.", 1000, "commitsTeam", 1000, "1000TeamCommits.png"));
             //Issues
             achievements.add(new Achievement("Debugging Team Amateur", "Fix 25 Issues in team.", 200, "issuesTeam", 25, ""));
             achievements.add(new Achievement("Debugging Team Apprentice", "Fix 50 Issues in team.", 400, "issuesTeam", 50, ""));
