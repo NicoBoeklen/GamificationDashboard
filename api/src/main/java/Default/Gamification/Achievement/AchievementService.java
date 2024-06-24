@@ -1,6 +1,7 @@
 package Default.Gamification.Achievement;
 
 import Default.Commit.CommitService;
+import Default.Gamification.Quest.UserQuestRepository;
 import Default.Issue.IssueService;
 import Default.PullRequest.PullRequestService;
 import Default.User.User;
@@ -19,6 +20,9 @@ public class AchievementService {
 
     @Autowired
     private UserAchievementRepository userAchievementRepository;
+
+    @Autowired
+    private UserQuestRepository userQuestRepository;
 
     @Autowired
     private UserService userService;
@@ -111,6 +115,9 @@ public class AchievementService {
                     break;
             }
         }
+        user.setLevel(userQuestRepository.findAll().stream().filter(q -> q.getUser().equals(user)).mapToInt(q -> q.getQuest().getXp()).sum()
+            + userAchievementRepository.findAll().stream().filter(q -> q.getUser().equals(user)).mapToInt(q -> q.getAchievement().getXp()).sum());
+        userService.saveUser2(user);
         return milestones;
     }
 
@@ -130,42 +137,42 @@ public class AchievementService {
     public void setAchievements() {
         if (achievementRepository.findAll().size() == 0) {
             List<Achievement> achievements = new ArrayList<>();
-            //Commits
-            achievements.add(new Achievement("First Commit", "Get 1 Commit.", 10, "commits", 1));
-            achievements.add(new Achievement("10 Commits", "Get 10 Commit.", 50, "commits", 10));
-            achievements.add(new Achievement("50 Commits", "Get 50 Commit.", 300, "commits", 50));
-            achievements.add(new Achievement("100 Commits", "Get 100 Commit.", 500, "commits", 100));
-            //Issues
-            achievements.add(new Achievement("Debugging", "Fix 1 Issue.", 10, "issues", 1));
-            achievements.add(new Achievement("Debugging Amateur", "Fix 5 Issue.", 50, "issues", 5));
-            achievements.add(new Achievement("Debugging Apprentice", "Fix 10 Issue.", 100, "issues", 10));
-            achievements.add(new Achievement("Debugging Pro", "Fix 15 Issue.", 100, "issues", 15));
-            achievements.add(new Achievement("Debugging Master", "Fix 20 Issue.", 200, "issues", 20));
+            //Commits 
+            achievements.add(new Achievement("First Commit", "Get 1 Commit.", 10, "commits", 1, "FirstCommit.png"));
+            achievements.add(new Achievement("10 Commits", "Get 10 Commit.", 50, "commits", 10, "10Commits.png"));
+            achievements.add(new Achievement("50 Commits", "Get 50 Commit.", 300, "commits", 50, "50Commits.png"));
+            achievements.add(new Achievement("100 Commits", "Get 100 Commit.", 500, "commits", 100, "100Commits.png"));
+            //Issues 
+            achievements.add(new Achievement("Debugging", "Fix 1 Issue.", 10, "issues", 1, "1FixDebugg.png"));
+            achievements.add(new Achievement("Debugging Amateur", "Fix 5 Issue.", 50, "issues", 5, "5Issue1.png"));
+            achievements.add(new Achievement("Debugging Apprentice", "Fix 10 Issue.", 100, "issues", 10, "10Issues.png"));
+            achievements.add(new Achievement("Debugging Pro", "Fix 15 Issue.", 100, "issues", 15, "15Issues.png"));
+            achievements.add(new Achievement("Debugging Master", "Fix 20 Issue.", 200, "issues", 20, "DebuggMaster.png"));
             //Reviews
-            achievements.add(new Achievement("Code Reviewer", "Review 10 Pull Requests.", 500, "pullRequests", 10));
+            achievements.add(new Achievement("Code Reviewer", "Review 10 Pull Requests.", 500, "pullRequests", 10, "CodeReviewer.png"));
             //LoC Deleted
-            achievements.add(new Achievement("Refactoring Hero", "Delete 500 Lines of Code.", 100, "linesOfCodeDeleted", 500));
+            achievements.add(new Achievement("Refactoring Hero", "Delete 500 Lines of Code.", 100, "linesOfCodeDeleted", 500, ""));
             //LoC Added
-            achievements.add(new Achievement("Code Marathoner Bronze", "Write 1000 Lines of Code.", 100, "linesOfCodeAdded", 1000));
-            achievements.add(new Achievement("Code Marathoner Silver", "Write 5000 Lines of Code.", 300, "linesOfCodeAdded", 5000));
-            achievements.add(new Achievement("Code Marathoner Gold", "Write 10000 Lines of Code.", 1000, "linesOfCodeAdded", 10000));
+            achievements.add(new Achievement("Code Marathoner Bronze", "Write 1000 Lines of Code.", 100, "linesOfCodeAdded", 1000, ""));
+            achievements.add(new Achievement("Code Marathoner Silver", "Write 5000 Lines of Code.", 300, "linesOfCodeAdded", 5000, ""));
+            achievements.add(new Achievement("Code Marathoner Gold", "Write 10000 Lines of Code.", 1000, "linesOfCodeAdded", 10000, ""));
 
             //Team-Achievements
             //Commits
-            achievements.add(new Achievement("500 Team Commits", "Get 500 Commit in your team.", 500, "commitsTeam", 500));
-            achievements.add(new Achievement("1000 Team Commits", "Get 1000 Commit in your team.", 1000, "commitsTeam", 1000));
+            achievements.add(new Achievement("500 Team Commits", "Get 500 Commit in your team.", 500, "commitsTeam", 500, "500TeamCommits.png" ));
+            achievements.add(new Achievement("1000 Team Commits", "Get 1000 Commit in your team.", 1000, "commitsTeam", 1000, "1000TeamCommits.png"));
             //Issues
-            achievements.add(new Achievement("Debugging Team Amateur", "Fix 25 Issues in team.", 200, "issuesTeam", 25));
-            achievements.add(new Achievement("Debugging Team Apprentice", "Fix 50 Issues in team.", 400, "issuesTeam", 50));
-            achievements.add(new Achievement("Debugging Team Master", "Fix 100 Issues in team.", 800, "issuesTeam", 100));
+            achievements.add(new Achievement("Debugging Team Amateur", "Fix 25 Issues in team.", 200, "issuesTeam", 25, ""));
+            achievements.add(new Achievement("Debugging Team Apprentice", "Fix 50 Issues in team.", 400, "issuesTeam", 50, ""));
+            achievements.add(new Achievement("Debugging Team Master", "Fix 100 Issues in team.", 800, "issuesTeam", 100, ""));
             //Reviews
-            achievements.add(new Achievement("Peer Review Experts", "Review 50 Pull Requests in team.", 1000, "pullRequestsTeam", 50));
+            achievements.add(new Achievement("Peer Review Experts", "Review 50 Pull Requests in team.", 1000, "pullRequestsTeam", 50,"TeamReview.png" ));
             //LoC Deleted
-            achievements.add(new Achievement("Refactoring Team Hero", "Delete 2000 Lines of Code in team.", 300, "linesOfCodeDeletedTeam", 2000));
+            achievements.add(new Achievement("Refactoring Team Hero", "Delete 2000 Lines of Code in team.", 300, "linesOfCodeDeletedTeam", 2000, ""));
             //LoC Added
-            achievements.add(new Achievement("Team Code Marathoners Bronze", "Write 5000 Lines of Code in team.", 300, "linesOfCodeAddedTeam", 5000));
-            achievements.add(new Achievement("Team Code Marathoners Silver", "Write 20000 Lines of Code in team.", 600, "linesOfCodeAddedTeam", 20000));
-            achievements.add(new Achievement("Team Code Marathoners Gold", "Write 30000 Lines of Code in team.", 1500, "linesOfCodeAddedTeam", 30000));
+            achievements.add(new Achievement("Team Code Marathoners Bronze", "Write 5000 Lines of Code in team.", 300, "linesOfCodeAddedTeam", 5000, ""));
+            achievements.add(new Achievement("Team Code Marathoners Silver", "Write 20000 Lines of Code in team.", 600, "linesOfCodeAddedTeam", 20000, ""));
+            achievements.add(new Achievement("Team Code Marathoners Gold", "Write 30000 Lines of Code in team.", 1500, "linesOfCodeAddedTeam", 30000, ""));
 
             achievementRepository.saveAll(achievements);
         }

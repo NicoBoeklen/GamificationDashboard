@@ -7,7 +7,7 @@
     <v-app-bar-title><strong>Insights</strong>: {{ repoName }}</v-app-bar-title>
 
     <template v-slot:append>
-      <v-btn @click="redirectManagementView()" variant="outlined" class="mr-3">Management View</v-btn>
+      <v-btn disabled @click="redirectManagementView()" variant="outlined" class="mr-3">Management View</v-btn>
 
       <v-btn @click="toggleTheme()" icon="mdi mdi-theme-light-dark"  ></v-btn>
 
@@ -23,6 +23,7 @@ import { useTheme } from 'vuetify'
 import {redirectLogin, redirectManagementView} from "../objects/directions";
 import AvatarComponent from "../diagrams/avatarHeader.vue";
 
+
 export default {
   components: {AvatarComponent},
   methods: {redirectLogin, redirectManagementView},
@@ -33,12 +34,18 @@ export default {
 
     function toggleTheme() {
       theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+      localStorage.setItem('theme', theme.global.name.value);
     }
     onMounted(() => {
       userName.value = localStorage.getItem('userName');
       console.log('Username:', userName);
       repoName.value = localStorage.getItem('repoName');
       console.log('Reponame:', repoName);
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        theme.global.name.value = savedTheme;
+      }
     });
 
     return { userName, toggleTheme, repoName };

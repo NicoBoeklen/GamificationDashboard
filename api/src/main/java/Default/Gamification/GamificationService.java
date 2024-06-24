@@ -85,7 +85,7 @@ public class GamificationService {
                 (e1, e2) -> e1,
                 LinkedHashMap::new
             ));
-
+        leaderboard.setUserList(userList);
         leaderboard.setLeaderboardMap(sortedLeaderboardMap);
         return leaderboard;
     }

@@ -27,7 +27,7 @@ import {fetchMilestone, Milestone, MilestoneObject} from '../../objects/mileston
 import {onMounted, ref} from "vue";
 
 const milestoneUser = ref([] as Milestone[]);
-let showTooltip = ref([]);
+let showTooltip = ref([] as boolean[]);
 
 export default {
   setup() {
@@ -57,7 +57,7 @@ export default {
 }
 
 .milestone-container {
-  max-height: 30em;
+  max-height: 29em;
   overflow-y: auto;
 }
 

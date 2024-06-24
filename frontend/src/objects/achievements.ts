@@ -2,12 +2,13 @@ import config from "../config";
 import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
-interface AchievementObject{
+export interface AchievementObject {
   name: string;
   description: string;
   xp: number;
   type: string;
   condition: number;
+  image: string;
 }
 
 export interface Achievement {
@@ -18,7 +19,7 @@ const repoId = localStorage.getItem('repoId');
 const userId = localStorage.getItem('userId');
 console.log("UserId lautet"+userId);
 
-export async function fetchAchievement(): Promise<Achievement> {
+export async function fetchAchievement(): Promise<Achievement[]> {
   const response = await fetch(`${config.fetchBaseUrl}/achievements/${userId}/${repoId}`,  {
     method: "GET",
     headers: {
@@ -29,7 +30,7 @@ export async function fetchAchievement(): Promise<Achievement> {
   if (!response.ok) {
     throw new Error("Failed to fetch Achievements");
   }
-  const achievement: Achievement = await response.json();
-  showToast(new Toast("Success", `Achievements fetched successfully!`, "success", faCheck, 5));
+  const achievement: Achievement[] = await response.json();
+  //showToast(new Toast("Success", `Achievements fetched successfully!`, "success", faCheck, 5));
   return achievement;
 }

@@ -4,6 +4,7 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 export interface PullRequest {
   numberReviewsUser: number;
+  numberReviewsTotal: number;
   averageCommentsPerReviewUser: number;
   openPullRequests: number;
   closedPullRequestsLastMonth: number;
@@ -28,6 +29,6 @@ export async function fetchPullRequests(): Promise<PullRequest> {
     throw new Error("Failed to fetch PullRequests");
   }
   const pull: PullRequest = await response.json();
-  showToast(new Toast("Success", `PullRequests fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `PullRequests fetched successfully!`, "success", faCheck, 5));
   return pull;
 }

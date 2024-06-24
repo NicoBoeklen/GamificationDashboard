@@ -1,6 +1,7 @@
 <template>
   <v-avatar color="white darken-1" style="margin-left: 1.3em;" class="counter-number"
   >{{ realLevel }}
+    <v-progress-circular v-if="realLevel == 0" indeterminate color="white" size="24"></v-progress-circular>
   </v-avatar
   >
   <v-progress-linear
@@ -15,8 +16,15 @@
 
 <script lang="ts">
 import {fetchAvatar} from '../../objects/avatar';
+import Level from "./level.vue";
+import {fetchMilestone} from "../../objects/milestones";
 
 export default {
+  computed: {
+    Level() {
+      return Level
+    }
+  },
   data() {
     return {
       level: 0,
@@ -26,12 +34,12 @@ export default {
     };
   },
   async mounted() {
+    await fetchMilestone();
     const user = await fetchAvatar();
     this.level = user.level;
     this.realLevel = Math.floor((1 + Math.sqrt(1 + (this.level / 12.5))) / 2);
     this.progress = Math.floor((((1 + Math.sqrt(1 + (this.level / 12.5))) / 2) - Math.floor((1 + Math.sqrt(1 + (this.level / 12.5))) / 2)) * 100);
-    console.log(this.progress, this.realLevel, ((1 + Math.sqrt(1 + (this.level / 12.5))) / 2))
-  }
+  },
 };
 </script>
 

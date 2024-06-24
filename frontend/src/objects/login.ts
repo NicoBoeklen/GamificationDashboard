@@ -3,6 +3,7 @@ import {showToast, Toast} from "../ts/toasts";
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {type Ref, ref} from "vue";
 import router from "../router";
+import {toast} from "vuetify-sonner";
 
 let userNameSave: string;
 
@@ -37,7 +38,17 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
     });
 
     if (!response.ok) {
+      showToast(new Toast("Error", `Login Failed!`, "error", faXmark, 5));
+      toast("Login Failed!", {
+        description: "Username, Ownername, ApiKey or RepoName is wrong!",
+        cardProps: {
+          color: 'error'
+        },
+        prependIcon: 'mdi-cancel',
+        progressBar: true,
+      })
       throw new Error(`HTTP error! status: ${response.status}`);
+
     }
 
     const data = await response.json() as Login;
@@ -47,12 +58,15 @@ export async function login(onLoadingChange: (isLoading: boolean) => void) {
     toLogin.value = data;
     console.log(toLogin.value.userName);
     localStorage.setItem('userName', toLogin.value.userName);
+    localStorage.setItem('loaded', "falsch");
     localStorage.setItem('repoId', String(toLogin.value.repoId));
     localStorage.setItem('userId', String(toLogin.value.userId));
     localStorage.setItem('repoName', toLogin.value.repoName);
     await router.push('/dashboard');
   } catch (error) {
-   console.log(error)
+    const err = error as Error
+    console.log('Ein Fehler ist aufgetreten:', error);
+    //showToast(new Toast("Error", `Login Failed! ${err.message}`, "error", faXmark, 5));
   } finally {
     onLoadingChange(false); // Ladezustand auf false setzen
   }

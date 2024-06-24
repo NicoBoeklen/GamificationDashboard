@@ -1,7 +1,6 @@
 package Default.GithubRepo;
 
 import Default.User.User;
-import Default.User.UserRepoId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -26,6 +25,14 @@ public class GithubRepo {
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
     
+    private Integer openIssues;
+    
+    private Integer numberOfReleases;
+
+    private Integer numberOfOpenPullRequests;
+    
+    private Integer numberOfContributors;
+    
     @OneToOne
     @JoinColumns({
         @JoinColumn(name = "owner_id", referencedColumnName = "user_id"),
@@ -45,6 +52,38 @@ public class GithubRepo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getOpenIssues() {
+        return openIssues;
+    }
+
+    public void setOpenIssues(Integer openIssues) {
+        this.openIssues = openIssues;
+    }
+
+    public Integer getNumberOfReleases() {
+        return numberOfReleases;
+    }
+
+    public void setNumberOfReleases(Integer numberOfReleases) {
+        this.numberOfReleases = numberOfReleases;
+    }
+
+    public Integer getNumberOfOpenPullRequests() {
+        return numberOfOpenPullRequests;
+    }
+
+    public void setNumberOfOpenPullRequests(Integer numberOfOpenPullRequests) {
+        this.numberOfOpenPullRequests = numberOfOpenPullRequests;
+    }
+
+    public Integer getNumberOfContributors() {
+        return numberOfContributors;
+    }
+
+    public void setNumberOfContributors(Integer numberOfContributors) {
+        this.numberOfContributors = numberOfContributors;
     }
 
     public String getName() {

@@ -1,6 +1,5 @@
 package Default.Gamification.Quest;
 
-import Default.Gamification.Achievement.UserAchievement;
 import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 public class QuestController {
@@ -25,10 +25,10 @@ public class QuestController {
     public List<UserQuestToday> getUserQuests(@PathVariable Long userId, @PathVariable Long repoId) {
         try {
             setQuests();
-            User user = userService.findById(userId, repoId).orElseThrow();
+            User user = userService.findById(userId, repoId).orElseThrow(NoSuchElementException::new);
             return questService.checkAndAwardQuests(user);
             //return questService.getQuests(user);
-        } catch (Error e) {
+        } catch (NoSuchElementException e) {
             return new ArrayList<>();
         }
     }

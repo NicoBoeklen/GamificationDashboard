@@ -25,6 +25,6 @@ export async function fetchSkills(): Promise<Skill> {
     throw new Error("Failed to fetch Skill");
   }
   const skill: Skill = await response.json();
-  showToast(new Toast("Success", `Skills fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Skills fetched successfully!`, "success", faCheck, 5));
   return skill;
 }

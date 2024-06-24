@@ -3,7 +3,7 @@
     <p v-if="!loaded" style="margin-left: 1em">Loading
       <v-progress-circular indeterminate color="white" size="24"></v-progress-circular>
     </p>
-    <canvas id="issueDensity" style="padding: 1em"></canvas>
+    <div class="chart-container"><canvas id="issueDensity" style="padding: 1em"></canvas></div>
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
           labels: labels,
           datasets: [
             {
-              label: 'Open Issues',
+              label: 'Open Issues / 1000 LoC',
               data: data,
               fill: false,
               borderColor: 'rgba(8, 98, 189, 0.5)',
@@ -47,6 +47,12 @@ export default {
         },
         options: {
           responsive: true,
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
           scales: {
             x: {
               display: true,
@@ -74,4 +80,17 @@ export default {
 }
 </script>
 <style scoped>
+.chart-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 50%;
+  height: 0;
+}
+#issueDensity {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>

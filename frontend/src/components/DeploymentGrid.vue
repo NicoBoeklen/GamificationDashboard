@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="5">
+      <v-col cols="6">
         <v-card >
           <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
             <team-avatar-component></team-avatar-component>
@@ -13,7 +13,7 @@
         <v-card style="margin-top: 1em;">
           <v-row>
             <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <v-card-title class="d-flex align-items-center" style="padding-right: 0; margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <avatar-component></avatar-component>
                 {{ diagrams[2].title1 }}
                 <v-icon small class="info-icon" @mouseover="showTooltip[2] = true" @mouseleave="showTooltip[2] = false">mdi-information</v-icon>
@@ -32,11 +32,11 @@
         </v-card>
       </v-col>
 
-      <v-col cols="7">
+      <v-col cols="6">
         <v-card>
           <v-row>
             <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <v-card-title class="d-flex align-items-center" style="padding-right: 0; margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 {{ diagrams[1].title1 }}
               </v-card-title>
@@ -66,7 +66,7 @@
         <v-card style="margin-top: 1em;">
           <v-row>
             <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-right: 0; padding-bottom: 0">
                 <team-avatar-component></team-avatar-component>
                 {{ diagrams[3].title1 }}
                 <v-icon small class="info-icon" @mouseover="showTooltip[3] = true" @mouseleave="showTooltip[3] = false">mdi-information</v-icon>
@@ -75,7 +75,7 @@
               <component :is="diagrams[3].component1"></component>
             </v-col>
             <v-col>
-              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0">
+              <v-card-title class="d-flex align-items-center" style="margin-top: 0.4em; margin-bottom: 0; padding-bottom: 0;">
                 <team-avatar-component></team-avatar-component>
                 {{ diagrams[3].title2 }}
                 <v-icon small class="info-icon" @mouseover="showTooltip[0] = true" @mouseleave="showTooltip[0] = false">mdi-information</v-icon>
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       diagrams: [
-        { component: PullRequest, title: 'Team Pull Requests Closed/Open' },
+        { component: PullRequest, title: 'Pull Requests Closed/Open' },
         {
           title1: 'Total Releases',
           component1: ReleasesCount,
@@ -117,9 +117,9 @@ export default {
           component3: ReleaseChart, title3: 'Recent Releases'
         },
         {
-          title1: 'Average number of comments',
+          title1: 'Average comments',
           component1: PullRequestComments,
-          title2: 'Amount of Reviews performed',
+          title2: 'Reviews performed',
           component2: PullRequestReviews
         },
         {

@@ -11,15 +11,6 @@
 
         <v-col class="commitment-wrapper">
           <div class="d-flex align-center">
-            <!--<v-img
-              :src="'https://cdn.builder.io/api/v1/image/assets/TEMP/a15a58212de51f3f8af173f0f65e334091b691385ab3ae8e623d83ef49bba2bc?apiKey=b979e3b43d464a49a8e4c392f6c7b6d1&'"
-              class="commitment-logo"
-              alt="Commitment Logo"
-            />
-            <p class="commitment-text">
-              <span class="strong-text">400</span> <span>Days of</span> <span class="bold-text">Commit</span>
-              <span>ment</span>
-            </p>-->
             <div class="right-align-container">
               <p>To update your project data please re-login!</p>
               <v-btn @click="redirectCodeInsights()" variant="outlined" class="mr-3">Insights
@@ -112,6 +103,13 @@ export default defineComponent({
     return {
       showTooltip: [false, false],
     }
+  },
+  mounted() {
+    if (localStorage.getItem('loaded') === "falsch") {
+      localStorage.setItem('loaded', "true");
+      console.log("Ich sollte die Seite aktualisieren")
+      window.location.reload();
+    }
   }
 });
 </script>
@@ -123,6 +121,7 @@ export default defineComponent({
   align-items: center;
   width: 100%;
 }
+
 .right-align-container p {
   margin: 0;
   margin-right: 1em;

@@ -1,12 +1,14 @@
 package Default.GithubRepo;
 
 import Default.GithubAPI.GithubAPIService;
+import Default.Issue.IssueService;
+import Default.PullRequest.PullRequestService;
+import Default.Release.ReleaseService;
 import Default.User.User;
 import Default.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +32,16 @@ public class GithubRepoController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private PullRequestService pullRequestService;
+    
+    @Autowired
+    private ReleaseService releaseService;
+    
+    @Autowired
+    private IssueService issueService;
+    
     @Autowired
     private GithubRepoRepository githubRepoRepository;
 
@@ -66,8 +78,16 @@ public class GithubRepoController {
     }
     @GetMapping("/api/repositoryData/{repoId}")
     public GithubRepo getRepo(@PathVariable Long repoId) {
-        return githubRepoRepository.findByRepoIdUserId(repoId);
+        GithubRepo repo;
+        repo = githubRepoRepository.findByRepoIdUserId(repoId);
+        repo.setNumberOfContributors((int) userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).count());
+        repo.setNumberOfReleases(releaseService.getNumberOfReleases(repoId));
+        repo.setOpenIssues(issueService.getOpenIssuesTeam(repoId));
+        repo.setNumberOfOpenPullRequests(pullRequestService.getOpenPullRequests(repoId));
+        githubRepoRepository.save(repo);
+        return repo;
     }
+    
     @GetMapping("/api/repositoryData/all")
     public List<GithubRepo> getRepos() {
         return githubRepoRepository.findAll();

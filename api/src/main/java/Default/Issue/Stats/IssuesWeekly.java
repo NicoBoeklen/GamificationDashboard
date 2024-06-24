@@ -1,23 +1,23 @@
 package Default.Issue.Stats;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class IssuesWeekly {
-    private LocalDateTime week;
+    private LocalDate week;
     private Long issues;
 
-    public IssuesWeekly(LocalDateTime week, Long issues) {
+    public IssuesWeekly(LocalDate week, Long issues) {
         this.week = week;
         this.issues = issues;
     }
     
 
     // Getter und Setter
-    public LocalDateTime getWeek() {
+    public LocalDate getWeek() {
         return week;
     }
 
-    public void setWeek(LocalDateTime week) {
+    public void setWeek(LocalDate week) {
         this.week = week;
     }
 

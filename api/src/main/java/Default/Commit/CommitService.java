@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -68,15 +67,6 @@ public class CommitService {
     public Integer getAdditionCountByDay(Long userId, Long repoId, LocalDate day) {
         return commitRepository.getAllAdditionsByUserByDay(userId, repoId, day);
     }
-
-    /**
-     * Gives back a List of weeks with total Changes in the code (additions -  deletions)
-     *
-     * @return List of Code Growth Objects
-     */
-    /*public List<CodeGrowth> getCodeGrowth(Long repoId) {
-        return commitRepository.getCodeGrowth(repoId);
-    }*/
 
     public List<CodeGrowth> getCodeGrowth(Long repoId) {
         List<CodeGrowth> codeGrowthList = commitRepository.getCodeGrowth(repoId);
@@ -166,10 +156,6 @@ public class CommitService {
      *
      * @return List of CommitsUser Objects
      */
-    /*public List<CommitsUser> getCommitsUser(Long userId, Long repoId) {
-        return commitRepository.getCommitsUser(userId,repoId);
-    }*/
-
     public List<CommitsUser> getCommitsUser(Long userId, Long repoId) {
         List<CommitsUser> commitsUserList = commitRepository.getCommitsUser(userId, repoId);
         List<CommitsUser> completeCommitsUserList = new ArrayList<>();

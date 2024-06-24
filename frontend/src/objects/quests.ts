@@ -32,6 +32,6 @@ export async function fetchQuests(): Promise<Quest[]> {
     throw new Error("Failed to fetch Quests");
   }
   const quest: Quest[] = await response.json();
-  showToast(new Toast("Success", `Quests fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Quests fetched successfully!`, "success", faCheck, 5));
   return quest;
 }

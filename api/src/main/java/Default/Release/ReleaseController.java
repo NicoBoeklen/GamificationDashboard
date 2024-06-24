@@ -1,7 +1,6 @@
 package Default.Release;
 
 import Default.GithubAPI.GithubAPIService;
-import Default.GithubRepo.GithubRepo;
 import Default.GithubRepo.GithubRepoService;
 import Default.Release.Stats.ReleaseMetrics;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 /**
  * Controller to provide get URL for Release (localhost)

@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -39,6 +38,10 @@ public class PullRequestService {
 
     public Integer getNumberReviews(Long userId, Long repoId) {
         return pullRequestRepository.getNumberReviews(userId, repoId);
+    }
+
+    public Integer getNumberReviewsTotal(Long repoId) {
+        return pullRequestRepository.getNumberReviewsTotal(repoId);
     }
 
     public Integer getNumberReviewsByDay(Long userId, Long repoId, LocalDate day) {

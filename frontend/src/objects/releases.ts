@@ -4,8 +4,8 @@ import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface ReleaseObject {
   id: number;
-  tag_name: String;
-  published_at: String;
+  tag_name: string;
+  published_at: string;
 }
 
 export interface Release {
@@ -28,6 +28,6 @@ export async function fetchReleases(): Promise<Release> {
     throw new Error("Failed to fetch Releases");
   }
   const release: Release = await response.json();
-  showToast(new Toast("Success", `Releases fetched successfully!`, "success", faCheck, 5));
+  //showToast(new Toast("Success", `Releases fetched successfully!`, "success", faCheck, 5));
   return release;
 }

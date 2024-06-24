@@ -1,5 +1,5 @@
 import {ref, type Ref} from "vue";
-import type {IconDefinition} from "@fortawesome";
+import type {IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {faInfo} from "@fortawesome/free-solid-svg-icons";
 
 type ToastType = "info" | "success" | "error" | "warning" | "dark";
