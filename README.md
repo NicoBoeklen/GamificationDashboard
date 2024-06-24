@@ -1,4 +1,4 @@
-# REST API and SPA Project For ToDos
+# REST API and SPA Project For Gamification Dashboard
 
 > This repository contains a Dashboard application based on a RESTful API with Spring Boot (`api/`) and a frontend application with Vue.js v3 (`frontend/`).
 > You can view your Github Projects in the Dashboard and have a gamified experience with the Dashboard
