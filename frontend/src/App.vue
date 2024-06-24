@@ -75,11 +75,7 @@
 
 <script lang="ts" setup>
 import {activeToasts} from "./ts/toasts";
-import {Close, Toast, Toasts} from "agnostic-vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {RouterView} from 'vue-router'
-import {reactive} from "vue";
-import { VSonner, toast } from 'vuetify-sonner'
-import {red} from "vuetify/util/colors";
-//console.log('Active Toasts:', activeToasts);
+import { VSonner} from 'vuetify-sonner'
 </script>
