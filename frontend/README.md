@@ -1,6 +1,6 @@
 # frontend
 
-This is a Dashboard application frontend with Vue.js v3. The UI is accessible under http://localhost:80.
+This is a Dashboard application frontend with Vue.js v3 and Vuetify. The UI is accessible under http://localhost:80.
 
 ## Prerequisites
 
