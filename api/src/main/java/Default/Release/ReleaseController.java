@@ -34,10 +34,10 @@ public class ReleaseController {
      * @param repo  GitHub Repository name
      * @return "Releases saved successfully" with 200 or 500 Error if exception is thrown
      */
-    @GetMapping("/release/{owner}/{repo}/{repoId}")
-    public ResponseEntity<?> getRelease(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId) {
+    @GetMapping("/release/{owner}/{repo}/{repoId}/{sessionId}")
+    public ResponseEntity<?> getRelease(@PathVariable String owner, @PathVariable String repo, @PathVariable Long repoId,@PathVariable Long sessionId) {
         try {
-            Flux<Release> releaseFlux = githubAPIService.getReleases(owner, repo, repoId)
+            Flux<Release> releaseFlux = githubAPIService.getReleases(owner, repo, repoId,sessionId)
                 .flatMap(release -> githubRepoService.findById(repoId)
                     .flatMap(repository -> {
                         if (repository != null) {

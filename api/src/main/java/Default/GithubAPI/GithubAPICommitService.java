@@ -1,8 +1,9 @@
 package Default.GithubAPI;
 
-import Default.Apikey;
 import Default.Commit.Commit;
+import Default.Login.LoginRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,7 +23,8 @@ import java.util.regex.Pattern;
  */
 @Service
 public class GithubAPICommitService {
-
+    @Autowired
+    private LoginRepository loginRepository;
     private final WebClient webClient;
 
     /**
@@ -31,7 +33,6 @@ public class GithubAPICommitService {
     public GithubAPICommitService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
 
@@ -39,14 +40,15 @@ public class GithubAPICommitService {
      * This Method is called to get all Commits from a GitHub Repo
      * And then get the Details by requesting every specific commit again with its URL
      *
-     * @param owner Name of the Owner of the GitHub Repository
-     * @param repo  Name of the GitHub Repository
+     * @param owner     Name of the Owner of the GitHub Repository
+     * @param repo      Name of the GitHub Repository
+     * @param sessionId
      * @return Returns a Flux (Datastream) of Commits
      */
-    public Flux<Commit> getCommits(String owner, String repo, Long repoId) {
+    public Flux<Commit> getCommits(String owner, String repo, Long repoId, Long sessionId) {
         String url = String.format("/repos/%s/%s/commits", owner, repo);
-        return getCommitsRecursively(url)
-            .flatMap(commit -> fetchCommitDetails(commit, owner, repo, repoId));
+        return getCommitsRecursively(url,sessionId)
+            .flatMap(commit -> fetchCommitDetails(commit, owner, repo, repoId,sessionId));
     }
 
 
@@ -56,16 +58,18 @@ public class GithubAPICommitService {
      * Recursively continues with next page
      *
      * @param url
+     * @param sessionId
      * @return Returns a Flux of Commits
      */
-    private Flux<Commit> getCommitsRecursively(String url) {
+    private Flux<Commit> getCommitsRecursively(String url, Long sessionId) {
         return webClient.get()
             .uri(url)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToFlux(Commit.class)
             .collectList()
-            .flatMapMany(commits -> getNextPageUrl(url)
-                .flatMapMany(nextUrl -> Flux.fromIterable(commits).concatWith(getCommitsRecursively(nextUrl)))
+            .flatMapMany(commits -> getNextPageUrl(url,sessionId)
+                .flatMapMany(nextUrl -> Flux.fromIterable(commits).concatWith(getCommitsRecursively(nextUrl, sessionId)))
                 .switchIfEmpty(Flux.fromIterable(commits)));
     }
 
@@ -75,7 +79,7 @@ public class GithubAPICommitService {
      * @param url The current page URL
      * @return A Mono containing the URL of the next page, or empty if no next page exists
      */
-    private Mono<String> getNextPageUrl(String url) {
+    private Mono<String> getNextPageUrl(String url,Long sessionId) {
         URI uri = URI.create(url);
         String baseUrl = uri.getPath().split("\\?")[0];
         String query = uri.getQuery();
@@ -95,6 +99,7 @@ public class GithubAPICommitService {
 
         return webClient.get()
             .uri(nextUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
@@ -118,10 +123,11 @@ public class GithubAPICommitService {
      * @param repo   Name of the GitHub Repository
      * @return Single Commit with als attributes
      */
-    private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo, Long repoId) {
+    private Mono<Commit> fetchCommitDetails(Commit commit, String owner, String repo, Long repoId, Long sessionId) {
         String url = String.format("/repos/%s/%s/commits/%s", owner, repo, commit.getId());
         return webClient.get()
             .uri(url)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginRepository.getApiKeyForLoggedUser(sessionId))
             .retrieve()
             .bodyToMono(CommitDetails.class)
             .map(details -> {

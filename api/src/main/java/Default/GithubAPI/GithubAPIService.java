@@ -1,7 +1,7 @@
 package Default.GithubAPI;
 
-import Default.Apikey;
 import Default.GithubRepo.GithubRepo;
+import Default.Login.LoginRepository;
 import Default.Release.Release;
 import Default.User.User;
 import Default.User.UserService;
@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,17 +32,30 @@ public class GithubAPIService {
 
     @Autowired
     UserService userService;
+    @Autowired
+    private LoginRepository loginRepository;
+    WebClient.Builder webClientBuilder;
     /**
      * Defines Header and webClient with API-Key
      */
     public GithubAPIService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
             .baseUrl("https://api.github.com")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + Apikey.Key.apiKey)
             .build();
     }
-    Mono<Long> getUserId(String user, Long repoId) {
-        return Mono.fromCallable(() -> getUserIdByNameAndRepo(user, repoId));
+    public String getGitHubData(Long sessionId) {
+        String apiKey = loginRepository.getApiKeyForLoggedUser(sessionId);
+            WebClient webClient = webClientBuilder.build();
+            return webClient.get()
+                .uri("https://api.github.com/user")
+                .headers(headers -> headers.setBearerAuth(apiKey))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        }
+
+    Mono<Long> getUserId(String user, Long repoId, Long sessionId) {
+        return Mono.fromCallable(() -> getUserIdByNameAndRepo(user, repoId,sessionId));
     }
     /**
      * This Method is called to get the Repository from a GitHub Repo
@@ -50,16 +64,19 @@ public class GithubAPIService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Mono (Data Object) of the Repository
      */
-    public Mono<GithubRepo> getRepository(String owner, String repo) {
+    public Mono<GithubRepo> getRepository(String owner, String repo, Long sessionId) {
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}", owner, repo)
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToMono(GithubRepo.class);
     }
 
-    public Mono<Long> getRepositoryId(String owner, String repo) {
+    public Mono<Long> getRepositoryId(String owner, String repo, Long sessionId) {
+        System.out.println("sessionId is"+loginRepository.getApiKeyForLoggedUser(sessionId));
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}", owner, repo)
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToMono(JsonNode.class)
             .map(jsonNode -> jsonNode.get("id").asLong());
@@ -72,9 +89,10 @@ public class GithubAPIService {
      * @param repo  Name of the GitHub Repository
      * @return Returns a Flux (Datastream) of Releases
      */
-    public Flux<Release> getReleases(String owner, String repo, Long repoId) {
+    public Flux<Release> getReleases(String owner, String repo, Long repoId,Long sessionId) {
         return this.webClient.get()
             .uri("/repos/{owner}/{repo}/releases", owner, repo)
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToFlux(Release.class);
     }
@@ -87,9 +105,9 @@ public class GithubAPIService {
      * @param repoId
      * @return Returns a Flux (Datastream) of Users
      */
-    public Flux<User> getContributors(String owner, String repo, Long repoId) {
+    public Flux<User> getContributors(String owner, String repo, Long repoId,Long sessionId) {
         String url = String.format("/repos/%s/%s/contributors", owner, repo);
-        return getContributorsRecursively(url, repoId);
+        return getContributorsRecursively(url, repoId,sessionId);
     }
 
     /**
@@ -100,9 +118,10 @@ public class GithubAPIService {
      * @param url
      * @return Returns a Flux of Contributors
      */
-    private Flux<User> getContributorsRecursively(String url, Long repoId) {
+    private Flux<User> getContributorsRecursively(String url, Long repoId, Long sessionId) {
         return webClient.get()
             .uri(url)
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .retrieve()
             .bodyToFlux(User.class)
             .map(user -> {
@@ -111,8 +130,8 @@ public class GithubAPIService {
                 return user;
             })
             .collectList()
-            .flatMapMany(contributors -> getNextPageUrl(url)
-                .flatMapMany(nextUrl -> Flux.fromIterable(contributors).concatWith(getContributorsRecursively(nextUrl, repoId)))
+            .flatMapMany(contributors -> getNextPageUrl(url,sessionId)
+                .flatMapMany(nextUrl -> Flux.fromIterable(contributors).concatWith(getContributorsRecursively(nextUrl, repoId,sessionId)))
                 .switchIfEmpty(Flux.fromIterable(contributors)));
     }
 
@@ -122,7 +141,7 @@ public class GithubAPIService {
      * @param url The current page URL
      * @return A Mono containing the URL of the next page, or empty if no next page exists
      */
-    private Mono<String> getNextPageUrl(String url) {
+    private Mono<String> getNextPageUrl(String url,Long sessionId) {
         URI uri = URI.create(url);
         String baseUrl = uri.getPath().split("\\?")[0];
         String query = uri.getQuery();
@@ -142,6 +161,7 @@ public class GithubAPIService {
 
         return webClient.get()
             .uri(nextUrl)
+            .headers(headers -> headers.setBearerAuth(loginRepository.getApiKeyForLoggedUser(sessionId)))
             .exchangeToMono(response -> {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(List.class).flatMap(body -> {
@@ -155,7 +175,7 @@ public class GithubAPIService {
             });
     }
 
-    public Long getUserIdByNameAndRepo(String user, Long repoId) {
+    public Long getUserIdByNameAndRepo(String user, Long repoId, Long sessionId) {
         return userService.findAll().stream().filter(u -> u.getRepoId().equals(repoId)).filter(u -> u.getName().equals(user)).findFirst().orElseThrow(() -> new NoSuchElementException()).getUserId();
     }
     

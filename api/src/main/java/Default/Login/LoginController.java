@@ -16,6 +16,8 @@ public class LoginController {
     GithubAPIService githubAPIService;
     @Autowired
     private GithubAPIController githubAPIController;
+    @Autowired
+    private LoginRepository loginRepository;
 
     @PostMapping("/api/login")
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,15 +27,18 @@ public class LoginController {
         login.setOwnerName(loginRequest.getOwnerName());
         login.setRepoName(loginRequest.getRepoName());
         login.setUserName(loginRequest.getUserName());
-        Long repoId = githubAPIService.getRepositoryId(login.getOwnerName(), login.getRepoName()).block();
+        login.setApiKey(loginRequest.getApiKey());
+        loginService.saveLogin(login);
+        System.out.println("Your API Key is " + login.getApiKey());
+        Long repoId = githubAPIService.getRepositoryId(login.getOwnerName(), login.getRepoName(),login.getId()).block();
         System.out.println("RepoIdsdaada" + repoId);
         login.setRepoId(repoId);
-        githubAPIController.getData(login.getOwnerName(), login.getRepoName(), login.getUserName()).block();
-        Long userId = githubAPIService.getUserIdByNameAndRepo(login.getUserName(), repoId);
+        githubAPIController.getData(login.getOwnerName(), login.getRepoName(), login.getUserName(),login.getId()).block();
+        Long userId = githubAPIService.getUserIdByNameAndRepo(login.getUserName(), repoId, login.getId());
         System.out.println("UserId: " + userId);
         login.setUserId(userId);
         login.setRepoId(repoId);
-        login.setApiKey(Apikey.Key.apiKey);
+        
         return loginService.saveLogin(login);
     }
     @GetMapping("/api/loggedUser/{sessionId}")
