@@ -105,8 +105,11 @@ public class IssueService {
     }
 
     public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId) {
-        List<IssuesWeekly> issuesList = issueRepository.getOpenIssuesWeekly(repoId);
-        return getIssuesWeeklies(issuesList, repoId);
+        List<IssuesWeekly> issuesList = new ArrayList<>();
+        for (LocalDate week: getWeeklyTotalIssues(repoId).stream().map(iw -> iw.getWeek()).toList()) {
+            issuesList.add(issueRepository.getOpenIssuesWeekly(repoId, week));
+        }
+        return issuesList;
     }
 
     private List<IssuesWeekly> getIssuesWeeklies(List<IssuesWeekly> issuesList, Long repoId) {
