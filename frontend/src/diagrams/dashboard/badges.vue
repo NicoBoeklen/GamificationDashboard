@@ -19,7 +19,7 @@
         <h3>Issues</h3>
         <div class="badges-container">
           <div v-for="(achievement, index) in issuesAchievements" :key="index" class="badge-wrapper">
-            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <p v-if="achievement.achievement.image!=''" style="font-Size: 0.9em; padding-top: 1em">{{ achievement.achievement.name }}</p>
             <v-img v-if="achievement.achievement.image!=''"
                    :src="getImageUrl(achievement.achievement.image)" class="badge"
                    :alt="achievement.achievement.name">
@@ -32,7 +32,7 @@
         <h3>Deployment</h3>
         <div class="badges-container">
           <div v-for="(achievement, index) in deploymentAchievements" :key="index" class="badge-wrapper">
-            <p v-if="achievement.achievement.image!=''" style="padding-top: 1em">{{ achievement.achievement.name }}</p>
+            <p v-if="achievement.achievement.image!=''" style="font-Size: 0.9em; padding-top: 1em">{{ achievement.achievement.name }}</p>
             <v-img v-if="achievement.achievement.image!=''"
                    :src="getImageUrl(achievement.achievement.image)" class="badge"
                    :alt="achievement.achievement.name">
