@@ -96,20 +96,23 @@ public class IssueService {
 
     public List<IssuesWeekly> getWeeklyClosedIssues(Long repoId) {
         List<IssuesWeekly> issuesList = issueRepository.getClosedIssuesWeekly(repoId);
-        return getIssuesWeeklies(issuesList);
+        return getIssuesWeeklies(issuesList, repoId);
     }
 
     public List<IssuesWeekly> getWeeklyTotalIssues(Long repoId) {
         List<IssuesWeekly> issuesList = issueRepository.getTotalIssuesWeekly(repoId);
-        return getIssuesWeeklies(issuesList);
+        return getIssuesWeeklies(issuesList, repoId);
     }
 
     public List<IssuesWeekly> getWeeklyOpenIssues(Long repoId) {
-        List<IssuesWeekly> issuesList = issueRepository.getOpenIssuesWeekly(repoId);
-        return getIssuesWeeklies(issuesList);
+        List<IssuesWeekly> issuesList = new ArrayList<>();
+        for (LocalDate week: getWeeklyTotalIssues(repoId).stream().map(iw -> iw.getWeek()).toList()) {
+            issuesList.add(issueRepository.getOpenIssuesWeekly(repoId, week));
+        }
+        return issuesList;
     }
 
-    private List<IssuesWeekly> getIssuesWeeklies(List<IssuesWeekly> issuesList) {
+    private List<IssuesWeekly> getIssuesWeeklies(List<IssuesWeekly> issuesList, Long repoId) {
         List<IssuesWeekly> cumulativeIssuesList = new ArrayList<>();
 
         if (issuesList.isEmpty()) {
@@ -134,6 +137,18 @@ public class IssueService {
             cumulativeIssuesList.add(new IssuesWeekly(currentWeek, cumulativeTotalChanges));
             currentWeek = currentWeek.plusWeeks(1);
             index++;
+        }
+        //If no issues where closed or opened last weeks, add weeks at the end
+        List<IssuesWeekly> totalIssuesList = issueRepository.getTotalIssuesWeekly(repoId);
+        while(!(cumulativeIssuesList.get(cumulativeIssuesList.size()-1).getWeek().isEqual(totalIssuesList.get(totalIssuesList.size()-1).getWeek()))) {
+            cumulativeIssuesList.add(new IssuesWeekly(currentWeek, cumulativeTotalChanges));
+            currentWeek = currentWeek.plusWeeks(1);
+        }
+        //Add weeks at the beginning
+        currentWeek = cumulativeIssuesList.get(0).getWeek();
+        while(!(cumulativeIssuesList.get(0).getWeek().isEqual(totalIssuesList.get(0).getWeek()))) {
+            cumulativeIssuesList.add(0, new IssuesWeekly(currentWeek, 0L));
+            currentWeek = currentWeek.minusWeeks(1);
         }
 
         return cumulativeIssuesList;

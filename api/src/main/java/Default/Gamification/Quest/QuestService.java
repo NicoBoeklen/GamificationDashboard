@@ -139,7 +139,7 @@ public class QuestService {
     }
 
     public void setQuests() {
-        if (questRepository.findAll().stream().map(q -> q.getDay().equals(LocalDate.now())).count()==0) {
+        if (questRepository.findAll().stream().filter(q -> q.getDay().equals(LocalDate.now())).count()==0) {
             List<Quest> teamQuests = new ArrayList<>();
             List<Quest> quests = new ArrayList<>();
             

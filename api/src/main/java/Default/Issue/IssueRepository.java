@@ -1,5 +1,6 @@
 package Default.Issue;
 
+import jakarta.persistence.SqlResultSetMapping;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,12 +25,14 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
         "ORDER BY CAST(DATE_TRUNC('week', i.dateClosed) AS LocalDate)")
     List<IssuesWeekly> getClosedIssuesWeekly(@Param("repoId") Long repoId);
 
-    @Query("SELECT new Default.Issue.Stats.IssuesWeekly(CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate), COUNT (i)) " +
+    @Query("SELECT NEW Default.Issue.Stats.IssuesWeekly( :selectedWeek, COUNT(i.id)) " +
         "FROM Issue i " +
-        "WHERE i.state = 'open' AND i.repositoryId = :repoId AND NOT TYPE(i)=PullRequest " +
-        "GROUP BY CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate)" +
-        "ORDER BY CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate)")
-    List<IssuesWeekly> getOpenIssuesWeekly(@Param("repoId") Long repoId);
+        "WHERE i.repositoryId = :repoId " +
+        "AND CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate) <= :selectedWeek " +
+        "AND (i.dateClosed IS NULL OR CAST(DATE_TRUNC('week', i.dateClosed) AS LocalDate) > :selectedWeek) " +
+        "AND NOT TYPE(i) = PullRequest " )
+    IssuesWeekly getOpenIssuesWeekly(@Param("repoId") Long repoId,
+                                           @Param("selectedWeek") LocalDate selectedWeek);
 
     @Query("SELECT new Default.Issue.Stats.IssuesWeekly(CAST(DATE_TRUNC('week', i.dateOpened) AS LocalDate), COUNT (i)) " +
         "FROM Issue i " +
