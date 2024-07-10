@@ -77,7 +77,7 @@ public interface CommitRepository extends JpaRepository<Commit, Long>{
     
     @Query("SELECT DATE_TRUNC('day', c.date) AS day, (SUM(c.additions) + SUM(c.deletions)) AS productivity " +
         "FROM Commit c " +
-        "WHERE c.author.userId = :userId AND c.author.repoId = :repoId " +
+        "WHERE c.isMerge = false AND c.author.userId = :userId AND c.author.repoId = :repoId " +
         "GROUP BY DATE_TRUNC('day', c.date) " +
         "ORDER BY DATE_TRUNC('day', c.date) desc")
     List<Object[]> getUserProductivity(@Param("userId") Long userId, @Param("repoId") Long repoId);
